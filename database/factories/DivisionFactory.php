@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Employee;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +21,6 @@ class DivisionFactory extends Factory
         $faker->addProvider(new \Faker\Provider\ru_RU\Person($faker));
 
         return [
-            'employee_id' => Employee::factory()->create()->id,
             'level0' => $faker->company(),
             'level1' => $faker->jobTitle(),
             'position' => $faker->jobTitle(),

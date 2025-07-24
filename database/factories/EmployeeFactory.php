@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Division;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -31,6 +32,7 @@ class EmployeeFactory extends Factory
         }
 
         return [
+            'division_id' => Division::factory()->create()->id,
             'first_name' => $firstName,
             'last_name' => $lastName,
             'middle_name' => $middleName,

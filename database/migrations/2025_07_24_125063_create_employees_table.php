@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 128);
 
+            $table->bigInteger('division_id')->unsigned()->nullable();
+            $table->foreign('division_id')->references('id')->on('divisions');
+
+            $table->string('first_name', 128);
             $table->string('last_name', 128);
             $table->string('middle_name', 128);
 

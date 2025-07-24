@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('employee_id')->unsigned()->nullable();
-            $table->foreign('employee_id')->references('id')->on('employees');
             $table->string('level0', 256)->nullable();
             $table->string('level1', 256)->nullable();
             $table->string('level2', 256)->nullable();
