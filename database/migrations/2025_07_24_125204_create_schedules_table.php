@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('status_id')->unsigned()->nullable();
             $table->foreign('status_id')->references('id')->on('statuses');
 
-            $table->dateTime('date');
+            $table->date('date');
             $table->text('description')->nullable();
 
             $table->timestamps();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
 
-            $table->string('letter', 2);
+            $table->string('letter', 2)->unique();
             $table->text('description')->nullable();
             $table->timestamps();
         });

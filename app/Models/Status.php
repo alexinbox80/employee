@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Status extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\StatusFactory> */
     use HasFactory, Notifiable;
     /**
      * The attributes that are mass assignable.

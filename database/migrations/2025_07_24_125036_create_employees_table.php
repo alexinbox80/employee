@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('middle_name', 128);
 
             $table->string('email', 128)->nullable();
-            $table->string('phone', 11)->nullable();
+            $table->string('phone', 20)->nullable();
             $table->string('address', 256);
 
             $table->timestamps();

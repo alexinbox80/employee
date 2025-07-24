@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
 class Division extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\DivisionFactory> */
     use HasFactory, Notifiable;
     /**
      * The attributes that are mass assignable.
@@ -26,4 +27,11 @@ class Division extends Model
         'position',
         'description'
     ];
+
+    //Relations
+    public function employee(): HasOne
+    {
+        return $this->hasOne(Employee::class,
+            'employee_id', 'id');
+    }
 }
