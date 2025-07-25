@@ -2,6 +2,28 @@ body {
     font-size: .875rem;
 }
 
+.link-control a {
+    text-decoration: none;
+}
+
+.dashboard-content {
+    position: relative;
+    top: 90px;
+}
+
+.dashboard-paginated {
+    display: flex;
+    justify-content: right;
+}
+
+.dashboard-paginated nav div span {
+   border: none !important;
+}
+
+.dashboard-paginated nav div a {
+    border: none !important;
+}
+
 .feather {
     width: 16px;
     height: 16px;

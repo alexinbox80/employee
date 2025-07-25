@@ -6,6 +6,11 @@
                 <h4>Здравствуйте, {{ 'User' }}!</h4>
             </li>
             <li class="nav-item">
+                <a class="nav-link @if(request()->routeIs('admin.statuses.*')) active @endif" aria-current="page" href="{{ route('admin.statuses.index') }}">
+                    <span data-feather="home" class="align-text-bottom">Статус служащего</span>
+                </a>
+            </li>
+            <li class="nav-item">
 {{--                @forelse( config('admin.menuList')  as $key => $item)--}}
 {{--                    <a class="nav-link @if (request()->routeIs($item['route']))) active @endif" aria-current="page"--}}
 {{--                       href="{{ route($item['route']) }}">--}}
@@ -18,10 +23,6 @@
 {{--                        </span>--}}
 {{--                    </a>--}}
 {{--                    @empty--}}
-
-                    <li class="nav-item">
-                        Записей не найдено
-                    </li>
 {{--                @endforelse--}}
             </li>
         </ul>
