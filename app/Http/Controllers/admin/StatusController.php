@@ -35,7 +35,7 @@ class StatusController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  CreateRequest  $request
+     * @param CreateRequest $request
      * @return RedirectResponse
      */
     public function store(CreateRequest $request): RedirectResponse
@@ -44,7 +44,7 @@ class StatusController extends Controller
             $request->validated()
         );
 
-        if($status->save()) {
+        if ($status->save()) {
             return redirect()->route('admin.statuses.index')
                 ->with('success', __('messages.admin.statuses.create.success'));
         }
@@ -79,9 +79,9 @@ class StatusController extends Controller
     {
         $status = $status->fill($request->validated());
 
-        if($status->save()) {
+        if ($status->save()) {
             return redirect()->route('admin.statuses.index')
-                ->with('success',  __('messages.admin.statuses.update.success'));
+                ->with('success', __('messages.admin.statuses.update.success'));
         }
 
         return back()->with('error', __('messages.admin.statuses.update.fail'));
@@ -99,7 +99,7 @@ class StatusController extends Controller
     {
         $status = Status::destroy($status->id);
 
-        if ( $status ) {
+        if ($status) {
             return redirect()->route('admin.statuses.index')
                 ->with('success', __('messages.admin.statuses.destroy.success'));
         }
