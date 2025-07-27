@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
             <img class="logo_image_header me-1" src="{{ asset('assets/images/favicon.png') }}" alt="logo"><a
-                class="navbar-brand" href="{{ url('/') }}">AggFitness</a>
+                class="navbar-brand" href="{{ url('/') }}">ИЦ</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -187,11 +187,11 @@
                         <button class="btn btn-outline-success" type="submit">Поиск</button>
                     </form>
                 @else
-                    <div class="btn-group align-self-start me-2 mb-2">
-                        <a href="{{ request()->url() }}#phone_mask" class="btn btn-outline-success">
-                            &#9660 Новости &#9660
-                        </a>
-                    </div>
+{{--                    <div class="btn-group align-self-start me-2 mb-2">--}}
+{{--                        <a href="{{ request()->url() }}#phone_mask" class="btn btn-outline-success">--}}
+{{--                            &#9660 Новости &#9660--}}
+{{--                        </a>--}}
+{{--                    </div>--}}
                 @endif
             </div>
         </div>

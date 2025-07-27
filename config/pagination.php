@@ -2,6 +2,9 @@
 
 return [
     'admin' => [
-        'statuses' => 15
+        'divisions' => 15,
+        'employees' => 15,
+        'statuses' => 15,
+        'schedules' => 15
     ]
 ];

@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 @section('content')
     <div class="dashboard-content">
-        <h2>Статус служащего</h2>
+        <h2>Планировщик</h2>
         <div style="display: flex; justify-content: right;">
-            <a href="{{ route('admin.statuses.create') }}" class="btn btn-primary">Добавить Статус служащего</a>
+            <a href="{{ route('admin.schedules.create') }}" class="btn btn-primary">Добавить Планировщик</a>
         </div><br>
         <div class="alert-message"></div><br>
         <div class="table-responsive">
@@ -12,24 +12,28 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Сокращение</th>
+                    <th scope="col">Идентификатор Служащего</th>
+                    <th scope="col">Идентификатор Статуса</th>
+                    <th scope="col">Дата</th>
                     <th scope="col">Описание</th>
                     <th scope="col">Запись создана</th>
                     <th scope="col">Запись обновлена</th>
                 </tr>
                 </thead>
                 <tbody>
-                @forelse($statuses as $status)
-                    <tr id="row-{{ $status->id }}">
-                        <td>{{ $status->id }}</td>
-                        <td>{{ $status->letter }}</td>
-                        <td>{{ $status->description }}</td>
-                        <td>{{ $status->created_at }}</td>
-                        <td>{{ $status->updated_at }}</td>
+                @forelse($schedules as $schedule)
+                    <tr id="row-{{ $schedule->id }}">
+                        <td>{{ $schedule->id }}</td>
+                        <td>{{ $schedule->employee_id }}</td>
+                        <td>{{ $schedule->status_id }}</td>
+                        <td>{{ $schedule->date }}</td>
+                        <td>{{ $schedule->description }}</td>
+                        <td>{{ $schedule->created_at }}</td>
+                        <td>{{ $schedule->updated_at }}</td>
                         <td>
                             <div class="link-control">
                                 <a
-                                    href="{{ route('admin.statuses.edit', ['status' => $status]) }}">Ред.</a>&nbsp;
+                                    href="{{ route('admin.schedules.edit', ['schedule' => $schedule]) }}">Ред.</a>&nbsp;
                                 {{-- <a href="javascript:;" class="delete" rel="{{ $characteristic->id }}" --}}
                                 <a href="" style="color: red;">Уд.</a>
                             </div>
@@ -37,13 +41,13 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">Записей не найдено</td>
+                        <td colspan="7">Записей не найдено</td>
                     </tr>
                 @endforelse
                 </tbody>
             </table>
             <div class="dashboard-paginated">
-                {{ $statuses->links() }}
+                {{ $schedules->links() }}
             </div>
         </div>
     </div>

@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->id();
 
-            $table->string('level0', 256)->nullable();
-            $table->string('level1', 256)->nullable();
+            $table->string('level0', 256);
+            $table->string('level1', 256);
             $table->string('level2', 256)->nullable();
             $table->string('level3', 256)->nullable();
             $table->string('level4', 256)->nullable();
             $table->string('level5', 256)->nullable();
-            $table->string('position', 256)->nullable();
+            $table->string('position', 256);
             $table->text('description')->nullable();
 
             $table->timestamps();
