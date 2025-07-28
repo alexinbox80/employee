@@ -44,8 +44,12 @@ class Employee extends Model
 
     public function schedules(): HasMany
     {
-        $date = Carbon::now('Europe/Moscow')->toDateString();
+        //$date = Carbon::now('Europe/Moscow')->toDateString();
+        $dateM = Carbon::now('Europe/Moscow')->format('m');
+        $dateY = Carbon::now('Europe/Moscow')->format('Y');
+        $date = $dateY . '-' . $dateM . '-01';
+        //dd($date);
 
-        return $this->hasMany(Schedule::class)->where('date', $date);
+        return $this->hasMany(Schedule::class)->where('date', '>=', $date);
     }
 }

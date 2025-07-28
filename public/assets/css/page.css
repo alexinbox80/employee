@@ -18,3 +18,11 @@
 .fio {
     align-content: center;
 }
+
+.fio_link, .division_link {
+    text-decoration: none;
+}
+
+.fio_link:hover, .division_link:hover {
+    text-decoration: underline;
+}
