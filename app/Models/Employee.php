@@ -21,9 +21,11 @@ class Employee extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'division_id',
         'first_name',
         'last_name',
         'middle_name',
+        'position',
         'email',
         'phone',
         'address',

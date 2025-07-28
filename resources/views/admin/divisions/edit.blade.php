@@ -11,32 +11,52 @@
                 @csrf
                 @method('put')
                 <div class="form-group">
-                    <label for="level0">Организация</label>
-                    <input type="text" class="form-control" name="level0" id="level0" value="{{ $division->level0 }}">
+                    <label for="level0_full">Организация, полное наименование</label>
+                    <input type="text" class="form-control" name="level0_full" id="level0_full" value="{{ $division->level0_full }}">
                 </div>
                 <div class="form-group">
-                    <label for="level1">Подразделение</label>
-                    <input type="text" class="form-control" name="level1" id="level1" value="{{ $division->level1 }}">
+                    <label for="level0_short">Организация, краткое наименование</label>
+                    <input type="text" class="form-control" name="level0_short" id="level0_short" value="{{ $division->level0_short }}">
                 </div>
                 <div class="form-group">
-                    <label for="level2">Отдел</label>
-                    <input type="text" class="form-control" name="level2" id="level2" value="{{ $division->level2 }}">
+                    <label for="level1_full">Подразделение, полное наименование</label>
+                    <input type="text" class="form-control" name="level1_full" id="level1_full" value="{{ $division->level1_full }}">
                 </div>
                 <div class="form-group">
-                    <label for="level3">Отделение</label>
-                    <input type="text" class="form-control" name="level3" id="level3" value="{{ $division->level3 }}">
+                    <label for="level1_short">Подразделение, краткое наименование</label>
+                    <input type="text" class="form-control" name="level1_short" id="level1_short" value="{{ $division->level1_short }}">
                 </div>
                 <div class="form-group">
-                    <label for="level4">Level 4</label>
-                    <input type="text" class="form-control" name="level4" id="level4" value="{{ $division->level4 }}">
+                    <label for="level2_full">Отдел, полное наименование</label>
+                    <input type="text" class="form-control" name="level2_full" id="level2_full" value="{{ $division->level2_full }}">
                 </div>
                 <div class="form-group">
-                    <label for="level5">Level 5</label>
-                    <input type="text" class="form-control" name="level5" id="level5" value="{{ $division->level5 }}">
+                    <label for="level2_short">Отдел, краткое наименование</label>
+                    <input type="text" class="form-control" name="level2_short" id="level2_short" value="{{ $division->level2_short }}">
                 </div>
                 <div class="form-group">
-                    <label for="position">Должность</label>
-                    <input type="text" class="form-control" name="position" id="position" value="{{ $division->position }}">
+                    <label for="level3_full">Отделение, полное наименование</label>
+                    <input type="text" class="form-control" name="level3_full" id="level3_full" value="{{ $division->level3_full }}">
+                </div>
+                <div class="form-group">
+                    <label for="level3_short">Отделение, краткое наименование</label>
+                    <input type="text" class="form-control" name="level3_short" id="level3_short" value="{{ $division->level3_short }}">
+                </div>
+                <div class="form-group">
+                    <label for="level4_full">Level 4, полное наименование</label>
+                    <input type="text" class="form-control" name="level4_full" id="level4_full" value="{{ $division->level4_full }}">
+                </div>
+                <div class="form-group">
+                    <label for="level4_short">Level 4, краткое наименование</label>
+                    <input type="text" class="form-control" name="level4_short" id="level4_short" value="{{ $division->level4_short }}">
+                </div>
+                <div class="form-group">
+                    <label for="level5_full">Level 5, полное наименование</label>
+                    <input type="text" class="form-control" name="level5_full" id="level5_full" value="{{ $division->level5_full }}">
+                </div>
+                <div class="form-group">
+                    <label for="level5_short">Level 5, краткое наименование</label>
+                    <input type="text" class="form-control" name="level5_short" id="level5_short" value="{{ $division->level5_short }}">
                 </div>
                 <div class="form-group">
                     <label for="description">Описание</label>

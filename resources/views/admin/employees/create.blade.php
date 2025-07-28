@@ -26,6 +26,10 @@
                     <input type="text" class="form-control" name="middle_name" id="middle_name" value="{{ old('middle_name') }}">
                 </div>
                 <div class="form-group">
+                    <label for="position">Должность</label>
+                    <input type="text" class="form-control" name="position" id="position" value="{{ old('position') }}">
+                </div>
+                <div class="form-group">
                     <label for="email">Электронная почта</label>
                     <input type="text" class="form-control" name="email" id="email" value="{{ old('email') }}">
                 </div>
