@@ -5,11 +5,13 @@ use App\Http\Controllers\admin\DivisionController as AdminDivisionController;
 use App\Http\Controllers\admin\EmployeeController as AdminEmployeeController;
 use App\Http\Controllers\admin\StatusController as AdminStatusController;
 use App\Http\Controllers\admin\ScheduleController as AdminScheduleController;
+use App\Http\Controllers\site\PageController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('index', ['hello' => 'world']);
+//});
 
+Route::get('/', [PageController::class, 'index']);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 //    Route::get('/', AdminIndexController::class)

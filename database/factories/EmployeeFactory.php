@@ -32,7 +32,7 @@ class EmployeeFactory extends Factory
         }
 
         return [
-            'division_id' => Division::factory()->create()->id,
+            'division_id' => rand(1, 30),
             'first_name' => $firstName,
             'last_name' => $lastName,
             'middle_name' => $middleName,
