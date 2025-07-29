@@ -26,6 +26,7 @@ class CreateRequest extends FormRequest
             'first_name'  => ['required', 'string', 'min:10', 'max:255'],
             'last_name'  => ['required', 'string', 'min:10', 'max:255'],
             'middle_name'  => ['required', 'string', 'min:10', 'max:255'],
+            'position'  => ['required', 'string', 'min:10', 'max:255'],
             'email' => ['nullable', 'email', 'min:5', 'max:128'],
             'phone'  => ['nullable', 'numeric', 'digits:10'],
             'address'  => ['required', 'string', 'min:11', 'max:256'],
@@ -39,6 +40,7 @@ class CreateRequest extends FormRequest
             'first_name'  => 'Имя',
             'last_name'  => 'Фамилия',
             'middle_name'  => 'Отчество',
+            'position'  => 'Должность',
             'email' => 'Электронная почта',
             'phone'  => 'Телефон',
             'address'  => 'Адрес кабинета'

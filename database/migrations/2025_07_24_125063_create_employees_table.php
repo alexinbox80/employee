@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('last_name', 128);
             $table->string('middle_name', 128);
 
+            $table->string('position', 256);
             $table->string('email', 128)->nullable();
             $table->string('phone', 20)->nullable();
             $table->string('address', 256);

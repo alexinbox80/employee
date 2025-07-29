@@ -36,6 +36,7 @@ class EmployeeFactory extends Factory
             'first_name' => $firstName,
             'last_name' => $lastName,
             'middle_name' => $middleName,
+            'position' => $faker->jobTitle(),
             'email' => $faker->unique()->safeEmail(),
             'phone' => $faker->e164PhoneNumber(),
             'address' => $faker->address(),

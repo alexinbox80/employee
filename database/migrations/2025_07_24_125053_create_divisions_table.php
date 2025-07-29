@@ -14,13 +14,18 @@ return new class extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->id();
 
-            $table->string('level0', 256);
-            $table->string('level1', 256);
-            $table->string('level2', 256)->nullable();
-            $table->string('level3', 256)->nullable();
-            $table->string('level4', 256)->nullable();
-            $table->string('level5', 256)->nullable();
-            $table->string('position', 256);
+            $table->string('level0_full', 256);
+            $table->string('level0_short', 256);
+            $table->string('level1_full', 256);
+            $table->string('level1_short', 256);
+            $table->string('level2_full', 256);
+            $table->string('level2_short', 256)->nullable();
+            $table->string('level3_full', 256)->nullable();
+            $table->string('level3_short', 256)->nullable();
+            $table->string('level4_full', 256)->nullable();
+            $table->string('level4_short', 256)->nullable();
+            $table->string('level5_full', 256)->nullable();
+            $table->string('level5_short', 256)->nullable();
             $table->text('description')->nullable();
 
             $table->timestamps();

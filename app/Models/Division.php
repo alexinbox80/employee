@@ -17,14 +17,18 @@ class Division extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'employee_id',
-        'level0',
-        'level1',
-        'level2',
-        'level3',
-        'level4',
-        'level5',
-        'position',
+        'level0_full',
+        'level0_short',
+        'level1_full',
+        'level1_short',
+        'level2_full',
+        'level2_short',
+        'level3_full',
+        'level3_short',
+        'level4_full',
+        'level4_short',
+        'level5_full',
+        'level5_short',
         'description'
     ];
 

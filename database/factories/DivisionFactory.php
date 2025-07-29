@@ -21,9 +21,12 @@ class DivisionFactory extends Factory
         $faker->addProvider(new \Faker\Provider\ru_RU\Person($faker));
 
         return [
-            'level0' => $faker->company(),
-            'level1' => $faker->jobTitle(),
-            'position' => $faker->jobTitle(),
+            'level0_full' => $faker->company(),
+            'level0_short' => 'QWE',
+            'level1_full' => $faker->jobTitle(),
+            'level1_short' => 'ASD',
+            'level2_full' => $faker->jobTitle() . ' ' . $faker->company(),
+            'level3_short' => 'ZXC',
             'description' => $faker->words(rand(5, 20), true),
         ];
     }

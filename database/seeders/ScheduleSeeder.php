@@ -24,7 +24,6 @@ class ScheduleSeeder extends Seeder
 
         $schedules = [];
         $index = -1;
-
         for ($i = 0; $i < 1000; $i++) {
             for ($m = 0; $m < 12; $m++) {
                 $index++;
@@ -32,6 +31,25 @@ class ScheduleSeeder extends Seeder
                 $statusId = rand(1, 6);
                 $date = Carbon::now('Europe/Moscow')->subMonths($m)->toDateString();
 
+                $schedules[$index] = [
+                    'employee_id' => $employeeId,
+                    'status_id' => $statusId,
+                    'date' => $date,
+                    'description' => $faker->words(rand(5, 20), true),
+                    'created_at' => now('Europe/Moscow'),
+                ];
+            }
+        }
+
+        $index = -1;
+        for ($i = 0; $i < 100; $i++) {
+            for ($d = 1; $d <= date('t', time()); $d++) {
+                $index++;
+                $employeeId = rand(1, 100);
+                $statusId = rand(1, 6);
+                $dateM = Carbon::now('Europe/Moscow')->format('m');
+                //$date = Carbon::now('Europe/Moscow')->subDays($d)->toDateString();
+                $date = '2025-' . $dateM . '-' . rand(1, date('t', time()));
                 $schedules[$index] = [
                     'employee_id' => $employeeId,
                     'status_id' => $statusId,

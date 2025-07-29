@@ -16,6 +16,7 @@
                     <th scope="col">Фамилия</th>
                     <th scope="col">Имя</th>
                     <th scope="col">Отчество</th>
+                    <th scope="col">Должность</th>
                     <th scope="col">Эл. почта</th>
                     <th scope="col">Телефон</th>
                     <th scope="col">Адрес</th>
@@ -31,6 +32,7 @@
                         <td>{{ $employee->last_name }}</td>
                         <td>{{ $employee->first_name }}</td>
                         <td>{{ $employee->middle_name }}</td>
+                        <td>{{ $employee->position }}</td>
                         <td>{{ $employee->email }}</td>
                         <td>{{ $employee->phone }}</td>
                         <td>{{ $employee->address }}</td>
@@ -47,7 +49,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="10">Записей не найдено</td>
+                        <td colspan="11">Записей не найдено</td>
                     </tr>
                 @endforelse
                 </tbody>
