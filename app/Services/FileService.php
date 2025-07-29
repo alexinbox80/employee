@@ -40,9 +40,11 @@ class FileService
     {
         /*
 
+
             $user = new User();
             $fillableColumns = $user->getFillable(); // Or simply $user->fillable
             dd($fillableColumns); // Display the array of fillable columns
+
 
          */
 
