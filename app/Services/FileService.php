@@ -18,7 +18,7 @@ class FileService
             throw new \Exception();
         }
 
-        fgetcsv($handle, separator: ';');
+        //fgetcsv($handle, separator: ';');
         // пока не достигнем конца файла
         while (!feof($handle)) {
             // читаем строку
@@ -38,32 +38,22 @@ class FileService
      */
     public static function convertProcess(string $filePath, Model $model): bool
     {
-        /*
+        $fillableColumns = $model->getFillable();
 
-
-            $user = new User();
-            $fillableColumns = $user->getFillable(); // Or simply $user->fillable
-            dd($fillableColumns); // Display the array of fillable columns
-
-
-         */
-
+        $array = [];
         foreach (self::convertCsv($filePath) as $row) {
-            if (!empty($row))
-                $model::create([
-                    'CAB' => empty($row[0]) ? null : $row[0],
-                    'F' => $row[1],
-                    'I' => $row[2],
-                    'O' => $row[3],
-                    'COMP' => $row[4],
-                    'IP' => $row[5],
-                    'OLD_IP' => $row[8],
-                    'MAC' => $row[6],
-                    'INFO' => $row[7],
-                    'FLAG' => empty($row[11]) ?? false,
-                    'DT_REG' => new \DateTime($row[9]),
-                    'DT_UPD' => new \DateTime($row[12])
-                ]);
+            if (!empty($row)) {
+                foreach ($row as $key => $item) {
+                    dump($key);
+
+                    if ($key <> 0)
+                        $array[$fillableColumns[$key - 1]] = $item;
+                }
+                dump($array);
+                $model::create($array);
+            }
+
+            $array = [];
         }
 
         return true;

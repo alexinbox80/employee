@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Division;
+use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -36,10 +36,14 @@ class EmployeeFactory extends Factory
             'first_name' => $firstName,
             'last_name' => $lastName,
             'middle_name' => $middleName,
+            'birth_date' => Carbon::now('Europe/Moscow')->subMonths(240)->toDateString(),
+            'sex' => $faker->randomElement(['МУЖСКОЙ', 'ЖЕНСКИЙ']),
             'position' => $faker->jobTitle(),
             'email' => $faker->unique()->safeEmail(),
-            'phone' => $faker->e164PhoneNumber(),
+            'home_phone' => $faker->e164PhoneNumber(),
+            'work_phone' => $faker->e164PhoneNumber(),
             'address' => $faker->address(),
+            'room' => rand(50, 400)
         ];
     }
 }

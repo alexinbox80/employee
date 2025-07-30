@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('letter', 2)->unique();
-            $table->text('description')->nullable();
+            $table->string('description', 255)->nullable();
+            $table->string('color', 128)->nullable();
             $table->timestamps();
         });
     }

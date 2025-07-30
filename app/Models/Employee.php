@@ -22,13 +22,18 @@ class Employee extends Model
      */
     protected $fillable = [
         'division_id',
+        'is_show',
         'first_name',
         'last_name',
         'middle_name',
+        'birth_date',
+        'sex',
         'position',
         'email',
-        'phone',
+        'home_phone',
+        'work_phone',
         'address',
+        'room'
     ];
 
     protected $with = [
