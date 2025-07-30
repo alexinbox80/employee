@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('level0_short', 256);
             $table->string('level1_full', 256);
             $table->string('level1_short', 256);
-            $table->string('level2_full', 256);
+            $table->string('level2_full', 256)->nullable();
             $table->string('level2_short', 256)->nullable();
             $table->string('level3_full', 256)->nullable();
             $table->string('level3_short', 256)->nullable();

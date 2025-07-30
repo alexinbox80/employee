@@ -49,18 +49,23 @@
                     </thead>
                     <tbody>
                     @php($divisionId = null)
-                    @forelse ($employees as $employee)
+                    @forelse ($employees as $key => $employee)
                         @if ($employee->division->id <> $divisionId)
                             <tr class="table_grid">
                                 <td colspan="{{ totalColumn(5) }}">
-                                    <a href="{{ route('page_division', ['division' => $employee->division->id]) }}" class="division_link"
-                                       title="{{ $employee->division->level0_full }}">{{ $employee->division->level0_short }}</a>
+                                    @if($employee->division->level2_full === null)
+                                        <a href="{{ route('page_division', ['division' => $employee->division->id]) }}" class="division_link"
+                                           title="{{ $employee->division->level1_full }}">{{ $employee->division->level1_short }}</a>
+                                    @else
+                                        <a href="{{ route('page_division', ['division' => $employee->division->id]) }}" class="division_link"
+                                           title="{{ $employee->division->level2_full }}">{{ $employee->division->level2_short }}</a>
+                                    @endif
                                 </td>
                             </tr>
                             @php( $divisionId = $employee->division->id )
                         @endif
                         <tr id="row-{{ $employee->id }}" class="table_grid">
-                            <td>{{ $employee->id }}</td>
+                            <td title="{{ $employee->id }}">{{ $key + 1 }}</td>
                             <td>{{ $employee->division_id }}</td>
                             <td class="fio">
                                 <a class="fio_link" href="{{ route('page_employee', ['employee' => $employee->id]) }}" title="{{ $employee->position }}">

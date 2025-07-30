@@ -7,5 +7,6 @@ return [
         'employee' => env('EMPLOYEE_CSV_FILE', 'sotr.csv'),
         'division' => env('DIVISION_CSV_FILE', 'division.csv'),
         'status' => env('STATUS_CSV_FILE', 'abbr.csv'),
+        'schedule' => env('SCHEDULE_CSV_FILE', '00_schedule.csv'),
     ]
 ];

@@ -22,9 +22,9 @@ class Employee extends Model
      */
     protected $fillable = [
         'division_id',
-        'is_show',
-        'first_name',
+        'is_shown',
         'last_name',
+        'first_name',
         'middle_name',
         'birth_date',
         'sex',
@@ -32,6 +32,7 @@ class Employee extends Model
         'email',
         'home_phone',
         'work_phone',
+        'mobile_phone',
         'address',
         'room'
     ];

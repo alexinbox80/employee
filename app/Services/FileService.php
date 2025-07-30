@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class FileService
@@ -36,7 +37,7 @@ class FileService
      * @return bool
      * @throws \Exception
      */
-    public static function convertProcess(string $filePath, Model $model): bool
+    public static function convertProcess(string $filePath, Model $model, bool $flagId = true): bool
     {
         $fillableColumns = $model->getFillable();
 
@@ -44,15 +45,22 @@ class FileService
         foreach (self::convertCsv($filePath) as $row) {
             if (!empty($row)) {
                 foreach ($row as $key => $item) {
-                    dump($key);
-
-                    if ($key <> 0)
+                    if (($key > 0) && ($item != '') && ($flagId === true)) {
+                        if ($fillableColumns[$key - 1] === 'birth_date') {
+                            $item = Carbon::createFromFormat('d.m.Y', $item)->format('Y-m-d');
+                        }
                         $array[$fillableColumns[$key - 1]] = $item;
+                    }
+
+                    if (!empty($item) && ($flagId === false)) {
+                        if ($fillableColumns[$key] === 'date') {
+                            $item = Carbon::createFromFormat('d.m.Y', $item)->format('Y-m-d');
+                        }
+                        $array[$fillableColumns[$key]] = $item;
+                    }
                 }
-                dump($array);
                 $model::create($array);
             }
-
             $array = [];
         }
 

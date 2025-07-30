@@ -19,8 +19,8 @@ return new class extends Migration
 
             $table->boolean('is_shown')->default(false);
 
-            $table->string('first_name', 128);
             $table->string('last_name', 128);
+            $table->string('first_name', 128);
             $table->string('middle_name', 128);
             $table->date('birth_date');
             $table->string('sex', 7)->default('МУЖСКОЙ');
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('email', 128)->nullable();
             $table->string('home_phone', 20)->nullable();
             $table->string('work_phone', 20)->nullable();
+            $table->string('mobile_phone', 20)->nullable();
             $table->string('address', 256);
             $table->smallInteger('room')->nullable();
 

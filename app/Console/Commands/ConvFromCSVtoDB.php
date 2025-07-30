@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Division;
 use App\Models\Employee;
+use App\Models\Schedule;
 use App\Models\Status;
 use App\Services\FileService;
 use Illuminate\Console\Command;
@@ -32,22 +33,22 @@ class ConvFromCSVtoDB extends Command
     {
         $localPath = config('csv.conf.localPath');
 
-//        $fileName = config('csv.conf.division');
-//        $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
-//
-//        FileService::convertProcess($file, new Division());
+        $fileName = config('csv.conf.division');
+        $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
+        FileService::convertProcess($file, new Division());
 
         $fileName = config('csv.conf.status');
         $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
-
         FileService::convertProcess($file, new Status());
 
+        $fileName = config('csv.conf.employee');
+        $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
+        FileService::convertProcess($file, new Employee());
 
-//        $fileName = config('csv.conf.employee');
-//        $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
-//
-//        FileService::convertProcess($file, new Employee());
-//
-//        $this->info('Data from CSV to DB was successfully converted.');
+        $fileName = config('csv.conf.schedule');
+        $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
+        FileService::convertProcess($file, new Schedule(), false);
+
+        $this->info('Data from CSV to DB was successfully converted.');
     }
 }
