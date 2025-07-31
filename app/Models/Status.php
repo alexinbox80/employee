@@ -19,7 +19,8 @@ class Status extends Model
     protected $fillable = [
         'letter',
         'description',
-        'color'
+        'color',
+        'color_description'
     ];
 
     public function schedule(): BelongsTo

@@ -25,6 +25,8 @@ class StatusSeeder extends Seeder
             $statuses[$i] = [
                 'letter' => $status_array[$i],
                 'description' => $description_array[$i],
+                'color' => '#FFCCFF',
+                'color_description' => 'желтый цвет',
                 'created_at' => now('Europe/Moscow'),
             ];
         }

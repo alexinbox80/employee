@@ -21,7 +21,10 @@ class Employee extends Model
      * @var list<string>
      */
     protected $fillable = [
+        //подразделение
         'division_id',
+        //отдел
+        'department_id',
         'is_shown',
         'last_name',
         'first_name',
@@ -53,9 +56,10 @@ class Employee extends Model
         //$date = Carbon::now('Europe/Moscow')->toDateString();
         $dateM = Carbon::now('Europe/Moscow')->format('m');
         $dateY = Carbon::now('Europe/Moscow')->format('Y');
-        $date = $dateY . '-' . $dateM . '-01';
+        $dateL = $dateY . '-' . $dateM . '-01';
+        $dateR = $dateY . '-' . $dateM . '-31';
         //dd($date);
 
-        return $this->hasMany(Schedule::class)->where('date', '>=', $date);
+        return $this->hasMany(Schedule::class)->where('date', '>=', $dateL)->where('date', '<=', $dateR);
     }
 }

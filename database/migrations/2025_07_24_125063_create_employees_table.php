@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
 
+            //подразделение
             $table->bigInteger('division_id')->unsigned()->nullable();
             $table->foreign('division_id')->references('id')->on('divisions');
+
+            //отдел
+            $table->bigInteger('department_id')->unsigned()->nullable();
+            $table->foreign('department_id')->references('id')->on('divisions');
 
             $table->boolean('is_shown')->default(false);
 

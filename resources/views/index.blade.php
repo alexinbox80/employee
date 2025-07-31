@@ -42,8 +42,7 @@
                         <th scope="col" class="fio">ФИО</th>
                         @for ($day = 1; $day <= date('t', time()); $day++)
                             <th scope="col"
-                                class="{{ ((numOfWeek($day) == 0) || (numOfWeek($day) == 6)) ? 'weekend' : 'work_day' }}">{{ $day }}
-                                <br> {{ dayOfWeek($day) }}</th>
+                                class="{{ ((numOfWeek($day) == 0) || (numOfWeek($day) == 6)) ? 'weekend' : 'work_day' }}">{{ $day }}<br>{{ dayOfWeek($day) }}</th>
                         @endfor
                     </tr>
                     </thead>
@@ -52,7 +51,7 @@
                     @forelse ($employees as $key => $employee)
                         @if ($employee->division->id <> $divisionId)
                             <tr class="table_grid">
-                                <td colspan="{{ totalColumn(5) }}">
+                                <td colspan="{{ totalColumn(5) }}" class="department">
                                     @if($employee->division->level2_full === null)
                                         <a href="{{ route('page_division', ['division' => $employee->division->id]) }}" class="division_link"
                                            title="{{ $employee->division->level1_full }}">{{ $employee->division->level1_short }}</a>
@@ -65,8 +64,8 @@
                             @php( $divisionId = $employee->division->id )
                         @endif
                         <tr id="row-{{ $employee->id }}" class="table_grid">
-                            <td title="{{ $employee->id }}">{{ $key + 1 }}</td>
-                            <td>{{ $employee->division_id }}</td>
+                            <td class="table_id" title="{{ $employee->id }}">{{ $key + 1 }}</td>
+                            <td>{{ $employee->department_id }}</td>
                             <td class="fio">
                                 <a class="fio_link" href="{{ route('page_employee', ['employee' => $employee->id]) }}" title="{{ $employee->position }}">
                                     {{ surname($employee->last_name, $employee->first_name, $employee->middle_name) }}
@@ -76,7 +75,7 @@
                                 <td class="{{ ((numOfWeek($day) == 0) || (numOfWeek($day) == 6)) ? 'weekend' : 'work_day' }}">
                                     @foreach ($employee->schedules as $schedule)
                                         @if (getDay($schedule->date) == $day)
-                                            <p title="{{ $schedule->status->description }}"
+                                            <p title="{{ $schedule->status->description }}" style="background-color: {{$schedule->status->color}}"
                                                class="table_grid__p">{{ strtoupper($schedule->status->letter) }}</p>
                                         @else
 {{--                                            &nbsp;--}}

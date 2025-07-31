@@ -1,6 +1,12 @@
+p, td {
+    margin: 2px!important;
+    padding: 0!important;
+}
+
 .table_grid th, .table_grid td {
     border: 1px solid black;
     text-align: center;
+    align-content: center;
 }
 
 .table_grid__p {
@@ -10,17 +16,35 @@
     text-align: center;
 }
 
-.weekend {
-    background-color: #0d6efd!important;
+th.weekend {
+    background-color: #e6e6e6!important;
     color: white;
+}
+
+td.weekend {
+    background-color: #e6e6e6!important;
+}
+
+.table_id {
+    padding: 0 3px!important;
 }
 
 .fio {
     align-content: center;
 }
 
-.fio_link, .division_link {
+.fio_link, .division_link, .division_fio__link {
     text-decoration: none;
+}
+
+.department {
+    height: 27px;
+}
+
+.fio_link {
+    display: block;
+    width: 200px;
+    height: 27px;
 }
 
 .fio_link:hover, .division_link:hover {

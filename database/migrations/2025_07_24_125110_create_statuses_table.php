@@ -16,7 +16,8 @@ return new class extends Migration
 
             $table->string('letter', 2)->unique();
             $table->string('description', 255)->nullable();
-            $table->string('color', 128)->nullable();
+            $table->string('color', 10)->nullable();
+            $table->string('color_description', 128)->nullable();
             $table->timestamps();
         });
     }
