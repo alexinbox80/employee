@@ -1,4 +1,12 @@
 @php
+
+    function getMonth(int $month): string
+    {
+        $months = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
+
+        return $months[ltrim($month - 1, '0')];
+    }
+
     function surname(string $lastName, string $firstName, string $middleName): string
     {
         return ucwords($lastName) . ' ' . strtoupper(substr($firstName, 0, 2)) . '.' . strtoupper(substr($middleName, 0, 2)) . '.';
@@ -14,15 +22,15 @@
         return (int)date('t', time()) + $param;
     }
 
-    function dayOfWeek(int $day): string
+    function dayOfWeek(int $year, int $month, int $day): string
     {
         $days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-        return $days[ date('w', strtotime('2025-07-' . $day))];
+        return $days[ date('w', strtotime($year . '-' . $month . '-' . $day))];
     }
 
-    function numOfWeek(int $day): int
+    function numOfWeek(int $year, int $month, int $day): int
     {
-        return date('w', strtotime('2025-07-' . $day));
+        return date('w', strtotime($year . '-' . $month . '-' . $day));
     }
 
     $currentMonth = $month;
@@ -31,13 +39,12 @@
 @extends('layouts.page')
 @section('content')
     <div class="container">
-        <div class="page_header">
-            <h1 class="display-5">Дежурства сотрудников</h1>
+        <div class="page_header mt-5">
             <div class="d-flex justify-content-end">
                 <a href="{{ route('page_generate_docx') }}" class="btn btn-primary">Выгрузить в Word</a>
             </div>
+            <h1 class="display-5">Дежурства сотрудников {{ getMonth($month) }} {{ $year }} года</h1>
             <br>
-            <div class="page_header__image p-4 p-md-5 mb-0 w-100"></div>
         </div>
         <x-navigation :$currentMonth :$currentYear/>
         <div class="col-md-6 px-0">
@@ -49,7 +56,7 @@
                     <th scope="col" class="fio">ФИО</th>
                     @for ($day = 1; $day <= date('t', time()); $day++)
                         <th scope="col"
-                            class="{{ ((numOfWeek($day) == 0) || (numOfWeek($day) == 6)) ? 'weekend' : 'work_day' }}">{{ $day }}<br>{{ dayOfWeek($day) }}</th>
+                            class="{{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}">{{ $day }}<br>{{ dayOfWeek($year, $month, $day) }}</th>
                     @endfor
                 </tr>
                 </thead>
@@ -79,7 +86,7 @@
                             </a>
                         </td>
                         @for ($day = 1; $day <= date('t', time()); $day++)
-                            <td class="{{ ((numOfWeek($day) == 0) || (numOfWeek($day) == 6)) ? 'weekend' : 'work_day' }}">
+                            <td class="{{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}">
                                 @foreach ($employee->schedules as $schedule)
                                     @if (getDay($schedule->date) == $day)
                                         <p title="{{ $schedule->status->description }}" style="background-color: {{$schedule->status->color}}"
