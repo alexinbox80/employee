@@ -13,6 +13,20 @@ if (!function_exists('getMonthsArray')) {
     }
 }
 
+if (!function_exists('lastDayOfMonth')) {
+    /**
+     * This function return last day of given month
+     * @param int $month The given month
+     * @param int $year The given year
+     * @return int
+     */
+    function lastDayOfMonth(int $month, int $year): int
+    {
+        $date = $year . '-' . $month . '-01';
+        return (int)date('t', strtotime($date . ' 01:01:01'));
+    }
+}
+
 if (!function_exists('getMonth')) {
     /**
      * This function return name of month by index

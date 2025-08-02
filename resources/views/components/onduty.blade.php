@@ -5,7 +5,7 @@
             <th scope="col">#</th>
             <th scope="col">Идентификатор подразделения</th>
             <th scope="col" class="fio">ФИО</th>
-            @for ($day = 1; $day <= date('t', time()); $day++)
+            @for ($day = 1; $day <= lastDayOfMonth($month, $year); $day++)
                 <th scope="col"
                     class="{{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}">{{ $day }}<br>{{ dayOfWeek($year, $month, $day) }}</th>
             @endfor
@@ -36,7 +36,7 @@
                         {{ surname($employee->last_name, $employee->first_name, $employee->middle_name) }}
                     </a>
                 </td>
-                @for ($day = 1; $day <= date('t', time()); $day++)
+                @for ($day = 1; $day <= lastDayOfMonth($month, $year); $day++)
                     <td class="{{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}">
                         @foreach ($employee->schedules as $schedule)
                             @if (getDay($schedule->date) == $day)

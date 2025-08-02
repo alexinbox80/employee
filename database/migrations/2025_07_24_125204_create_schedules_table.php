@@ -23,6 +23,8 @@ return new class extends Migration
             $table->date('date');
             $table->text('description')->nullable();
 
+            //$table->unique(['status_id', 'date']);
+
             $table->timestamps();
         });
     }
