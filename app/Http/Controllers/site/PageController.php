@@ -16,6 +16,7 @@ class PageController extends Controller
      */
     public function index(Request $request): View
     {
+        //dump($request->query('month'));
         $month = $request->query('month');
         $year = $request->query('year');
 

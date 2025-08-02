@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if (!function_exists('getMonthsArray')) {
     /**
      * This function return aray of months of year
@@ -21,7 +23,7 @@ if (!function_exists('getMonth')) {
     {
         $months = getMonthsArray();
 
-        return $months[ltrim($month - 1, '0')];
+        return $months[$month - 1];
     }
 }
 
@@ -89,5 +91,52 @@ if (!function_exists('numOfWeek')) {
     function numOfWeek(int $year, int $month, int $day): int
     {
         return date('w', strtotime($year . '-' . $month . '-' . $day));
+    }
+
+    if (!function_exists('generateURLDecrement')) {
+        /**
+         * This function return the url of page for previous month
+         * @param string $url the url of current page
+         * @param int $month the current month
+         * @param int $year the current year
+         * @return string
+         */
+        function generateURLDecrement(string $url, int $month, int $year): string
+        {
+            $month--;
+            if ($month < 1) {
+                $month = 12;
+                $year--;
+            }
+
+            return $url . '?month=' . $month . '&year=' . $year;
+        }
+    }
+
+    if (!function_exists('generateURLIncrement')) {
+        /**
+         * This function return the url of page for next month
+         * @param string $url the url of current page
+         * @param int $month the current month
+         * @param int $year the current year
+         * @return string
+         */
+        function generateURLIncrement(string $url, int $month, int $year): string
+        {
+            $dateM = Carbon::now('Europe/Moscow')->format('m');
+            $dateY = Carbon::now('Europe/Moscow')->format('Y');
+
+            $month++;
+            if (($month > $dateM) && ($year == $dateY)) {
+                $month = ltrim($dateM, 0);
+            }
+
+            if ($month > 12) {
+                $month = 1;
+                $year++;
+            }
+
+            return $url . '?month=' . $month . '&year=' . $year;
+        }
     }
 }
