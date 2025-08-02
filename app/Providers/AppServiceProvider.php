@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\EmployeeContract;
+use App\Repositories\EmployeeRepository;
+use App\Services\Contracts\PageContract;
+use App\Services\PageService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PageContract::class, PageService::class);
+        $this->app->bind(EmployeeContract::class, EmployeeRepository::class);
     }
 
     /**

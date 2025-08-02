@@ -5,35 +5,29 @@ namespace App\Http\Controllers\site;
 use App\Http\Controllers\Controller;
 use App\Models\Division;
 use App\Models\Employee;
+use App\Services\Contracts\PageContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
-
-class PageController extends Controller
+final class PageController extends Controller
 {
+    public function __construct(
+        private readonly PageContract $pageService,
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): View
     {
-        //dump($request->query('month'));
-        $month = $request->query('month');
-        $year = $request->query('year');
-
-        if ($month === null) {
-            $month = date('m');
-        }
-
-        if ($year === null) {
-            $year = date('Y');
-        }
-
-        $employees = Employee::query()->with(['division', 'schedules'])->orderBy('division_id')->orderBy('last_name')->get();
+        $result = $this->pageService->index($request);
 
         return view('index', [
-            'employees' => $employees,
-            'month' => $month,
-            'year' => $year,
+            'employees' => $result['employees'],
+            'month' => $result['month'],
+            'year' => $result['year'],
         ]);
     }
 
