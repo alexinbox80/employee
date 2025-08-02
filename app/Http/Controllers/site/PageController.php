@@ -4,14 +4,14 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Division;
-use App\Services\Contracts\PageContract;
+use App\Services\Contracts\EmployeeContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 final class PageController extends Controller
 {
     public function __construct(
-        private readonly PageContract $pageService,
+        private readonly EmployeeContract $employeeService,
     )
     {
     }
@@ -21,7 +21,10 @@ final class PageController extends Controller
      */
     public function index(Request $request): View
     {
-        $result = $this->pageService->index($request);
+        $month = $request->query('month');
+        $year = $request->query('year');
+
+        $result = $this->employeeService->index($month, $year);
 
         return view('index', [
             'employees' => $result['employees'],
@@ -33,13 +36,13 @@ final class PageController extends Controller
     public function getEmployeeById(int $employeeId): View
     {
         return view('employee', [
-            'employee' => $this->pageService->findEmployeeById($employeeId),
+            'employee' => $this->employeeService->findEmployeeById($employeeId),
         ]);
     }
 
     public function getDivisionById(Division $division): View
     {
-        $result = $this->pageService->getDivisionById($division->id);
+        $result = $this->employeeService->getDivisionById($division->id);
 
         return view('division', [
             'division' => $division,

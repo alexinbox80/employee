@@ -4,25 +4,21 @@ namespace App\Services;
 
 use App\Models\Division;
 use App\Models\Employee;
-use App\Repositories\Contracts\DivisionContract;
-use App\Repositories\Contracts\EmployeeContract;
-use App\Services\Contracts\PageContract;
-use Illuminate\Http\Request;
+use App\Repositories\Contracts\DivisionContract as DivisionRepositoryContract;
+use App\Repositories\Contracts\EmployeeContract as EmployeeRepositoryContract;
+use App\Services\Contracts\EmployeeContract;
 
-final class PageService implements PageContract
+final class EmployeeService implements EmployeeContract
 {
     public function __construct(
-        private readonly EmployeeContract $employeeRepository,
-        private readonly DivisionContract $divisionRepository,
+        private readonly EmployeeRepositoryContract $employeeRepository,
+        private readonly DivisionRepositoryContract $divisionRepository,
     )
     {
     }
 
-    public function index(Request $request): array
+    public function index(int $month = null, int $year = null): array
     {
-        $month = $request->query('month');
-        $year = $request->query('year');
-
         if ($month === null) {
             $month = date('m');
         }

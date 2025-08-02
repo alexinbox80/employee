@@ -3,12 +3,10 @@
 namespace App\Services\Contracts;
 
 use App\Models\Employee;
-use Illuminate\Http\Request;
 
-interface PageContract
+interface EmployeeContract
 {
-    public function index(Request $request): array;
+    public function index(int $month, int $year): array;
     public function getDivisionById(int $divisionId): array;
-
     public function findEmployeeById(int $id): Employee;
 }
