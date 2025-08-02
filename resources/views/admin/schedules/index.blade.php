@@ -18,6 +18,7 @@
                     <th scope="col">Описание</th>
                     <th scope="col">Запись создана</th>
                     <th scope="col">Запись обновлена</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>

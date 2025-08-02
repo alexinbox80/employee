@@ -27,6 +27,7 @@
                     <th scope="col">Описание</th>
                     <th scope="col">Запись создана</th>
                     <th scope="col">Запись обновлена</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,7 +60,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="16">Записей не найдено</td>
+                        <td colspan="17">Записей не найдено</td>
                     </tr>
                 @endforelse
                 </tbody>

@@ -12,29 +12,40 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Идентификатор подразделения</th>
+                    <th scope="col">Виден</th>
+                    <th scope="col">Отдел</th>
                     <th scope="col">Фамилия</th>
                     <th scope="col">Имя</th>
                     <th scope="col">Отчество</th>
+                    <th scope="col">День рождения</th>
                     <th scope="col">Должность</th>
                     <th scope="col">Эл. почта</th>
-                    <th scope="col">Телефон</th>
+                    <th scope="col">Рабочий телефон</th>
+                    <th scope="col">Домашний телефон</th>
+                    <th scope="col">Мобильный телефон</th>
                     <th scope="col">Адрес</th>
                     <th scope="col">Запись создана</th>
                     <th scope="col">Запись обновлена</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 @forelse($employees as $employee)
                     <tr id="row-{{ $employee->id }}">
                         <td>{{ $employee->id }}</td>
-                        <td>{{ $employee->division_id }}</td>
+                        <td>{{ $employee->is_shown }}
+                            <input name="isShown" type="checkbox" value={{ (int)$employee->is_shown }} checked="{{ ($employee->is_shown == 1) ? 'checked': '' }}" disabled>
+                        </td>
+                        <td>{{ $employee->department->level2_short }}</td>
                         <td>{{ $employee->last_name }}</td>
                         <td>{{ $employee->first_name }}</td>
                         <td>{{ $employee->middle_name }}</td>
+                        <td>{{ dateDDMMYYYY($employee->birth_date) }}</td>
                         <td>{{ $employee->position }}</td>
                         <td>{{ $employee->email }}</td>
-                        <td>{{ $employee->phone }}</td>
+                        <td>{{ $employee->work_phone }}</td>
+                        <td>{{ $employee->home_phone }}</td>
+                        <td>{{ $employee->mobile_phone }}</td>
                         <td>{{ $employee->address }}</td>
                         <td>{{ $employee->created_at }}</td>
                         <td>{{ $employee->updated_at }}</td>
@@ -49,7 +60,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11">Записей не найдено</td>
+                        <td colspan="16">Записей не найдено</td>
                     </tr>
                 @endforelse
                 </tbody>

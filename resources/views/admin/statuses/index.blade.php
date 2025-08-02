@@ -14,8 +14,11 @@
                     <th scope="col">#</th>
                     <th scope="col">Сокращение</th>
                     <th scope="col">Описание</th>
+                    <th scope="col">Hex код цвета</th>
+                    <th scope="col">Название цвета</th>
                     <th scope="col">Запись создана</th>
                     <th scope="col">Запись обновлена</th>
+                    <th scope="col">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,6 +27,8 @@
                         <td>{{ $status->id }}</td>
                         <td>{{ $status->letter }}</td>
                         <td>{{ $status->description }}</td>
+                        <td>{{ $status->color }}</td>
+                        <td>{{ $status->color_description }}</td>
                         <td>{{ $status->created_at }}</td>
                         <td>{{ $status->updated_at }}</td>
                         <td>
@@ -37,7 +42,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">Записей не найдено</td>
+                        <td colspan="8">Записей не найдено</td>
                     </tr>
                 @endforelse
                 </tbody>
