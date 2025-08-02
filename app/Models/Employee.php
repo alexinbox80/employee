@@ -39,6 +39,7 @@ class Employee extends Model
 
     protected $with = [
         'division',
+        'department',
         'schedules'
     ];
 
@@ -46,6 +47,11 @@ class Employee extends Model
     public function division(): HasOne
     {
         return $this->hasOne(Division::class, 'id', 'division_id');
+    }
+
+    public function department(): HasOne
+    {
+        return $this->hasOne(Division::class, 'id', 'department_id');
     }
 
     public function schedules(): HasMany

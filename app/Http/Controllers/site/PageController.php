@@ -4,7 +4,6 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Division;
-use App\Models\Employee;
 use App\Services\Contracts\PageContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -31,20 +30,20 @@ final class PageController extends Controller
         ]);
     }
 
-    public function getEmployeeById(Employee $employee): View
+    public function getEmployeeById(int $employeeId): View
     {
         return view('employee', [
-            'employee' => $employee
+            'employee' => $this->pageService->findEmployeeById($employeeId),
         ]);
     }
 
     public function getDivisionById(Division $division): View
     {
-        $employees = Employee::query()->where('division_id', $division->id)->orderBy('last_name')->get();
+        $result = $this->pageService->getDivisionById($division->id);
 
         return view('division', [
             'division' => $division,
-            'employees' => $employees
+            'employees' => $result['employees']
         ]);
     }
 }

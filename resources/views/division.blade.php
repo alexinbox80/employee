@@ -6,7 +6,7 @@
             <a class="division_link" href="{{ route('page_index') }}">НАЗАД</a>
             <ul class="list-group">
                 <li class="list-group-item" aria-current="true">
-                    <span>{{$division->level1_full}}</span>
+                    <span>{{$division->level2_full}}</span>
                 </li>
                 @foreach($employees as $key => $employee)
                     <li class="list-group-item" aria-current="true">

@@ -44,6 +44,7 @@ td.weekend {
     display: block;
     width: 200px;
     height: 27px;
+    align-content: center;
 }
 
 .fio_link:hover, .division_link:hover {

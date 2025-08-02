@@ -153,4 +153,16 @@ if (!function_exists('numOfWeek')) {
             return $url . '?month=' . $month . '&year=' . $year;
         }
     }
+
+    if (!function_exists('dateDDMMYYYY')) {
+        /**
+         * This function return the date in format DD.MM.YYYY
+         * @param string $date the url of current page
+         * @return string
+         */
+        function dateDDMMYYYY(string $date): string
+        {
+            return date('d.m.Y', strtotime($date));
+        }
+    }
 }
