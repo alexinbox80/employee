@@ -32,6 +32,21 @@ final class EmployeeService implements EmployeeContract
         return ['employees' => $employees, 'month' => $month, 'year' => $year];
     }
 
+    public function indexDocx(int $month = null, int $year = null): array
+    {
+        if ($month === null) {
+            $month = date('m');
+        }
+
+        if ($year === null) {
+            $year = date('Y');
+        }
+
+        $employees = $this->employeeRepository->getEmployeesForDocx($month, $year);
+
+        return ['employees' => $employees, 'month' => $month, 'year' => $year];
+    }
+
     public function getDivisionById(int $divisionId): array
     {
         return [

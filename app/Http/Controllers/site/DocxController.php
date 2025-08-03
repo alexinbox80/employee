@@ -4,8 +4,8 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Services\Contracts\EmployeeContract;
-use Carbon\Carbon;
 use DateTime;
+use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\SimpleType\JcTable;
@@ -34,9 +34,12 @@ class DocxController extends Controller
         return abs($diff->days) === 1;
     }
 
-    public function generate(): BinaryFileResponse
+    public function generate(Request $request): BinaryFileResponse
     {
-        $employees = $this->employeeService->index();
+        $month = $request->query('month');
+        $year = $request->query('year');
+
+        $employees = $this->employeeService->indexDocx($month, $year);
 
         $phpWord = new PhpWord();
         $phpWord->setDefaultFontName('Times New Roman');
@@ -51,43 +54,20 @@ class DocxController extends Controller
         ];
         $section = $phpWord->addSection($sectionStyle);
 
-        //$section = $phpWord->addSection();
-
         // Add text
-        $section->addText('Hello, this is a generated DOCX document from Laravel!',  null, ['align' => JcTable::START]);
+        $section->addText('Hello, this is a generated DOCX document from Laravel!', null, ['align' => JcTable::START]);
         $section->addText('This text is bold and italic.', ['bold' => true, 'italic' => true]);
-
 
         $header = ['size' => 16, 'bold' => true, 'align' => 'center'];
         $section->addText('Table with colspan and rowspan', null, $header);
 
-
-
-        /*
- *  3. colspan (gridSpan) and rowspan (vMerge)
- *  -------------------------
- *  |  A  |     B     |  C  |
- *  |-----|-----------|     |
- *  |        D        |     |
- *  ------|-----------|     |
- *  |  E  |  F  |  G  |     |
- *  -------------------------
- */
-
-        //$section->addPageBreak();
         $section->addTextBreak(1);
         $section->addText('Table with colspan and rowspan', $header, ['align' => 'center']);
         $section->addTextBreak(1);
 
         $fancyTableStyle = ['borderSize' => 6, 'borderColor' => '999999'];
-        $cellRowSpan = ['vMerge' => 'restart', 'valign' => 'center', 'bgColor' => 'FFFF00'];
-        $cellRowContinue = ['vMerge' => 'continue'];
         $cellColSpan = ['gridSpan' => 2];
         $cellHCentered = ['alignment' => JcTable::CENTER];
-        $cellVCentered = ['valign' => 'center'];
-
-
-
 
         $spanTableStyleName = 'new Colspan Rowspan';
         $phpWord->addTableStyle($spanTableStyleName, $fancyTableStyle);
@@ -98,30 +78,6 @@ class DocxController extends Controller
 
             $schedules = $employee->schedules;
             if (count($schedules) > 0) {
-//                $firstItem = array_shift($schedules);
-//                $lastItem = end($schedules);
-
-                $flag = false;
-                foreach ($schedules as $keySchedules => $schedule) {
-//                    dump($schedule->date);
-//                    dump($schedule->status->letter);
-
-                    if ($flag === false) {
-                        $firstDate = $schedule->date;
-                        $flag = true;
-                    }
-
-                    if ($keySchedules > 1 && $this->areDatesConsecutive($schedule->date, $schedules[$keySchedules - 1]->date)) {
-                        //dump('if() ' . $this->areDatesConsecutive($schedule->date, $schedules[$keySchedules - 1]->date));
-                        //$firstDate = $schedule->date;
-                        $lastDate = $schedules[$keySchedules]->date;
-                        $flag = true;
-                    }
-
-                    if ($keySchedules > 1 && !$this->areDatesConsecutive($schedule->date, $schedules[$keySchedules - 1]->date)) {
-                        $flag = false;
-                    }
-                }
 
                 if ($employee->division->id <> $divisionId) {
                     if ($key <> 0) {
@@ -135,20 +91,53 @@ class DocxController extends Controller
                     $divisionId = $employee->division->id;
                 }
 
-                $row = $table->addRow();
-//                dump('-> ' . $employee->last_name);
-//                dump('-> ' . dateDDMMYYYY($firstDate));
-//                dump('-> ' . dateDDMMYYYY($lastDate));
-                //dateDDMMYYYY($firstItem['date']) . '-' . dateDDMMYYYY($lastItem['date'])
-                $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
-                $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
-                $row->addCell(7000)->addText($cellContent);
+                $flag = false;
+                foreach ($schedules as $keySchedule => $schedule) {
+                    if ($flag === false) {
+                        $firstDate = $schedule->date;
+                        $lastDate = $schedule->date;
+                        $flag = true;
+                    }
+
+                    if ($keySchedule > 1 && $this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date)) {
+                        $lastDate = $schedule->date;
+                        $flag = true;
+                    }
+
+                    if ($keySchedule > 1 && !$this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date)) {
+                        $flag = false;
+                        //$firstDate = $schedules[$keySchedule - 1]->date;
+
+                        $row = $table->addRow();
+                        $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
+                        $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
+                        $row->addCell(7000)->addText($cellContent);
+                    }
+
+                    if ($keySchedule === count($schedules) - 1) {
+                        $row = $table->addRow();
+                        $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
+                        $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
+                        $row->addCell(7000)->addText($cellContent);
+
+//                        if (($firstDate <> $year . '-' . $month .'-01') && ($flag === false)) {
+//                            $date = new DateTime($firstDate); // Create a DateTime object for today
+//                            $date->modify('-1 day'); // Subtract one day
+//                            $firstDate =  $date->format('Y-m-d'); // Output: 2025-08-02
+//                        }
+                    }
+                }
+
+//                $row = $table->addRow();
+//                $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
+//                $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
+//                $row->addCell(7000)->addText($cellContent);
             }
         }
 
         // Save the document
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-        $fileName = 'IC_DUTY_' . Carbon::now('Europe/Moscow')->toDateString() . '.docx';
+        $fileName = 'IC_DUTY_' . date('Y_m_d', strtotime($year . '-' . $month . '-' . '1')) . '.docx';
         $objWriter->save(storage_path('app/' . $fileName));
 
         // Download the document

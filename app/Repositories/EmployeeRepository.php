@@ -24,6 +24,21 @@ final class EmployeeRepository implements EmployeeContract
             ->get();
     }
 
+    public function getEmployeesForDocx(int $month, int $year, bool $isShown = true): Collection
+    {
+        $dateL = $year . '-' . $month . '-01';
+        $lastDayOfMonth = (int)date('t', strtotime($dateL . ' 01:01:01'));
+        $dateR = $year . '-' . $month . '-' . $lastDayOfMonth;
+
+        return Employee::query()
+            ->with(['division', 'schedules' => function ($query) use ($dateL, $dateR) {
+                $query->where('date', '>=', $dateL)->where('date', '<=', $dateR)->orderBy('date', 'asc');
+            }])->where('is_shown', $isShown)
+            ->orderBy('division_id')
+            ->orderBy('last_name')
+            ->get();
+    }
+
     public function getEmployeesForPageById(int $divisionId): Collection
     {
         return Employee::query()->where('division_id', $divisionId)->orderBy('last_name')->get();

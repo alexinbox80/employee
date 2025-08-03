@@ -107,6 +107,21 @@ if (!function_exists('numOfWeek')) {
         return date('w', strtotime($year . '-' . $month . '-' . $day));
     }
 
+    if (!function_exists('generateURL')) {
+        /**
+         * This function return the url of page for given month and year
+         * @param string $url the url of current page
+         * @param int $month the current month
+         * @param int $year the current year
+         * @return string
+         */
+        function generateURL(string $url, int $month, int $year): string
+        {
+            return $url . '?month=' . $month . '&year=' . $year;
+        }
+    }
+
+
     if (!function_exists('generateURLDecrement')) {
         /**
          * This function return the url of page for previous month
