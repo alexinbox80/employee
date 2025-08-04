@@ -43,7 +43,7 @@ class DocxController extends Controller
 
         $phpWord = new PhpWord();
         $phpWord->setDefaultFontName('Times New Roman');
-        $phpWord->setDefaultFontSize(10);
+        $phpWord->setDefaultFontSize(12);
 
         $sectionStyle = [
             'orientation' => 'portrait',
@@ -55,14 +55,31 @@ class DocxController extends Controller
         $section = $phpWord->addSection($sectionStyle);
 
         // Add text
-        $section->addText('Hello, this is a generated DOCX document from Laravel!', null, ['align' => JcTable::START]);
-        $section->addText('This text is bold and italic.', ['bold' => true, 'italic' => true]);
+        $cornerStamp = ['size' => 14, 'bold' => true];
+        $conerStampPosition = [
+            'space' => ['before' => 0, 'after' => 0],
+            'indentation' => ['left' => $this->m2t(100), 'right' => 0]
+        ];
 
-        $header = ['size' => 16, 'bold' => true, 'align' => 'center'];
-        $section->addText('Table with colspan and rowspan', null, $header);
+        $section->addText('У Т В Е Р Ж Д А Ю', $cornerStamp, $conerStampPosition);
+        $section->addText('Начальник ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
+        $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
+        $section->addText('____________ Г.А. Полевкова', $cornerStamp, $conerStampPosition);
 
+        if ($month === 1) {
+            $stampMonth = 12;
+            $stampYear = $year - 1;
+        } else {
+            $stampMonth = $month - 1;
+            $stampYear = $year;
+        }
+
+        $section->addText('" ' . lastDayOfMonth($stampMonth, $stampYear) . ' " ' . getMonth($stampMonth, true) .  ' ' . $stampYear . ' года', $cornerStamp, $conerStampPosition);
         $section->addTextBreak(1);
-        $section->addText('Table with colspan and rowspan', $header, ['align' => 'center']);
+
+        $header = ['size' => 14, 'bold' => true, 'align' => 'center'];
+        $section->addTextBreak(1);
+        $section->addText('Дежурство сотрудников ИЦ на ' . getMonth($month) . ' ' . $year . ' года', $header, ['align' => 'center']);
         $section->addTextBreak(1);
 
         $fancyTableStyle = ['borderSize' => 6, 'borderColor' => '999999'];

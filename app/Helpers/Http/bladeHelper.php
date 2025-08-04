@@ -13,6 +13,17 @@ if (!function_exists('getMonthsArray')) {
     }
 }
 
+if (!function_exists('getMonthsArrayEnding')) {
+    /**
+     * This function return aray of months of year
+     * @return array
+     */
+    function getMonthsArrayEnding(): array
+    {
+        return ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    }
+}
+
 if (!function_exists('lastDayOfMonth')) {
     /**
      * This function return last day of given month
@@ -31,11 +42,12 @@ if (!function_exists('getMonth')) {
     /**
      * This function return name of month by index
      * @param int $month The index of month
+     * @param bool $ending change ending of the word
      * @return string
      */
-    function getMonth(int $month): string
+    function getMonth(int $month, bool $ending = false): string
     {
-        $months = getMonthsArray();
+        $months = $ending === false ? getMonthsArray() : getMonthsArrayEnding();
 
         return $months[$month - 1];
     }

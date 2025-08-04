@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="col mb-3 mt-md-4 px-4">
-                <button class="btn btn-success" type="submit">Отправить</button>
+                <button class="btn btn-success" type="submit">Получить</button>
             </div>
         </div>
         <div class="row">
