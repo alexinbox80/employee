@@ -3,6 +3,7 @@
     <div class="page_header">
         <h1 class="display-5">О сотруднике</h1>
         <div class="page_header__image p-4 p-md-5 mb-0 w-100">
+            <a class="division_link" href="{{ route('page.get.index') }}">НАЗАД</a>
             <ul class="list-group">
                 <li class="list-group-item" aria-current="true">
                     <span>Орган:</span>

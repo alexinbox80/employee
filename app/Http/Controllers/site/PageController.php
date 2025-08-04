@@ -7,7 +7,9 @@ use App\Models\Division;
 use App\Services\Contracts\StatusContract;
 use App\Services\Contracts\EmployeeContract;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 final class PageController extends Controller
 {
@@ -65,5 +67,12 @@ final class PageController extends Controller
             'month' => $result['month'],
             'year' => $result['year'],
         ]);
+    }
+
+    public function processSchedule(Request $request): JsonResponse
+    {
+        Log::info(json_encode($request));
+
+        return response()->json(['status' => 200, 'data' => 'Here']);
     }
 }

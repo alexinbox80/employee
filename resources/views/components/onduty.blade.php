@@ -18,10 +18,10 @@
                 <tr class="table_grid">
                     <td colspan="{{ totalColumn(5) }}" class="department">
                         @if($employee->division->level2_full === null)
-                            <a href="{{ route('page_division', ['division' => $employee->division->id]) }}" class="division_link"
+                            <a href="{{ route('page.get.division', ['division' => $employee->division->id]) }}" class="division_link"
                                title="{{ $employee->division->level1_full }}">{{ $employee->division->level1_short }}</a>
                         @else
-                            <a href="{{ route('page_division', ['division' => $employee->division->id]) }}" class="division_link"
+                            <a href="{{ route('page.get.division', ['division' => $employee->division->id]) }}" class="division_link"
                                title="{{ $employee->division->level2_full }}">{{ $employee->division->level2_short }}</a>
                         @endif
                     </td>
@@ -32,7 +32,7 @@
                 <td class="table_id" title="{{ $employee->id }}">{{ $key + 1 }}</td>
                 <td>{{ $employee->department_id }}</td>
                 <td class="fio">
-                    <a class="fio_link" href="{{ route('page_employee', ['employee' => $employee->id]) }}" title="{{ $employee->position }}">
+                    <a class="fio_link" href="{{ route('page.get.employee', ['employee' => $employee->id]) }}" title="{{ $employee->position }}">
                         {{ surname($employee->last_name, $employee->first_name, $employee->middle_name) }}
                     </a>
                 </td>

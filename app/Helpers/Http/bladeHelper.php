@@ -192,4 +192,16 @@ if (!function_exists('numOfWeek')) {
             return date('d.m.Y', strtotime($date));
         }
     }
+
+    if (!function_exists('getCurrentMonth')) {
+        /**
+         * This function return the date in format DD.MM.YYYY
+         * @param string $date the url of current page
+         * @return string
+         */
+        function getCurrentMonth(): int
+        {
+            return date('m', time());
+        }
+    }
 }

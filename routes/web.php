@@ -8,12 +8,14 @@ use App\Http\Controllers\admin\ScheduleController as AdminScheduleController;
 use App\Http\Controllers\site\PageController;
 use App\Http\Controllers\site\DocxController;
 
-Route::get('/generate-docx', [DocxController::class, 'generate'])->name('page_generate_docx');
-
-Route::get('/', [PageController::class, 'index'])->name('page_index');
-Route::get('/create', [PageController::class, 'create'])->name('page_create');
-Route::get('/employee/{employee}', [PageController::class, 'getEmployeeById'])->name('page_employee');
-Route::get('/division/{division}', [PageController::class, 'getDivisionById'])->name('page_division');
+Route::group(['as' => 'page.'], function () {
+    Route::get('/generate-docx', [DocxController::class, 'generate'])->name('get.docx');
+    Route::get('/', [PageController::class, 'index'])->name('get.index');
+    Route::get('/create', [PageController::class, 'create'])->name('get.create');
+    Route::post('/schedules', [PageController::class, 'processSchedule'])->name('post.schedule');
+    Route::get('/employee/{employee}', [PageController::class, 'getEmployeeById'])->name('get.employee');
+    Route::get('/division/{division}', [PageController::class, 'getDivisionById'])->name('get.division');
+});
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/', function() {

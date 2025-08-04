@@ -1,5 +1,5 @@
 <div class="row">
-    <form method="get" action="{{ route('page_index') }}">
+    <form method="get" action="{{ route('page.get.index') }}">
 {{--        @csrf--}}
         <div class="d-flex">
             <div class="col-md-5 mb-3 px-4">
