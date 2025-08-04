@@ -5,6 +5,7 @@ namespace App\Http\Controllers\site;
 use App\Http\Controllers\Controller;
 use App\Services\Contracts\EmployeeContract;
 use DateTime;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
@@ -20,12 +21,23 @@ class DocxController extends Controller
     {
     }
 
-    function m2t(int $millimeters): float
+    private function m2t(int $millimeters): float
     {
         return floor($millimeters * 56.7); //1 твип равен 1/567 сантиметра
     }
 
-    function areDatesConsecutive(string $date1, string $date2): bool
+
+    private function getHeadDepartment(Collection $employees, int $id = 1): bool
+    {
+        foreach ($employees as $employee) {
+            if(isset($employee->schedules[0]->date) && $employee->id === $id && date('d', strtotime($employee->schedules[0]->date)) === '01' )
+                return true;
+        }
+
+        return false;
+    }
+
+    private function areDatesConsecutive(string $date1, string $date2): bool
     {
         $firstDate = new DateTime($date1);
         $secondDate = new DateTime($date2);
@@ -62,9 +74,15 @@ class DocxController extends Controller
         ];
 
         $section->addText('У Т В Е Р Ж Д А Ю', $cornerStamp, $conerStampPosition);
-        $section->addText('Начальник ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
-        $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
-        $section->addText('____________ Г.А. Полевкова', $cornerStamp, $conerStampPosition);
+        if ($this->getHeadDepartment($employees['employees'], 1) === true) {
+            $section->addText('Начальник ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
+            $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
+            $section->addText('____________ Г.А. Полевкова', $cornerStamp, $conerStampPosition);
+        } else {
+            $section->addText('Врио начальника ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
+            $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
+            $section->addText('____________ Е.И. Минкин', $cornerStamp, $conerStampPosition);
+        }
 
         if ($month === 1) {
             $stampMonth = 12;
