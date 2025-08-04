@@ -71,7 +71,7 @@ final class PageController extends Controller
 
     public function processSchedule(Request $request): JsonResponse
     {
-        Log::info(json_encode($request));
+        Log::info(json_encode($request->input('data')));
 
         return response()->json(['status' => 200, 'data' => 'Here']);
     }

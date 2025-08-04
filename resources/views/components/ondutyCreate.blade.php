@@ -105,9 +105,10 @@
             let response = await fetch(url, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ data: data })
+                body: JSON.stringify(data)
             })
             .then(res => {
                 if (res.ok) { console.log("HTTP request successful") }
@@ -116,16 +117,11 @@
             })
             // .then(res => console.log(res))
             // .then(data => console.log(data))
-            // .catch(error => console.log(error)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            //let result = await response.json();
-            //return result;
+            // .catch(error => {
+            //     console.error('Error:', error);
+            // });
+            let result = await response.json();
+            return result;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -165,28 +161,29 @@
                 console.log(scheduleLists);
 
                 if (scheduleLists != null)
-                    send(`/schedules`, scheduleLists).then((result) => {
+                    send(`/schedules`, {data: scheduleLists}).then((result) => {
 
-                    const answer = JSON.parse(JSON.stringify(result));
-                    let alertBlock = document.querySelector('.alert-message');
-                    alertBlock.textContent = '';
-                    switch (answer.status.toLowerCase()) {
-                        case 'ok':
-                            console.log(JSON.stringify(result));
-                            const message = `Запись с #ID = ${id} успешно удалена`;
-                            renderBlock(alertBlock, message, 'success', 'beforeend');
-                            let removeRow = document.querySelector('#row-' + id);
-                            removeRow.remove();
-                            setTimeout("location.reload()", 2000);
-                            break;
-                        case 'error':
-                            console.log(JSON.stringify(result));
-                            const error = 'Возникла ошибка при удалении записи';
-                            renderBlock(alertBlock, error, 'danger', 'beforeend');
-                            break;
-                        default:
-                            console.log('Wrong Answer');
-                    }
+                        console.log(result);
+                    // const answer = JSON.parse(JSON.stringify(result));
+                    // let alertBlock = document.querySelector('.alert-message');
+                    // alertBlock.textContent = '';
+                    // switch (answer.status.toLowerCase()) {
+                    //     case 'ok':
+                    //         console.log(JSON.stringify(result));
+                    //         const message = `Запись с #ID = ${id} успешно удалена`;
+                    //         renderBlock(alertBlock, message, 'success', 'beforeend');
+                    //         let removeRow = document.querySelector('#row-' + id);
+                    //         removeRow.remove();
+                    //         setTimeout("location.reload()", 2000);
+                    //         break;
+                    //     case 'error':
+                    //         console.log(JSON.stringify(result));
+                    //         const error = 'Возникла ошибка при удалении записи';
+                    //         renderBlock(alertBlock, error, 'danger', 'beforeend');
+                    //         break;
+                    //     default:
+                    //         console.log('Wrong Answer');
+                    //}
                 });
 
             })
