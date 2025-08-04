@@ -82,29 +82,25 @@ class DocxController extends Controller
         $section->addText('Дежурство сотрудников ИЦ на ' . getMonth($month) . ' ' . $year . ' года', $header, ['align' => 'center']);
         $section->addTextBreak(1);
 
-        $fancyTableStyle = ['borderSize' => 6, 'borderColor' => '999999'];
+        //$fancyTableStyle = ['borderSize' => 6, 'borderColor' => '999999'];
+        $fancyTableStyle = ['borderSize' => 6, 'borderColor' => 'white'];
         $cellColSpan = ['gridSpan' => 2];
         $cellHCentered = ['alignment' => JcTable::CENTER];
+        $cellHleft = ['alignment' => JcTable::START];
 
         $spanTableStyleName = 'new Colspan Rowspan';
         $phpWord->addTableStyle($spanTableStyleName, $fancyTableStyle);
         $table = $section->addTable($spanTableStyleName);
 
         $divisionId = null;
+        $contents = [];
         foreach ($employees['employees'] as $key => $employee) {
 
             $schedules = $employee->schedules;
             if (count($schedules) > 0) {
 
                 if ($employee->division->id <> $divisionId) {
-                    if ($key <> 0) {
-                        $row = $table->addRow();
-                        $row->addCell(10000, $cellColSpan)->addText('');
-                    }
-
-                    $row = $table->addRow();
                     $division = is_null($employee->division->level2_full) ? $employee->department->level1_full : $employee->division->level2_full;
-                    $row->addCell(10000, $cellColSpan)->addText($division, null, $cellHCentered);
                     $divisionId = $employee->division->id;
                 }
 
@@ -125,30 +121,64 @@ class DocxController extends Controller
                         $flag = false;
                         //$firstDate = $schedules[$keySchedule - 1]->date;
 
-                        $row = $table->addRow();
-                        $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
-                        $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
-                        $row->addCell(7000)->addText($cellContent);
+                        $contents[$employee->division->id][] = [
+                            'employee_id' => $employee->id,
+                            'division_id' => $employee->division->id,
+                            'department_id' => $employee->department->id,
+                            'division' => $division,
+                            'start' => $firstDate,
+                            'end' => $lastDate,
+                            'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                        ];
                     }
 
                     if ($keySchedule === count($schedules) - 1) {
-                        $row = $table->addRow();
-                        $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
-                        $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
-                        $row->addCell(7000)->addText($cellContent);
-
 //                        if (($firstDate <> $year . '-' . $month .'-01') && ($flag === false)) {
 //                            $date = new DateTime($firstDate); // Create a DateTime object for today
 //                            $date->modify('-1 day'); // Subtract one day
 //                            $firstDate =  $date->format('Y-m-d'); // Output: 2025-08-02
 //                        }
+
+                        $contents[$employee->division->id][] = [
+                            'employee_id' => $employee->id,
+                            'division_id' => $employee->division->id,
+                            'department_id' => $employee->department->id,
+                            'division' => $division,
+                            'start' => $firstDate,
+                            'end' => $lastDate,
+                            'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                        ];
                     }
                 }
+           }
+        }
 
-//                $row = $table->addRow();
-//                $row->addCell(3000)->addText(dateDDMMYYYY($firstDate) . ' - ' . dateDDMMYYYY($lastDate), null, $cellHCentered);
-//                $cellContent = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone;
-//                $row->addCell(7000)->addText($cellContent);
+        $sortContents = [];
+        foreach ($contents as $content) {
+            usort($content,  function ($a, $b) {
+                $t1 = strtotime($a['start']);
+                $t2 = strtotime($b['start']);
+                return $t1 - $t2; // For ascending order
+                // return $t2 - $t1; // For descending order
+            });
+            $sortContents[] = $content;
+        }
+
+        foreach ($sortContents as $key => $content) {
+            $divisionId = null;
+            foreach ($content as $item) {
+                if ($item['division_id'] <> $divisionId) {
+                    $row = $table->addRow();
+                    $row->addCell($this->m2t(180), $cellColSpan)->addText('');
+
+                    $row = $table->addRow();
+                    $row->addCell($this->m2t(180), $cellColSpan)->addText($key  + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHleft);
+                    $divisionId = $item['division_id'];
+                }
+
+                $row = $table->addRow();
+                $row->addCell($this->m2t(60))->addText(dateDDMMYYYY($item['start']) . ' - ' . dateDDMMYYYY($item['end']), null, $cellHCentered);
+                $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHleft);
             }
         }
 
