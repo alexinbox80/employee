@@ -3,6 +3,7 @@
     <div class="container">
         <div class="page_header mt-5">
             <div class="d-flex justify-content-end">
+                <a class="btn btn-outline-primary me-2" href="{{ generateURL(route('page_create'), $month + 1, $year) }}">Создать дежурных</a>
                 <a class="btn btn-primary" href="{{ generateURL(route('page_generate_docx'), $month, $year) }}">Выгрузить в Word</a>
             </div>
             <h1 class="display-5">Дежурство по Информационному центру</h1>

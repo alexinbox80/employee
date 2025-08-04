@@ -4,6 +4,7 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Division;
+use App\Services\Contracts\StatusContract;
 use App\Services\Contracts\EmployeeContract;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ final class PageController extends Controller
 {
     public function __construct(
         private readonly EmployeeContract $employeeService,
+        private readonly StatusContract $statusService,
     )
     {
     }
@@ -47,6 +49,21 @@ final class PageController extends Controller
         return view('division', [
             'division' => $division,
             'employees' => $result['employees']
+        ]);
+    }
+
+    public function create(Request $request): View
+    {
+        $month = $request->query('month');
+        $year = $request->query('year');
+
+        $result = $this->employeeService->index($month, $year);
+
+        return view('create', [
+            'employees' => $result['employees'],
+            'statuses' => $this->statusService->getStatuses(),
+            'month' => $result['month'],
+            'year' => $result['year'],
         ]);
     }
 }

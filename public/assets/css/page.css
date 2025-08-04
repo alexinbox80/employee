@@ -50,3 +50,7 @@ td.weekend {
 .fio_link:hover, .division_link:hover {
     text-decoration: underline;
 }
+
+.cell_event {
+    cursor: pointer;
+}
