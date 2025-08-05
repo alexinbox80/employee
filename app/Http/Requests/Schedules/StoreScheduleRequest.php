@@ -22,10 +22,10 @@ class StoreScheduleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'schedule' => ['required', 'array', 'min:1'],
-            'schedule.*.employee_id' => ['required', 'integer', 'gt:0'],
-            'schedule.*.status_id' => ['required', 'integer', 'gt:0'],
-            'schedule.*.date' => ['required', 'string', 'date_format:Y-n-j'],
+            'schedules' => ['required', 'array', 'min:1'],
+            'schedules.*.employee_id' => ['required', 'integer', 'gt:0'],
+            'schedules.*.status_id' => ['required', 'integer', 'gt:0'],
+            'schedules.*.date' => ['required', 'string', 'date_format:Y-n-j'],
         ];
     }
 }
