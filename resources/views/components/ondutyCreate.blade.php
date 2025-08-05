@@ -45,7 +45,7 @@
                         data-date="{{ $year }}-{{ $month }}-{{ $day }}">
                         @foreach ($employee->schedules as $schedule)
                             @if (getDay($schedule->date) == $day)
-                                <p title="{{ $schedule->status->description }}" style="background-color: {{$schedule->status->color}}"
+                                <p title="{{ $schedule->status->description }}" style="background-color: {{ $schedule->status->color }}"
                                    class="table_grid__p">{{ strtoupper($schedule->status->letter) }}</p>
                             @endif
                         @endforeach
