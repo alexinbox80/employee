@@ -29,6 +29,11 @@ class Schedule extends Model
         'status'
     ];
 
+    public static function dateConvert(string $date): string
+    {
+        return date('Y-m-d', strtotime($date));
+    }
+
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);

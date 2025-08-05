@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Schedules\StoreScheduleRequest;
 use App\Models\Division;
 use App\Services\Contracts\StatusContract;
 use App\Services\Contracts\EmployeeContract;
+use App\Services\Contracts\ScheduleContract;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 final class PageController extends Controller
@@ -16,6 +20,7 @@ final class PageController extends Controller
     public function __construct(
         private readonly EmployeeContract $employeeService,
         private readonly StatusContract $statusService,
+        private readonly ScheduleContract $scheduleService,
     )
     {
     }
@@ -69,10 +74,23 @@ final class PageController extends Controller
         ]);
     }
 
-    public function processSchedule(Request $request): JsonResponse
+    public function processSchedule(StoreScheduleRequest $request): JsonResponse
     {
-        Log::info(json_encode($request->input('data')));
+        $validated = $request->validated();
+        $this->scheduleService->createSchedule($validated);
 
-        return response()->json(['status' => 200, 'data' => 'Here']);
+
+
+        try {
+            $deleted = true;
+            if ( $deleted === false) {
+                return response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+            } else {
+                return response()->json(['status' => 'ok'], Response::HTTP_OK);
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage().' '.$e->getCode());
+            return response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

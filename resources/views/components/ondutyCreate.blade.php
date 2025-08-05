@@ -1,6 +1,8 @@
 <x-statusPanel :$statuses />
+
 <div class="col-md-10 px-0">
     <a class="fio_link" href="{{ route('page.get.index') }}">НАЗАД</a>
+    <div class="alert-message"></div>
     <table id="onduty_create" class="table table-striped table-sm">
         <thead>
         <tr class="table_grid">
@@ -88,8 +90,8 @@
             cellGrids.forEach(cell => {
                 if(cell.dataset.clicked > 0) {
                     lists.push({
-                        employee_id: cell.dataset.employee_id,
-                        status_id: cell.dataset.status_id,
+                        employee_id: parseInt(cell.dataset.employee_id),
+                        status_id: parseInt(cell.dataset.status_id),
                         date: cell.dataset.date
                     });
                 }
@@ -101,27 +103,44 @@
                 return null;
         }
 
+        function getHtml(message, type = 'success') {
+            let alertContent;
+
+            alertContent = `<div class="alert alert-${type} alert-dismissible fade show">
+                                ${message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>`;
+
+            return alertContent;
+        }
+
+        function renderBlock(container, message, type = 'success', target = 'afterbegin') {
+
+            container.insertAdjacentHTML(target, getHtml(message, type));
+
+            return true;
+        }
+
         async function send(url, data) {
-            let response = await fetch(url, {
+            return await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify(data)
-            })
-            .then(res => {
-                if (res.ok) { console.log("HTTP request successful") }
-                else { console.log("HTTP request unsuccessful") }
-                return res
-            })
-            // .then(res => console.log(res))
-            // .then(data => console.log(data))
-            // .catch(error => {
-            //     console.error('Error:', error);
-            // });
-            let result = await response.json();
-            return result;
+            }).then(response => response.json())
+                 // Assuming PHP returns JSON
+                .then(data => data)
+                .catch(error => console.error('Error: ', error));
+        }
+
+        function alertBlockAutoClose(block, delay) {
+            setTimeout(function() {
+                if (block) {
+                    block.textContent = '';
+                }
+            }, delay);
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -161,31 +180,27 @@
                 console.log(scheduleLists);
 
                 if (scheduleLists != null)
-                    send(`/schedules`, {data: scheduleLists}).then((result) => {
-
-                        console.log(result);
-                    // const answer = JSON.parse(JSON.stringify(result));
-                    // let alertBlock = document.querySelector('.alert-message');
-                    // alertBlock.textContent = '';
-                    // switch (answer.status.toLowerCase()) {
-                    //     case 'ok':
-                    //         console.log(JSON.stringify(result));
-                    //         const message = `Запись с #ID = ${id} успешно удалена`;
-                    //         renderBlock(alertBlock, message, 'success', 'beforeend');
-                    //         let removeRow = document.querySelector('#row-' + id);
-                    //         removeRow.remove();
-                    //         setTimeout("location.reload()", 2000);
-                    //         break;
-                    //     case 'error':
-                    //         console.log(JSON.stringify(result));
-                    //         const error = 'Возникла ошибка при удалении записи';
-                    //         renderBlock(alertBlock, error, 'danger', 'beforeend');
-                    //         break;
-                    //     default:
-                    //         console.log('Wrong Answer');
-                    //}
+                    send(`/schedules`, {schedule: scheduleLists}).then((result) => {
+                        const answer = JSON.parse(JSON.stringify(result));
+                        let alertBlock = document.querySelector('.alert-message');
+                        alertBlock.textContent = '';
+                        switch (answer.status.toLowerCase()) {
+                            case 'ok':
+                                console.log(JSON.stringify(result));
+                                const message = `Данные успешно сохранены`;
+                                renderBlock(alertBlock, message, 'success', 'beforeend');
+                                alertBlockAutoClose(alertBlock, 3000);
+                                break;
+                            case 'error':
+                                console.log(JSON.stringify(result));
+                                const error = 'Возникла ошибка при сохранении данных';
+                                renderBlock(alertBlock, error, 'danger', 'beforeend');
+                                alertBlockAutoClose(alertBlock, 3000);
+                                break;
+                            default:
+                                console.log('Wrong Answer');
+                    }
                 });
-
             })
         });
     </script>

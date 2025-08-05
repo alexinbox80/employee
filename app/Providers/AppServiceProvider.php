@@ -5,12 +5,16 @@ namespace App\Providers;
 use App\Repositories\Contracts\DivisionContract;
 use App\Repositories\Contracts\EmployeeContract as EmployeeRepositoryContract;
 use App\Repositories\Contracts\StatusContract as StatusRepositoryContract;
+use App\Repositories\Contracts\ScheduleContract as ScheduleRepositoryContract;
 use App\Repositories\DivisionRepository;
 use App\Repositories\EmployeeRepository;
+use App\Repositories\ScheduleRepository;
 use App\Repositories\StatusRepository;
 use App\Services\Contracts\EmployeeContract as EmployeeServiceContract;
 use App\Services\Contracts\StatusContract as StatusServiceContract;
+use App\Services\Contracts\ScheduleContract as ScheduleServiceContract;
 use App\Services\EmployeeService;
+use App\Services\ScheduleService;
 use App\Services\StatusService;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DivisionContract::class, DivisionRepository::class);
         $this->app->bind(StatusServiceContract::class, StatusService::class);
         $this->app->bind(StatusRepositoryContract::class, StatusRepository::class);
+        $this->app->bind(ScheduleServiceContract::class, ScheduleService::class);
+        $this->app->bind(ScheduleRepositoryContract::class, ScheduleRepository::class);
     }
 
     /**

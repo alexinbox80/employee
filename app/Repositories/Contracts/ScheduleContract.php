@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Repositories\Contracts;
+
+use App\Models\Schedule;
+use Illuminate\Database\Eloquent\Collection;
+
+interface ScheduleContract
+{
+    public function getSchedules(): Collection;
+    public function getSchedulesByEmployeeId(int $employeeId): Collection;
+    public function getScheduleById(int $id): Schedule;
+    public function createSchedule(int $employeeId, int $statusId, string $date): bool;
+    public function deleteSchedule(int $employeeId, int $statusId, string $date): int;
+}
