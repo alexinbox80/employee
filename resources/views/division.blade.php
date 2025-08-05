@@ -1,8 +1,10 @@
 @extends('layouts.page')
 @section('content')
     <div class="page_header">
+    </div>
+    <div class="container">
         <h1 class="display-5">О подразделении</h1>
-        <div class="page_header__image p-4 p-md-5 mb-0 w-100">
+        <div class="division_list p-4 p-md-5 mb-0 w-100">
             <a class="division_link" href="{{ route('page.get.index') }}">НАЗАД</a>
             <ul class="list-group">
                 <li class="list-group-item" aria-current="true">
