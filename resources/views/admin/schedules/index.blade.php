@@ -32,11 +32,13 @@
                         <td>{{ $schedule->created_at }}</td>
                         <td>{{ $schedule->updated_at }}</td>
                         <td>
-                            <div class="link-control">
-                                <a
-                                    href="{{ route('admin.schedules.edit', ['schedule' => $schedule]) }}">Ред.</a>&nbsp;
-                                {{-- <a href="javascript:;" class="delete" rel="{{ $characteristic->id }}" --}}
-                                <a href="" style="color: red;">Уд.</a>
+                            <div class="link-control d-flex">
+                                <a href="{{ route('admin.schedules.edit', ['schedule' => $schedule]) }}">Ред.</a>&nbsp;
+                                <form method="POST" action="{{ route('admin.schedules.destroy', $schedule) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="delete__link" type="submit" onclick="return confirm('Вы уверены?')">Уд.</button>
+                                </form>
                             </div>
                         </td>
                     </tr>

@@ -60,3 +60,7 @@ td.weekend {
     right: 160px;
     top: 110px;
 }
+
+.employee__img {
+    width: 400px;
+}

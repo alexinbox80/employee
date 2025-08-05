@@ -1,4 +1,15 @@
 <div class="col-md-6 px-0 d-flex justify-content-between">
+    <div class="form-check me-2">
+        <input class="radioStatusPanel form-check-input"
+               type="radio"
+               name="exampleRadios"
+               id="radio-0"
+               data-color="#E3D2EA"
+               data-description="Удалить статус"
+               data-id="0"
+               value="Х">
+        <label class="form-check-label" for="radio-0}" title="Х">Удалить статус</label>
+    </div>
     @foreach($statuses as $key => $status)
         <div class="form-check me-2">
             <input class="radioStatusPanel form-check-input"

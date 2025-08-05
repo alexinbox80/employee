@@ -24,7 +24,7 @@ class StoreScheduleRequest extends FormRequest
         return [
             'schedules' => ['required', 'array', 'min:1'],
             'schedules.*.employee_id' => ['required', 'integer', 'gt:0'],
-            'schedules.*.status_id' => ['required', 'integer', 'gt:0'],
+            'schedules.*.status_id' => ['required', 'integer', 'gte:0'],
             'schedules.*.date' => ['required', 'string', 'date_format:Y-n-j'],
         ];
     }

@@ -1,6 +1,7 @@
 .reset {
     all: revert;
 }
+
 .block {
     position: relative;
     padding: 1rem;
@@ -10,21 +11,17 @@
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
 }
+
 .content {
     margin-bottom: 3rem;
 }
-/*table {*/
-    /*table-layout: fixed;*/
-    /*width:100%*/
-/*}*/
-/*td {*/
-    /*word-wrap:break-word;*/
-/*}*/
+
 .link {
     display: block;
     text-decoration: none;
     text-align: end;
 }
+
 .block [id]:before {
     display: block;
     content: "";
@@ -32,14 +29,23 @@
     height: 90px;
     visibility: hidden;
 }
+
 .admin_header__image {
 }
+
 .admin_header:before {
     display: block;
     content: "";
     height: 2rem;
     visibility: hidden;
 }
+
 .logo_image_header {
     width: 2.45rem;
+}
+
+.delete__link {
+    color: red!important;
+    border: none!important;
+    background: none!important;
 }

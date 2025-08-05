@@ -5,9 +5,15 @@ namespace App\Repositories;
 use App\Models\Schedule;
 use App\Repositories\Contracts\ScheduleContract;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class ScheduleRepository implements ScheduleContract
+final class ScheduleRepository implements ScheduleContract
 {
+    public function getPaginated(): LengthAwarePaginator
+    {
+        return Schedule::paginate(config('pagination.admin.schedules'));
+    }
+
     public function getSchedules(): Collection
     {
         return Schedule::all();
@@ -44,5 +50,19 @@ class ScheduleRepository implements ScheduleContract
         $schedule->delete();
 
         return $schedule;
+    }
+
+    public function store(array $schedule): bool
+    {
+        $schedules = new Schedule(
+            $schedule
+        );
+
+        return $schedules->save();
+    }
+
+    public function destroy(int $scheduleId): int
+    {
+        return  Schedule::destroy($scheduleId);
     }
 }

@@ -179,7 +179,7 @@
                 console.log(scheduleLists);
 
                 if (scheduleLists != null)
-                    send(`/schedules`, {schedules: scheduleLists}).then((result) => {
+                    send(`/schedules`, { schedules: scheduleLists }).then((result) => {
                         const answer = JSON.parse(JSON.stringify(result));
                         let alertBlock = document.querySelector('.alert-message');
                         alertBlock.textContent = '';

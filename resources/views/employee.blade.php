@@ -5,7 +5,7 @@
     <div class="container">
         <h1 class="display-5">О сотруднике</h1>
         <div class="d-flex">
-            <div class="employee_list p-4 p-md-5 mb-0 w-100">
+            <div class="employee_list w-50">
                 <a class="division_link" href="{{ route('page.get.index') }}">НАЗАД</a>
                 <ul class="list-group">
                     <li class="list-group-item" aria-current="true">
@@ -78,8 +78,12 @@
                     </li>
                 </ul>
             </div>
-            <div class="employee_foto">
-                PICTURE
+            <div class="employee__picture w-50">
+                @if($employee->sex === 'МУЖСКОЙ')
+                    <img class="employee__img" src="{{ asset('storage/picture/men.png') }}" alt="employee">
+                @else
+                    <img class="employee__img" src="{{ asset('storage/picture/woman.png') }}" alt="employee">
+                @endif
             </div>
         </div>
     </div>

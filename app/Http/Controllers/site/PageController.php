@@ -8,12 +8,10 @@ use App\Models\Division;
 use App\Services\Contracts\StatusContract;
 use App\Services\Contracts\EmployeeContract;
 use App\Services\Contracts\ScheduleContract;
-use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 final class PageController extends Controller
 {
@@ -77,20 +75,12 @@ final class PageController extends Controller
     public function processSchedule(StoreScheduleRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $this->scheduleService->createSchedule($validated);
+        $result = $this->scheduleService->createSchedule($validated);
 
-
-
-        try {
-            $deleted = true;
-            if ( $deleted === false) {
-                return response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
-            } else {
-                return response()->json(['status' => 'ok'], Response::HTTP_OK);
-            }
-        } catch (Exception $e) {
-            Log::error($e->getMessage().' '.$e->getCode());
+        if ( $result === false) {
             return response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json(['status' => 'ok'], Response::HTTP_OK);
         }
     }
 }

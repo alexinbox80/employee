@@ -6,21 +6,25 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedules\CreateRequest;
 use App\Http\Requests\Schedules\EditRequest;
 use App\Models\Schedule;
+use App\Services\ScheduleService as scheduleServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 
-class ScheduleController extends Controller
+final class ScheduleController extends Controller
 {
+    public function __construct(
+        private readonly ScheduleServiceContract $scheduleService
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $schedules = Schedule::query()
-            ->paginate(config('pagination.admin.schedules'));
-
         return view('admin.schedules.index', [
-            'schedules' => $schedules
+            'schedules' => $this->scheduleService->getPaginated()
         ]);
     }
 
@@ -40,12 +44,13 @@ class ScheduleController extends Controller
      */
     public function store(CreateRequest $request): RedirectResponse
     {
-        $schedules = new Schedule(
-            $request->validated()
-        );
+        $validated = $request->validated();
+        $result = $this->scheduleService->store($validated);
 
-        if ($schedules->save()) {
-            return redirect()->route('admin.schedules.index')
+        if ($result) {
+//            return redirect()->route('admin.schedules.index')
+//                ->with('success', __('messages.admin.schedules.create.success'));
+            return redirect()->back()
                 ->with('success', __('messages.admin.schedules.create.success'));
         }
 
@@ -80,7 +85,7 @@ class ScheduleController extends Controller
         $schedule = $schedule->fill($request->validated());
 
         if ($schedule->save()) {
-            return redirect()->route('admin.schedules.index')
+            return redirect()->route('admin.schedules.index', ['page' => 2])
                 ->with('success', __('messages.admin.schedules.update.success'));
         }
 
@@ -92,15 +97,14 @@ class ScheduleController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Schedule $schedule
-     *
      * @return RedirectResponse
      */
     public function destroy(Schedule $schedule): RedirectResponse
     {
-        $schedule = Schedule::destroy($schedule->id);
+        $result = $this->scheduleService->destroy($schedule->id);
 
-        if ($schedule) {
-            return redirect()->route('admin.schedules.index')
+        if ($result) {
+            return redirect()->back()
                 ->with('success', __('messages.admin.schedules.destroy.success'));
         }
 

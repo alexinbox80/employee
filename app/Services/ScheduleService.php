@@ -6,14 +6,19 @@ use App\Models\Schedule;
 use App\Services\Contracts\ScheduleContract;
 use App\Repositories\Contracts\ScheduleContract as ScheduleRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class ScheduleService implements ScheduleContract
+final class ScheduleService implements ScheduleContract
 {
     public function __construct(
         private readonly ScheduleRepositoryContract $scheduleRepository
     )
     {
+    }
+
+    public function getPaginated(): LengthAwarePaginator
+    {
+        return $this->scheduleRepository->getPaginated();
     }
 
     public function getSchedules(): Collection
@@ -33,17 +38,32 @@ class ScheduleService implements ScheduleContract
 
     public function createSchedule(array $schedules): bool
     {
-        Log::info(json_encode($schedules));
+        foreach ($schedules['schedules'] as $schedule) {
+            if ($schedule['status_id'] > 0) {
+                $result = $this->scheduleRepository->createSchedule(
+                    $schedule['employee_id'], $schedule['status_id'], $schedule['date']
+                );
 
-        $employeeId = 5;
-        $statusId = 2;
-        $date = '2025-11-11';
-
-        return $this->scheduleRepository->createSchedule($employeeId, $statusId, $date);
+                if (!$result) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public function deleteSchedule(int $employeeId, int $statusId, string $date): int
     {
         return $this->scheduleRepository->deleteSchedule($employeeId, $statusId, $date);
+    }
+
+    public function store(array $schedule): bool
+    {
+        return $this->scheduleRepository->store($schedule);
+    }
+
+    public function destroy(int $scheduleId): int
+    {
+        return $this->scheduleRepository->destroy($scheduleId);
     }
 }
