@@ -3,17 +3,18 @@ p, td {
     padding: 0!important;
 }
 
-.table_grid th, .table_grid td {
+.table__grid th, .table__grid td {
     border: 1px solid black;
     text-align: center;
     align-content: center;
 }
 
-.table_grid__p {
+.table__grid-p {
     border: 1px solid black;
     width: auto;
     height: auto;
     text-align: center;
+    line-height: 25px;
 }
 
 th.weekend {
@@ -32,7 +33,7 @@ td.weekend {
     align-content: center;
 }
 
-.fio_link, .division_link, .division_fio__link {
+.fio__link, .division__link, .division__fio-link {
     text-decoration: none;
 }
 
@@ -40,18 +41,21 @@ td.weekend {
     height: 27px;
 }
 
-.fio_link {
+.fio__link {
     display: block;
-    width: 200px;
-    height: 27px;
+    height: 32px;
     align-content: center;
 }
 
-.fio_link:hover, .division_link:hover {
+.column {
+    width: 32px;
+}
+
+.fio__link:hover, .division__link:hover {
     text-decoration: underline;
 }
 
-.cell_event {
+.cell__event {
     cursor: pointer;
 }
 

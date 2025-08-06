@@ -1,12 +1,12 @@
 @extends('layouts.page')
 @section('content')
-    <div class="page_header">
+    <div class="page__header">
     </div>
     <div class="container">
         <h1 class="display-5">О сотруднике</h1>
         <div class="d-flex">
-            <div class="employee_list w-50">
-                <a class="division_link" href="{{ route('page.get.index') }}">НАЗАД</a>
+            <div class="employee__list w-50">
+                <a class="division__link" href="{{ route('page.get.index') }}">НАЗАД</a>
                 <ul class="list-group">
                     <li class="list-group-item" aria-current="true">
                         <span>Орган:</span>
@@ -80,9 +80,9 @@
             </div>
             <div class="employee__picture w-50">
                 @if($employee->sex === 'МУЖСКОЙ')
-                    <img class="employee__img" src="{{ asset('storage/picture/men.png') }}" alt="employee">
+                    <img class="employee__img" style="width: 324px;" src="{{ asset('storage/images/man.jpg') }}" alt="employee">
                 @else
-                    <img class="employee__img" src="{{ asset('storage/picture/woman.png') }}" alt="employee">
+                    <img class="employee__img" src="{{ asset('storage/images/woman.jpg') }}" alt="employee">
                 @endif
             </div>
         </div>

@@ -1,4 +1,4 @@
-<div class="col-md-6 px-0 d-flex justify-content-between">
+<div class="col-md-12 px-0 d-flex justify-content-between">
     <div class="form-check me-2">
         <input class="radioStatusPanel form-check-input"
                type="radio"
