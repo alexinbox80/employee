@@ -39,8 +39,18 @@ final class ScheduleService implements ScheduleContract
     public function createSchedule(array $schedules): bool
     {
         foreach ($schedules['schedules'] as $schedule) {
-            if ($schedule['status_id'] > 0) {
+            if ($schedule['isDelete'] === false) {
                 $result = $this->scheduleRepository->createSchedule(
+                    $schedule['employee_id'], $schedule['status_id'], $schedule['date']
+                );
+
+                if (!$result) {
+                    return false;
+                }
+            }
+
+            if ($schedule['isDelete'] === true) {
+                $result = $this->scheduleRepository->deleteSchedule(
                     $schedule['employee_id'], $schedule['status_id'], $schedule['date']
                 );
 

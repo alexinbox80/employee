@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 if (!function_exists('getMonthsArray')) {
     /**
@@ -195,13 +196,30 @@ if (!function_exists('numOfWeek')) {
 
     if (!function_exists('getCurrentMonth')) {
         /**
-         * This function return the date in format DD.MM.YYYY
-         * @param string $date the url of current page
-         * @return string
+         * This function return the current month in format MM
+         * @return int
          */
         function getCurrentMonth(): int
         {
             return date('m', time());
+        }
+    }
+
+    if (!function_exists('getEmployeeStatuses')) {
+        /**
+         * This function returns a string containing status identifiers separated by semicolons.
+         * @param Collection $statuses
+         * @param int $day given day
+         * @return string
+         */
+        function getEmployeeStatuses(Collection $statuses, int $day): string
+        {
+            $string = '';
+            foreach ($statuses as $status) {
+                if ( getDay($status->date) == $day)
+                    $string .= $status->status_id . ';';
+            }
+            return $string;
         }
     }
 }

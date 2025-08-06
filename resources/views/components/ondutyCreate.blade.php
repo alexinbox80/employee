@@ -43,7 +43,11 @@
                         <td class="cell__event {{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}"
                             data-employee_id="{{ $employee->id }}"
                             data-clicked="0"
-                            data-date="{{ $year }}-{{ $month }}-{{ $day }}">
+                            data-date="{{ $year }}-{{ $month }}-{{ $day }}"
+                            @if (($string = getEmployeeStatuses($employee->schedules, $day)) != '')
+                                data-set="{{ $string }}"
+                            @endif
+                            >
                             @foreach ($employee->schedules as $schedule)
                                 @if (getDay($schedule->date) == $day)
                                     <p title="{{ $schedule->status->description }}" style="background-color: {{ $schedule->status->color }}"
@@ -90,11 +94,30 @@
             const cellGrids = document.querySelectorAll('.cell__event');
             cellGrids.forEach(cell => {
                 if(cell.dataset.clicked > 0) {
-                    lists.push({
-                        employee_id: parseInt(cell.dataset.employee_id),
-                        status_id: parseInt(cell.dataset.status_id),
-                        date: cell.dataset.date
-                    });
+                    const gridSet = cell.dataset.set;
+                    const gridSetArray = gridSet.split(';', gridSet.length - 1);
+
+                    if (gridSetArray.includes('0')) {
+                        gridSetArray.reverse().forEach(ind => {
+                            if (parseInt(ind))
+                                lists.push({
+                                    employee_id: parseInt(cell.dataset.employee_id),
+                                    status_id: parseInt(ind),
+                                    date: cell.dataset.date,
+                                    isDelete: true
+                                });
+                        });
+                    } else {
+                        gridSetArray.reverse().forEach(ind => {
+                            if (parseInt(ind))
+                                lists.push({
+                                    employee_id: parseInt(cell.dataset.employee_id),
+                                    status_id: parseInt(ind),
+                                    date: cell.dataset.date,
+                                    isDelete: false
+                                });
+                        });
+                    }
                 }
             });
 
@@ -151,26 +174,52 @@
                 cell.addEventListener('click', function() {
                     const clickedState = parseInt(cell.dataset.clicked);
                     const selectedValue = getSelectedRadioButtonValue('radioStatusPanel');
+                    const paragraph = document.createElement('p');
+                    const gridSet = cell.dataset.set;
 
-                    if (clickedState === 0) {
-                        // 1. Создаем новый параграф
-                        const paragraph = document.createElement('p');
-
-                        // 2. Добавляем текст в параграф
+                    if (parseInt(selectedValue.id) === 0 && clickedState === 0 && 'set' in cell.dataset) {
+                        cell.textContent = '';
                         paragraph.style.backgroundColor = selectedValue.color;
                         paragraph.textContent = selectedValue.value;
                         paragraph.classList.add('table__grid-p');
                         paragraph.setAttribute('title', selectedValue.description);
                         this.appendChild(paragraph);
-                        this.setAttribute('data-status_id', selectedValue.id)
+                        this.setAttribute('data-set', gridSet + selectedValue.id + ';');
+                        cell.dataset.clicked = '1';
+                    } else
 
-                        // First click: Mark as clicked once
+                    if (clickedState === 0 && parseInt(selectedValue.id)) {
+                        // 1. Создаем новый параграф
+                        if ('set' in cell.dataset) {
+                            if (!gridSet.split(';').includes(selectedValue.id)) {
+                                // 2. Добавляем текст в параграф
+                                paragraph.style.backgroundColor = selectedValue.color;
+                                paragraph.textContent = selectedValue.value;
+                                paragraph.classList.add('table__grid-p');
+                                paragraph.setAttribute('title', selectedValue.description);
+                                this.appendChild(paragraph);
+                                this.setAttribute('data-status_id', selectedValue.id);
+                                this.setAttribute('data-set', gridSet + selectedValue.id + ';');
+                            }
+                        }
+                        else if (parseInt(selectedValue.id)) {
+                            // 2. Добавляем текст в параграф
+                            paragraph.style.backgroundColor = selectedValue.color;
+                            paragraph.textContent = selectedValue.value;
+                            paragraph.classList.add('table__grid-p');
+                            paragraph.setAttribute('title', selectedValue.description);
+                            this.appendChild(paragraph);
+                            this.setAttribute('data-status_id', selectedValue.id);
+                            this.setAttribute('data-set', selectedValue.id + ';');
+                        }
+
                         cell.dataset.clicked = '1';
                     } else {
                         // Second click: Clear content and reset state
                         cell.textContent = ''; // Or cell.innerHTML = '';
                         cell.dataset.clicked = '0';
                         cell.removeAttribute('data-status_id');
+                        cell.removeAttribute('data-set');
                     }
                 });
             });
@@ -178,7 +227,6 @@
             const saveDataSpan = document.getElementById('saveSchedule');
             saveDataSpan.addEventListener('click', function() {
                 const scheduleLists = createScheduleLists();
-                console.log(scheduleLists);
 
                 if (scheduleLists != null)
                     send(`/schedules`, { schedules: scheduleLists }).then((result) => {

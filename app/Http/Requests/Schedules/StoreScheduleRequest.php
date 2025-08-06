@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Schedules;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreScheduleRequest extends FormRequest
 {
@@ -24,8 +25,9 @@ class StoreScheduleRequest extends FormRequest
         return [
             'schedules' => ['required', 'array', 'min:1'],
             'schedules.*.employee_id' => ['required', 'integer', 'gt:0'],
-            'schedules.*.status_id' => ['required', 'integer', 'gte:0'],
+            'schedules.*.status_id' => ['required', 'integer', 'gt:0'],
             'schedules.*.date' => ['required', 'string', 'date_format:Y-n-j'],
+            'schedules.*.isDelete' => ['required', 'boolean', Rule::in(['true', 'false', 1, 0, '1', 0, true, false])],
         ];
     }
 }

@@ -47,9 +47,7 @@ final class ScheduleRepository implements ScheduleContract
             'status_id' => $statusId,
             'date' => Schedule::dateConvert($date
             )])->first();
-        $schedule->delete();
-
-        return $schedule;
+        return $schedule->delete();
     }
 
     public function store(array $schedule): bool
