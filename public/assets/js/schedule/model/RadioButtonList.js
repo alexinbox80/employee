@@ -1,4 +1,4 @@
-import eventEmitter from "../helpers/eventEmitter.js";
+import eventEmitter from '../helpers/eventEmitter.js';
 
 export default class RadioButtonList {
 
@@ -10,10 +10,24 @@ export default class RadioButtonList {
     }
 
     init() {
-        const radioStatusPane = document.querySelectorAll('.radioStatusPanel');
-        radioStatusPane.forEach(radio => {
+        const lists = [];
+        const radioStatusPanel = document.querySelectorAll('.radioStatusPanel');
+        radioStatusPanel.forEach(radio => {
             radio.addEventListener('click', this._radioClickListener.bind(this, radio));
         });
+
+        for (const button of radioStatusPanel) {
+            lists.push({
+                'id': parseInt(button.dataset.id),
+                'letter': button.dataset.letter,
+                'color': button.dataset.color,
+                'description': button.dataset.description
+            })
+        }
+
+        if (lists.length) {
+            this._radioButtonList = lists;
+        }
     }
 
     _radioClickListener(button) {
@@ -23,26 +37,6 @@ export default class RadioButtonList {
             'color': button.dataset.color,
             'description': button.dataset.description
         };
-    }
-
-    createRadioButtonList() {
-        const lists = [];
-        const buttons = document.querySelectorAll('.radioStatusPanel');
-
-        for (const button of buttons) {
-                lists.push({
-                    'id': parseInt(button.dataset.id),
-                    'letter': button.dataset.letter,
-                    'color': button.dataset.color,
-                    'description': button.dataset.description
-                })
-        }
-
-        if (lists.length) {
-            this._radioButtonList = lists;
-            return true;
-        } else
-            return false;
     }
 
     _findActiveButton() {

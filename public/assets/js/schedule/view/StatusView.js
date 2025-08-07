@@ -1,16 +1,8 @@
-export default class StatusView {
+import paragraph from './Paragraph.js';
 
-    _createParagraph(context, selectedValue) {
-        const paragraph = document.createElement('p');
-        paragraph.style.backgroundColor = selectedValue.color;
-        paragraph.textContent = selectedValue.letter;
-        paragraph.classList.add('table__grid-p');
-        paragraph.setAttribute('title', selectedValue.description);
-        console.log(paragraph);
-        context.appendChild(paragraph);
-    }
+export default {
 
-    render($container, $active) {
-        this._createParagraph($container, $active);
+    render(container, active) {
+        paragraph.createParagraph(container, active);
     }
 }

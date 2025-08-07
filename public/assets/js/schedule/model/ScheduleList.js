@@ -28,8 +28,6 @@ export default class ScheduleList {
                 const gridSet = cell.dataset.set;
                 const gridSetArray = gridSet.split(';').slice(0, gridSet.length - 1);
 
-                const ans = [];
-
                 gridSetArray.forEach(ind => {
                     if(parseInt(ind)) {
                         lists.push({
@@ -55,15 +53,14 @@ export default class ScheduleList {
     }
 
     remove(data) {
-        console.log(data.employee_id);
         this._scheduleList.forEach(schedule => {
             if (schedule.employee_id === data.employee_id && schedule.date === data.date)
                 schedule.isDelete = true;
         });
     }
 
-    get(date) {
-        return this._scheduleList.find(schedule => schedule.date === date);
+    get(data) {
+        return this._scheduleList.find(schedule => schedule.date === data.date);
     }
 
     getAll() {

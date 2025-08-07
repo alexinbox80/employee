@@ -1,8 +1,8 @@
 export default {
-    _url: '/',
+    _url: 'http://localhost:8080',
 
-    createSchedules(errorCallBack, data) {
-        return fetch(`${this._url}/schedules`, {
+    async createSchedules(errorCallBack, data) {
+        return await fetch(`${this._url}/schedules`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
