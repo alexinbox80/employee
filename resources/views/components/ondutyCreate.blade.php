@@ -2,7 +2,7 @@
 <div class="col-md-12 px-0">
     <a class="fio__link" href="{{ route('page.get.index') }}">НАЗАД</a>
     <div class="alert-message"></div>
-    <table id="onduty_create" class="table table-striped table-sm">
+    <table id="onduty__create" class="table table-striped table-sm">
         <thead>
             <tr class="table__grid">
                 <th class="column" scope="col">#</th>
@@ -40,7 +40,8 @@
                         </a>
                     </td>
                     @for ($day = 1; $day <= lastDayOfMonth($month, $year); $day++)
-                        <td class="cell__event {{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}"
+                        <td id="cell-{{ $employee->id * 100 + $day }}"
+                            class="cell__event {{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}"
                             data-employee_id="{{ $employee->id }}"
                             data-clicked="0"
                             data-date="{{ $year }}-{{ $month }}-{{ $day }}"
@@ -168,7 +169,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            const tableCells = document.querySelectorAll('#onduty_create .cell__event');
+            const tableCells = document.querySelectorAll('#onduty__create .cell__event');
 
             tableCells.forEach(cell => {
                 cell.addEventListener('click', function() {
