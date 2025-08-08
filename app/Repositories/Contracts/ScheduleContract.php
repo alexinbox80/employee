@@ -8,6 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ScheduleContract
 {
+    public function getAll(int $month, int $year): Collection;
     public function getPaginated(): LengthAwarePaginator;
     public function getSchedules(): Collection;
     public function getSchedulesByEmployeeId(int $employeeId): Collection;

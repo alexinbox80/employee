@@ -9,6 +9,18 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 final class ScheduleRepository implements ScheduleContract
 {
+    public function getAll(int $month, int $year): Collection
+    {
+        $dateL = $year . '-' . $month . '-01';
+        $lastDayOfMonth = (int)date('t', strtotime($dateL . ' 01:01:01'));
+        $dateR = $year . '-' . $month . '-' . $lastDayOfMonth;
+
+        return Schedule::where('date', '>=', $dateL)->where('date', '<=', $dateR)
+            ->orderBy('employee_id')
+            ->orderBy('status_id')
+            ->get();
+    }
+
     public function getPaginated(): LengthAwarePaginator
     {
         return Schedule::paginate(config('pagination.admin.schedules'));

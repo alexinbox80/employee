@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use DateTime;
 use App\Models\Schedule;
 use App\Services\Contracts\ScheduleContract;
 use App\Repositories\Contracts\ScheduleContract as ScheduleRepositoryContract;
@@ -14,6 +15,21 @@ final class ScheduleService implements ScheduleContract
         private readonly ScheduleRepositoryContract $scheduleRepository
     )
     {
+    }
+
+    public function getAll(int $month = null, int $year = null): array
+    {
+        $date = new DateTime();
+
+        if ($month === null) {
+            $month = $date->modify('+1 month')->format('m');
+        }
+
+        if ($year === null) {
+            $year = $date->format('Y');
+        }
+
+        return ['data' => $this->scheduleRepository->getAll($month, $year)];
     }
 
     public function getPaginated(): LengthAwarePaginator

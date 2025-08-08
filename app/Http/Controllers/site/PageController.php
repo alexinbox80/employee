@@ -3,22 +3,17 @@
 namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Schedules\StoreScheduleRequest;
 use App\Models\Division;
 use App\Services\Contracts\StatusContract;
 use App\Services\Contracts\EmployeeContract;
-use App\Services\Contracts\ScheduleContract;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 final class PageController extends Controller
 {
     public function __construct(
         private readonly EmployeeContract $employeeService,
         private readonly StatusContract $statusService,
-        private readonly ScheduleContract $scheduleService,
     )
     {
     }
@@ -70,17 +65,5 @@ final class PageController extends Controller
             'month' => $result['month'],
             'year' => $result['year'],
         ]);
-    }
-
-    public function processSchedule(StoreScheduleRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-        $result = $this->scheduleService->createSchedule($validated);
-
-        if ( $result === false) {
-            return response()->json(['status' => 'error'], Response::HTTP_BAD_REQUEST);
-        } else {
-            return response()->json(['status' => 'ok'], Response::HTTP_OK);
-        }
     }
 }

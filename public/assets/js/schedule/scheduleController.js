@@ -8,22 +8,22 @@ export default {
     _eventEmitter: eventEmitter,
     _scheduleListModel: new ScheduleList,
     _radioButtonModel: new RadioButtonList,
+    //_tableView: new TableView,
 
     init() {
         console.log('Schedule controller');
 
-        // this._eventEmmiter.addListener('added', this._renderCart.bind(this));
-        // this._eventEmmiter.addListener('removed', this._renderCart.bind(this));
-        // this._eventEmmiter.addListener('loaded', this._renderCart.bind(this));
-        // this._eventEmmiter.addListener('loaded', this._renderShowcase.bind(this));
-
+        // this._eventEmitter.addListener('added', this._renderCart.bind(this));
+        // this._eventEmitter.addListener('removed', this._renderCart.bind(this));
+        // this._eventEmitter.addListener('loaded', this._renderCart.bind(this));
+        //this._eventEmitter.addListener('loaded', this._tableView._render.bind(this));
 
         //this._eventEmmiter.emit('added', this._clickListener);
 
         //console.log(this);
 
         // this._cartModel.load();
-        // this._showcaseModel.load();
+        //this._tableView.load();
 
         if (this._scheduleListModel.createScheduleList())
             new TableView(this._scheduleListModel, this._radioButtonModel);
@@ -79,7 +79,7 @@ export default {
             if (block) {
                 block.textContent = '';
             }
-            location.reload();
+            //location.reload();
         }, delay);
     }
 }

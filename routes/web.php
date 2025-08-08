@@ -12,7 +12,6 @@ Route::group(['as' => 'page.'], function () {
     Route::get('/generate-docx', [DocxController::class, 'generate'])->name('get.docx');
     Route::get('/', [PageController::class, 'index'])->name('get.index');
     Route::get('/create', [PageController::class, 'create'])->name('get.create');
-    Route::post('/schedules', [PageController::class, 'processSchedule'])->name('post.schedule');
     Route::get('/employee/{employee}', [PageController::class, 'getEmployeeById'])->name('get.employee');
     Route::get('/division/{division}', [PageController::class, 'getDivisionById'])->name('get.division');
 });
