@@ -9,9 +9,7 @@ export default {
         if (parseInt(active.id) === 0) {
             paragraph.removeParagraphs(container, active);
             paragraph.createParagraph(container, active);
-        }
-
-        else
+        } else
             paragraph.createParagraph(container, active);
     }
 }
