@@ -1,6 +1,5 @@
 import paragraph from './Paragraph.js';
 import statusView from './StatusView.js';
-import getDateOfMonth from '../utils/getDateOfMonth.js';
 import makeIndex from '../utils/makeIndex.js';
 
 export default class TableView {
@@ -35,16 +34,18 @@ export default class TableView {
         const activeButton = this._radioButtonModel.getActive();
         if (activeButton.id > 0) {
             this._scheduleListModel.add({
-                'employee_id': parseInt(cell.dataset.employee_id),
-                'status_id': parseInt(activeButton.id),
-                'date': cell.dataset.date,
-                'isDelete': false
+                cell_id: makeIndex(cell.dataset.employee_id, cell.dataset.date),
+                employee_id: parseInt(cell.dataset.employee_id),
+                status_id: parseInt(activeButton.id),
+                date: cell.dataset.date,
+                isDelete: false,
+                isActive: true
             });
             statusView.render(cell, activeButton);
         } else {
             this._scheduleListModel.remove({
-                'employee_id': parseInt(cell.dataset.employee_id),
-                'date': cell.dataset.date,
+                employee_id: parseInt(cell.dataset.employee_id),
+                date: cell.dataset.date
             })
             statusView.render(cell, activeButton);
         }

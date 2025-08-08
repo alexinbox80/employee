@@ -49,12 +49,12 @@
                                 data-set="{{ $string }}"
                             @endif
                             >
-                            @foreach ($employee->schedules as $schedule)
-                                @if (getDay($schedule->date) == $day)
+{{--                            @foreach ($employee->schedules as $schedule)--}}
+{{--                                @if (getDay($schedule->date) == $day)--}}
 {{--                                    <p title="{{ $schedule->status->description }}" style="background-color: {{ $schedule->status->color }}"--}}
 {{--                                       class="table__grid-p">{{ strtoupper($schedule->status->letter) }}</p>--}}
-                                @endif
-                            @endforeach
+{{--                                @endif--}}
+{{--                            @endforeach--}}
                         </td>
                     @endfor
                 </tr>

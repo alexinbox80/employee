@@ -1,4 +1,5 @@
 import eventEmitter from '../helpers/eventEmitter.js';
+import makeIndex from "../utils/makeIndex.js";
 
 export default class ScheduleList {
 
@@ -31,10 +32,12 @@ export default class ScheduleList {
                 gridSetArray.forEach(ind => {
                     if(parseInt(ind)) {
                         lists.push({
+                            cell_id: makeIndex(cell.dataset.employee_id, cell.dataset.date),
                             employee_id: parseInt(cell.dataset.employee_id),
                             status_id: parseInt(ind),
                             date: cell.dataset.date,
-                            isDelete: false
+                            isDelete: false,
+                            isActive: false,
                         });
                     }
                 });
@@ -54,13 +57,23 @@ export default class ScheduleList {
 
     remove(data) {
         this._scheduleList.forEach(schedule => {
-            if (schedule.employee_id === data.employee_id && schedule.date === data.date)
+            if (schedule.employee_id === data.employee_id && schedule.date === data.date) {
                 schedule.isDelete = true;
+                schedule.isActive = true;
+            }
         });
     }
 
     get(data) {
         return this._scheduleList.find(schedule => schedule.date === data.date);
+    }
+
+    getActive() {
+        return this._scheduleList.filter(schedule => schedule.isActive === true);
+    }
+
+    clearActive() {
+        return this._scheduleList.filter(schedule => schedule.isActive !== true);
     }
 
     getAll() {
