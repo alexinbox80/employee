@@ -1,8 +1,30 @@
 export default {
-    _url: 'http://localhost:8080',
+    _url: 'http://localhost:8080/',
+
+    async getCatalog(errorCallBack) {
+        return await fetch(`${this._url}schedules`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => {
+                if (response.ok) {
+                    //return response.data;
+
+                    return response.json();
+                } else {
+                    return errorCallBack(response.status);
+                }
+            })
+            .then((data) => data)
+            .catch((error) => {
+                return errorCallBack(error);
+            })
+    },
 
     async createSchedules(errorCallBack, data) {
-        return await fetch(`${this._url}/schedules`, {
+        return await fetch(`${this._url}schedules`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,8 +45,8 @@ export default {
             })
     },
 
-    deleteFromModels(errorCallBack, id) {
-        return fetch(`${this._url}/delete`, {
+    async deleteFromModels(errorCallBack, id) {
+        return await fetch(`${this._url}delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

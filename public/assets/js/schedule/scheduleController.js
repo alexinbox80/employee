@@ -41,7 +41,6 @@ export default {
         const submitButton = document.querySelector('#save__schedule');
         const scheduleList = this._scheduleListModel.getAll();
         submitButton.addEventListener('click', this._clickListenerSubmit.bind(this, scheduleList));
-
     },
 
     _clickListenerSubmit(scheduleList) {

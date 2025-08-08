@@ -1,5 +1,7 @@
 import paragraph from './Paragraph.js';
 import statusView from './StatusView.js';
+import getDateOfMonth from '../utils/getDateOfMonth.js';
+import makeIndex from '../utils/makeIndex.js';
 
 export default class TableView {
     constructor(scheduleListModel, radioButtonModel) {
@@ -19,9 +21,7 @@ export default class TableView {
     _render() {
         const scheduleList = this._scheduleListModel.getAll();
         scheduleList.forEach((schedule) => {
-            const date = new Date(schedule.date); // August 8, 2025 (a Friday)
-            const dayOfMonth = date.getDate();
-            const index = parseInt(schedule.employee_id) * 100 + dayOfMonth;
+            const index = makeIndex(schedule.employee_id, schedule.date);
             const cell = document.querySelectorAll(`#cell-${ index }`);
 
             cell.forEach((item) => {
