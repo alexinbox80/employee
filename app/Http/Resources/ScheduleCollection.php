@@ -15,8 +15,8 @@ class ScheduleCollection extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'employee_id' => $this->employee_id,
-            'status_id' => $this->status_id,
+            'employeeId' => $this->employee_id,
+            'statusId' => $this->status_id,
             'date' => $this->date,
         ];
     }

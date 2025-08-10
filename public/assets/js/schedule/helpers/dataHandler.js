@@ -1,5 +1,7 @@
+import configure from '../config/configure.js';
+
 export default {
-    _url: 'http://localhost:8080/api/v1/',
+    _url: configure.url,
 
     async getSchedules(errorCallBack) {
         return await fetch(`${this._url}schedules`, {
@@ -10,8 +12,6 @@ export default {
         })
             .then((response) => {
                 if (response.ok) {
-                    //return response.data;
-
                     return response.json();
                 } else {
                     return errorCallBack(response.status);

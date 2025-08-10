@@ -8,7 +8,6 @@ export default {
     _eventEmitter: eventEmitter,
     _scheduleListModel: new ScheduleList,
     _radioButtonModel: new RadioButtonList,
-    //_tableView: new TableView,
 
     init() {
         console.log('Schedule controller');
@@ -25,8 +24,9 @@ export default {
         // this._cartModel.load();
         //this._tableView.load();
 
-        if (this._scheduleListModel.createScheduleList())
+        if (this._scheduleListModel.createScheduleList()) {
             new TableView(this._scheduleListModel, this._radioButtonModel);
+        }
 
         const submitButton = document.querySelector('#save__schedule');
         submitButton.addEventListener('click', this._clickListenerSubmit.bind(this, this._scheduleListModel));

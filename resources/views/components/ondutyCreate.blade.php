@@ -43,19 +43,12 @@
                         <td id="cell-{{ $employee->id * 100 + $day }}"
                             class="cell__event {{ ((numOfWeek($year, $month, $day) == 0) || (numOfWeek($year, $month, $day) == 6)) ? 'weekend' : 'work_day' }}"
                             data-employee_id="{{ $employee->id }}"
-                            data-clicked="0"
+{{--                            data-clicked="0"--}}
                             data-date="{{ $year }}-{{ $month }}-{{ $day }}"
                             @if (($string = getEmployeeStatuses($employee->schedules, $day)) != '')
                                 data-set="{{ $string }}"
                             @endif
-                            >
-{{--                            @foreach ($employee->schedules as $schedule)--}}
-{{--                                @if (getDay($schedule->date) == $day)--}}
-{{--                                    <p title="{{ $schedule->status->description }}" style="background-color: {{ $schedule->status->color }}"--}}
-{{--                                       class="table__grid-p">{{ strtoupper($schedule->status->letter) }}</p>--}}
-{{--                                @endif--}}
-{{--                            @endforeach--}}
-                        </td>
+                            ></td>
                     @endfor
                 </tr>
             @empty

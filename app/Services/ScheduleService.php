@@ -57,7 +57,7 @@ final class ScheduleService implements ScheduleContract
         foreach ($schedules['schedules'] as $schedule) {
             if ($schedule['isDelete'] === false) {
                 $result = $this->scheduleRepository->createSchedule(
-                    $schedule['employee_id'], $schedule['status_id'], $schedule['date']
+                    $schedule['employeeId'], $schedule['statusId'], $schedule['date']
                 );
 
                 if (!$result) {
@@ -67,7 +67,7 @@ final class ScheduleService implements ScheduleContract
 
             if ($schedule['isDelete'] === true) {
                 $result = $this->scheduleRepository->deleteSchedule(
-                    $schedule['employee_id'], $schedule['status_id'], $schedule['date']
+                    $schedule['employeeId'], $schedule['statusId'], $schedule['date']
                 );
 
                 if (!$result) {
