@@ -37,13 +37,13 @@ class DocxController extends Controller
         return false;
     }
 
-    private function areDatesConsecutive(string $date1, string $date2): bool
+    private function areDatesConsecutive(string $date1, string $date2, int $employeeId1, int $employeeId2): bool
     {
         $firstDate = new DateTime($date1);
         $secondDate = new DateTime($date2);
 
         $diff = $firstDate->diff($secondDate);
-        return abs($diff->days) === 1;
+        return abs($diff->days) === 1 && $employeeId1 === $employeeId2;
     }
 
     public function generate(Request $request): BinaryFileResponse
@@ -123,49 +123,52 @@ class DocxController extends Controller
                 }
 
                 $flag = false;
+                $scheduleId = [5, 10, 12];
                 foreach ($schedules as $keySchedule => $schedule) {
-                    if ($flag === false) {
-                        $firstDate = $schedule->date;
-                        $lastDate = $schedule->date;
-                        $flag = true;
-                    }
+                    if (in_array($schedule->status_id, $scheduleId)) {
+                        if ($flag === false) {
+                            $firstDate = $schedule->date;
+                            $lastDate = $schedule->date;
+                            $flag = true;
+                        }
 
-                    if ($keySchedule > 1 && $this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date)) {
-                        $lastDate = $schedule->date;
-                        $flag = true;
-                    }
+                        if ($keySchedule > 1 && $this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date, $schedule->employee_id, $schedules[$keySchedule - 1]->employee_id)) {
+                            $lastDate = $schedule->date;
+                            $flag = true;
+                        }
 
-                    if ($keySchedule > 1 && !$this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date)) {
-                        $flag = false;
-                        //$firstDate = $schedules[$keySchedule - 1]->date;
+                        if ($keySchedule > 1 && !$this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date, $schedule->employee_id, $schedules[$keySchedule - 1]->employee_id)) {
+                            $flag = false;
+                            //$firstDate = $schedules[$keySchedule - 1]->date;
 
-                        $contents[$employee->division->id][] = [
-                            'employee_id' => $employee->id,
-                            'division_id' => $employee->division->id,
-                            'department_id' => $employee->department->id,
-                            'division' => $division,
-                            'start' => $firstDate,
-                            'end' => $lastDate,
-                            'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                        ];
-                    }
+                            $contents[$employee->division->id][] = [
+                                'employee_id' => $employee->id,
+                                'division_id' => $employee->division->id,
+                                'department_id' => $employee->department->id,
+                                'division' => $division,
+                                'start' => $firstDate,
+                                'end' => $lastDate,
+                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                            ];
+                        }
 
-                    if ($keySchedule === count($schedules) - 1) {
+                        if ($keySchedule === count($schedules) - 1) {
 //                        if (($firstDate <> $year . '-' . $month .'-01') && ($flag === false)) {
 //                            $date = new DateTime($firstDate); // Create a DateTime object for today
 //                            $date->modify('-1 day'); // Subtract one day
 //                            $firstDate =  $date->format('Y-m-d'); // Output: 2025-08-02
 //                        }
 
-                        $contents[$employee->division->id][] = [
-                            'employee_id' => $employee->id,
-                            'division_id' => $employee->division->id,
-                            'department_id' => $employee->department->id,
-                            'division' => $division,
-                            'start' => $firstDate,
-                            'end' => $lastDate,
-                            'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                        ];
+                            $contents[$employee->division->id][] = [
+                                'employee_id' => $employee->id,
+                                'division_id' => $employee->division->id,
+                                'department_id' => $employee->department->id,
+                                'division' => $division,
+                                'start' => $firstDate,
+                                'end' => $lastDate,
+                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                            ];
+                        }
                     }
                 }
            }
@@ -190,7 +193,7 @@ class DocxController extends Controller
                     $row->addCell($this->m2t(180), $cellColSpan)->addText('');
 
                     $row = $table->addRow();
-                    $row->addCell($this->m2t(180), $cellColSpan)->addText($key  + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHleft);
+                    $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHleft);
                     $divisionId = $item['division_id'];
                 }
 
