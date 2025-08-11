@@ -18,38 +18,6 @@ export default class ScheduleList {
 
     }
 
-    // createScheduleList() {
-    //     const lists = [];
-    //     const cellGrids = document.querySelectorAll('.cell__event');
-    //
-    //     cellGrids.forEach(cell => {
-    //         if ('set' in cell.dataset) {
-    //             const gridSet = cell.dataset.set;
-    //             const gridSetArray = gridSet.split(';').slice(0, gridSet.length - 1);
-    //
-    //             gridSetArray.forEach(ind => {
-    //                 if(parseInt(ind)) {
-    //                     lists.push({
-    //                         cellId: makeIndex(cell.dataset.employee_id, cell.dataset.date),
-    //                         employeeId: parseInt(cell.dataset.employee_id),
-    //                         statusId: parseInt(ind),
-    //                         date: cell.dataset.date,
-    //                         isDelete: false,
-    //                         isActive: false,
-    //                     });
-    //                 }
-    //             });
-    //         }
-    //     });
-    //
-    //     if (lists.length > 0) {
-    //         console.log(lists);
-    //         this._scheduleList = lists;
-    //         return true;
-    //     } else
-    //         return false;
-    // }
-
     async createScheduleListApi() {
         await dataHandler
             .getSchedules(error => { console.log(error)})

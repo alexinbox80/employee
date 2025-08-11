@@ -33,22 +33,34 @@ class ConvFromCSVtoDB extends Command
     {
         $localPath = config('csv.conf.localPath');
 
+        $progressBar = $this->output->createProgressBar(4);
+        $progressBar->start();
+
         $fileName = config('csv.conf.division');
         $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
         FileService::convertProcess($file, new Division());
+
+        $progressBar->advance();
 
         $fileName = config('csv.conf.status');
         $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
         FileService::convertProcess($file, new Status());
 
+        $progressBar->advance();
+
         $fileName = config('csv.conf.employee');
         $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
         FileService::convertProcess($file, new Employee());
+
+        $progressBar->advance();
 
         $fileName = config('csv.conf.schedule');
         $file = Storage::disk('private')->path($localPath . DIRECTORY_SEPARATOR . $fileName);
         FileService::convertProcess($file, new Schedule(), false);
 
-        $this->info('Data from CSV to DB was successfully converted.');
+        $progressBar->advance();
+        $progressBar->finish();
+
+        $this->info(PHP_EOL . 'Data from CSV to DB was successfully converted.' . PHP_EOL);
     }
 }

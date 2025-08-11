@@ -34,6 +34,7 @@ class FileService
     /**
      * @param string $filePath
      * @param Model $model
+     * @param bool $flagId
      * @return bool
      * @throws \Exception
      */
