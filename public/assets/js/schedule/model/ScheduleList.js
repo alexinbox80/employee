@@ -18,9 +18,9 @@ export default class ScheduleList {
 
     }
 
-    async createScheduleListApi() {
+    async createScheduleListApi(dateVolumeObject) {
         await dataHandler
-            .getSchedules(error => { console.log(error)})
+            .getSchedules(error => { console.log(error)}, dateVolumeObject.month, dateVolumeObject.year)
             .then(result => {
                 const arr = [];
                 result.data.forEach(schedule => {
@@ -37,7 +37,8 @@ export default class ScheduleList {
                 this._scheduleList = arr;
             });
 
-         return !!this._scheduleList.length;
+        //return !!this._scheduleList.length;
+        return true;
     }
 
     add(schedule) {

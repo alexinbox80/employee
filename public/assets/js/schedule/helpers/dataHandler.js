@@ -3,8 +3,8 @@ import configure from '../config/configure.js';
 export default {
     _url: configure.url,
 
-    async getSchedules(errorCallBack) {
-        return await fetch(`${this._url}schedules`, {
+    async getSchedules(errorCallBack, month, year) {
+        return await fetch(`${this._url}schedules?month=${month}&year=${year}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
