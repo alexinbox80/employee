@@ -9,6 +9,9 @@ export default class SaveButton {
     }
 
     _init() {
+        const submitButtonTop = document.querySelector('#save__schedule-top');
+        submitButtonTop.addEventListener('click', this._clickListenerSubmit.bind(this, this._scheduleListModel));
+
         const submitButton = document.querySelector('#save__schedule');
         submitButton.addEventListener('click', this._clickListenerSubmit.bind(this, this._scheduleListModel));
     }

@@ -51,6 +51,14 @@ td.weekend {
     width: 32px;
 }
 
+.sp__column {
+    width: 31px;
+}
+
+.sp__input {
+    cursor: pointer;
+}
+
 .fio__link:hover, .division__link:hover {
     text-decoration: underline;
 }
