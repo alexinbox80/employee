@@ -26,7 +26,7 @@ class StoreScheduleRequest extends FormRequest
             'schedules' => ['required', 'array', 'min:1'],
             'schedules.*.employeeId' => ['required', 'integer', 'gt:0'],
             'schedules.*.statusId' => ['required', 'integer', 'gt:0'],
-            'schedules.*.date' => ['required', 'string', 'date_format:Y-n-j'],
+            'schedules.*.date' => ['required', 'string', 'date_format:Y-m-d'],
             'schedules.*.isDelete' => ['required', 'boolean', Rule::in(['true', 'false', 1, 0, '1', 0, true, false])],
         ];
     }

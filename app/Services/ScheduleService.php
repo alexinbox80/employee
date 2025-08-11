@@ -8,6 +8,7 @@ use App\Services\Contracts\ScheduleContract;
 use App\Repositories\Contracts\ScheduleContract as ScheduleRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 final class ScheduleService implements ScheduleContract
 {
@@ -54,6 +55,7 @@ final class ScheduleService implements ScheduleContract
 
     public function createSchedule(array $schedules): bool
     {
+        Log::info(json_encode($schedules));
         foreach ($schedules['schedules'] as $schedule) {
             if ($schedule['isDelete'] === false) {
                 $result = $this->scheduleRepository->createSchedule(

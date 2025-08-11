@@ -18,40 +18,40 @@ export default class ScheduleList {
 
     }
 
-    createScheduleList() {
-        const lists = [];
-        const cellGrids = document.querySelectorAll('.cell__event');
+    // createScheduleList() {
+    //     const lists = [];
+    //     const cellGrids = document.querySelectorAll('.cell__event');
+    //
+    //     cellGrids.forEach(cell => {
+    //         if ('set' in cell.dataset) {
+    //             const gridSet = cell.dataset.set;
+    //             const gridSetArray = gridSet.split(';').slice(0, gridSet.length - 1);
+    //
+    //             gridSetArray.forEach(ind => {
+    //                 if(parseInt(ind)) {
+    //                     lists.push({
+    //                         cellId: makeIndex(cell.dataset.employee_id, cell.dataset.date),
+    //                         employeeId: parseInt(cell.dataset.employee_id),
+    //                         statusId: parseInt(ind),
+    //                         date: cell.dataset.date,
+    //                         isDelete: false,
+    //                         isActive: false,
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     });
+    //
+    //     if (lists.length > 0) {
+    //         console.log(lists);
+    //         this._scheduleList = lists;
+    //         return true;
+    //     } else
+    //         return false;
+    // }
 
-        cellGrids.forEach(cell => {
-            if ('set' in cell.dataset) {
-                const gridSet = cell.dataset.set;
-                const gridSetArray = gridSet.split(';').slice(0, gridSet.length - 1);
-
-                gridSetArray.forEach(ind => {
-                    if(parseInt(ind)) {
-                        lists.push({
-                            cellId: makeIndex(cell.dataset.employee_id, cell.dataset.date),
-                            employeeId: parseInt(cell.dataset.employee_id),
-                            statusId: parseInt(ind),
-                            date: cell.dataset.date,
-                            isDelete: false,
-                            isActive: false,
-                        });
-                    }
-                });
-            }
-        });
-
-        if (lists.length > 0) {
-            console.log(lists);
-            this._scheduleList = lists;
-            return true;
-        } else
-            return false;
-    }
-
-    createScheduleListApi() {
-        dataHandler
+    async createScheduleListApi() {
+        await dataHandler
             .getSchedules(error => { console.log(error)})
             .then(result => {
                 const arr = [];
@@ -66,19 +66,10 @@ export default class ScheduleList {
                     });
                     arr.push(scheduleCell.get);
                 })
-                return arr;
-            })
-            .then(data => {
-                let ans = [];
-                data.forEach(item => {
-                    ans.push(new Schedule(item).get);
-                });
-                // console.log(ans);
-                this._scheduleList = ans;
-                console.log(this._scheduleList);
+                this._scheduleList = arr;
             });
 
-        return true;
+         return !!this._scheduleList.length;
     }
 
     add(schedule) {
@@ -127,7 +118,9 @@ export default class ScheduleList {
     }
 
     clearActive() {
-        return this._scheduleList.filter(schedule => schedule.isActive !== true);
+        this._scheduleList
+            .filter(schedule => schedule.isActive === true)
+            .forEach(schedule => schedule.isActive = false);
     }
 
     getAll() {

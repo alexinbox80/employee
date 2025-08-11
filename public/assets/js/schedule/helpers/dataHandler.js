@@ -34,7 +34,6 @@ export default {
         })
             .then((response) => {
                 if (response.ok) {
-                    //return true;
                     return response.json()
                 } else {
                     return errorCallBack(response.status);
