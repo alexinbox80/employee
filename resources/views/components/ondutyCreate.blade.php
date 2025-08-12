@@ -55,7 +55,10 @@
     <div class="row">
         <div class="d-flex justify-content-between">
             <a class="fio__link" href="{{ route('page.get.index') }}">НАЗАД</a>
-            <span id="save__schedule" class="btn btn-outline-primary me-2">Сохранить</span>
+            <div class="d-flex">
+                <span id="clear__schedule-bottom" class="btn btn-outline-info me-2">Очистить</span>
+                <span id="save__schedule" class="btn btn-outline-primary me-2">Сохранить</span>
+            </div>
         </div>
     </div>
 </div>

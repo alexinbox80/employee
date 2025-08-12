@@ -57,8 +57,8 @@ final class ScheduleRepository implements ScheduleContract
         $schedule = Schedule::where([
             'employee_id' => $employeeId,
             'status_id' => $statusId,
-            'date' => Schedule::dateConvert($date
-            )])->first();
+            'date' => Schedule::dateConvert($date)
+            ])->first();
         return $schedule->delete();
     }
 
@@ -73,6 +73,6 @@ final class ScheduleRepository implements ScheduleContract
 
     public function destroy(int $scheduleId): int
     {
-        return  Schedule::destroy($scheduleId);
+        return Schedule::destroy($scheduleId);
     }
 }

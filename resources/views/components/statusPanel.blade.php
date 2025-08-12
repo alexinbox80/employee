@@ -39,6 +39,7 @@
             @endforeach
         </div>
         <div class="button">
+            <span id="clear__schedule-top" class="btn btn-outline-info me-2">Очистить</span>
             <span id="save__schedule-top" class="btn btn-outline-primary me-2">Сохранить</span>
         </div>
     </div>
