@@ -2,6 +2,7 @@ import eventEmitter from '../helpers/eventEmitter.js';
 import makeIndex from '../utils/makeIndex.js';
 import dataHandler from '../helpers/dataHandler.js'
 import Schedule from './Schedule.js';
+import configure from "../config/configure.js";
 
 export default class ScheduleList {
 
@@ -72,9 +73,14 @@ export default class ScheduleList {
     removeLast(cell) {
         const scheduleCell = document.getElementById(cell.id);
 
+        if (configure.debug) console.log('removeLast ', scheduleCell.lastChild);
+
         if (scheduleCell.lastChild) {
             scheduleCell.removeChild(scheduleCell.lastChild);
+
+            if (configure.debug) console.log('scheduleCell ', this.getAll());
             this._scheduleList.pop();
+            if (configure.debug) console.log('scheduleCell ', this.getAll());
         }
     }
 

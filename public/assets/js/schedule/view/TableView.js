@@ -27,6 +27,28 @@ export default class TableView extends ScheduleList {
             cell.addEventListener('click', this._clickListener.bind(this, cell));
             cell.addEventListener('dblclick', this._doubleClickListener.bind(this, cell));
         });
+
+        let clicked = false;
+        const selector = document.querySelectorAll('#onduty__create .cell__event');
+        selector.forEach(cell => {
+            cell.onclick = function (event) {
+                if (clicked) {
+                    console.log('double click');
+
+                    clicked = false;
+                    return;
+                }
+
+                clicked = true;
+                setTimeout(function () {
+                    if (clicked) {
+                        console.log('single click');
+                    }
+
+                    clicked = false;
+                }, 300);
+            }
+        });
     }
 
     render() {
@@ -58,10 +80,12 @@ export default class TableView extends ScheduleList {
     }
 
     _doubleClickListener(cell) {
+        if (configure.debug) console.log('dclick ', cell);
         this._scheduleListModel.removeLast(cell);
     }
 
     _clickListener(cell) {
+        if (configure.debug) console.log('click ', cell);
         const activeButton = this._radioButtonModel.getActive();
         const cellId = parseInt(cell.id.slice(5, cell.id.length));
 
