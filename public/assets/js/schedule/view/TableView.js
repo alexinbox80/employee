@@ -42,6 +42,21 @@ export default class TableView extends ScheduleList {
         });
     }
 
+    refreshTable() {
+        if (configure.debug) { console.log('refreshTable()'); }
+
+        const activeCells = this._scheduleListModel.getActive();
+        activeCells.forEach(item => {
+            const cell = document.getElementById(`cell-${ item.cellId }`);
+            if (item.isDelete === true) {
+                paragraph.removeParagraphs(cell, { id: 0 });
+            }
+        });
+
+        this._scheduleListModel.clearActive();
+        if (configure.debug) { console.log(this._scheduleListModel.getActive()); }
+    }
+
     _doubleClickListener(cell) {
         this._scheduleListModel.removeLast(cell);
     }

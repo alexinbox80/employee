@@ -3,8 +3,9 @@ import dataHandler from '../helpers/dataHandler.js';
 import alertWindow from '../view/AlertWindow.js';
 
 export default class SaveButton {
-    constructor(scheduleListModel) {
+    constructor(scheduleListModel, tableView) {
         this._scheduleListModel = scheduleListModel;
+        this._tableView = tableView;
         this._init();
     }
 
@@ -45,6 +46,6 @@ export default class SaveButton {
                     }
                 });
 
-        scheduleListModel.clearActive();
+        this._tableView.refreshTable();
     }
 }

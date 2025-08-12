@@ -37,11 +37,13 @@ export default {
         this._scheduleListModel.createScheduleListApi(dVolumeObject)
             .then(
                 data => {
+                    const table = new TableView(this._scheduleListModel, this._radioButtonModel);
+
                     if (data === true) {
-                        new TableView(this._scheduleListModel, this._radioButtonModel).render();
+                        table.render();
                     }
 
-                    new SaveButton(this._scheduleListModel);
+                    new SaveButton(this._scheduleListModel, table);
                 }
         );
     }
