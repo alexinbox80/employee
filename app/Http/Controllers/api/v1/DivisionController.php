@@ -7,11 +7,13 @@ use App\Http\Requests\Divisions\CreateRequest;
 use App\Http\Requests\Divisions\EditRequest;
 use App\Http\Resources\DivisionResource;
 use App\Services\Contracts\DivisionContract as DivisionServiceContract;
+use App\Services\Contracts\ResponseContract;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class DivisionController extends Controller
 {
     public function __construct(
+        public readonly ResponseContract $responseService,
         public readonly DivisionServiceContract $divisionService
     )
     {
@@ -24,7 +26,9 @@ final class DivisionController extends Controller
     {
         $divisions = $this->divisionService->getPaginated();
 
-        return response()->json(['division' => DivisionResource::collection($divisions)], JsonResponse::HTTP_OK);
+        return $this->responseService->success([
+            DivisionResource::collection($divisions['data'])
+        ]);
     }
 
     /**
@@ -35,11 +39,14 @@ final class DivisionController extends Controller
         $validated = $request->validated();
         $division = $this->divisionService->createDivision($validated);
 
-        if ($division) {
-            return response()->json(['division' => DivisionResource::make($division)], JsonResponse::HTTP_CREATED);
-        } else {
-            return response()->json('Error', JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        if ($division)
+            return $this->responseService->created([
+                DivisionResource::make($division)
+            ]);
+        else
+            return $this->responseService->unSuccess([
+                'message' => __('messages.admin.divisions.create.fail')
+            ]);
     }
 
     /**
@@ -49,7 +56,9 @@ final class DivisionController extends Controller
     {
         $division = $this->divisionService->getDivisionById($id);
 
-        return response()->json(['division' => DivisionResource::make($division)], JsonResponse::HTTP_OK);
+        return $this->responseService->success([
+            DivisionResource::make($division)
+        ]);
     }
 
     /**
@@ -60,7 +69,9 @@ final class DivisionController extends Controller
         $validated = $request->validated();
         $division = $this->divisionService->updateDivision($validated, $id);
 
-        return response()->json(['division' => DivisionResource::make($division)], JsonResponse::HTTP_OK);
+        return $this->responseService->success([
+            DivisionResource::make($division)
+        ]);
     }
 
     /**
@@ -70,6 +81,13 @@ final class DivisionController extends Controller
     {
         $division = $this->divisionService->destroy($id);
 
-        return response()->json(['division' => ['id' => $division]], JsonResponse::HTTP_OK);
+        if ($division)
+            return $this->responseService->success([
+                'message' => __('messages.admin.divisions.destroy.success')
+            ]);
+        else
+            return $this->responseService->unSuccess([
+                'message' => __('messages.admin.divisions.destroy.fail')
+            ]);
     }
 }

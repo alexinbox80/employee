@@ -3,13 +3,12 @@
 namespace App\Services\Contracts;
 
 use App\Models\Division;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface DivisionContract
 {
     public function getAll(): array;
-    public function getPaginated(): LengthAwarePaginator;
+    public function getPaginated(): array;
     public function getDivisions(): Collection;
     public function getDivisionById(int $id): Division;
     public function createDivision(array $division): Division;

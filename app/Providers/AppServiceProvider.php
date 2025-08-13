@@ -14,7 +14,9 @@ use App\Services\Contracts\DivisionContract as DivisionServiceContract;
 use App\Services\Contracts\EmployeeContract as EmployeeServiceContract;
 use App\Services\Contracts\StatusContract as StatusServiceContract;
 use App\Services\Contracts\ScheduleContract as ScheduleServiceContract;
+use App\Services\Contracts\ResponseContract;
 use App\Services\EmployeeService;
+use App\Services\ResponseService;
 use App\Services\ScheduleService;
 use App\Services\StatusService;
 use App\Services\DivisionService;
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(ResponseContract::class, ResponseService::class);
+
         $this->app->bind(EmployeeServiceContract::class, EmployeeService::class);
         $this->app->bind(EmployeeRepositoryContract::class, EmployeeRepository::class);
 

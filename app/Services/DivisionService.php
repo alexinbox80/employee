@@ -7,7 +7,6 @@ use App\DTO\UpdateDivisionDTO;
 use App\Models\Division;
 use App\Repositories\Contracts\DivisionContract as DivisionRepositoryContract;
 use App\Services\Contracts\DivisionContract;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 final class DivisionService implements DivisionContract
@@ -23,9 +22,11 @@ final class DivisionService implements DivisionContract
         return ['data' => $this->divisionRepository->getAll()];
     }
 
-    public function getPaginated(): LengthAwarePaginator
+    public function getPaginated(): array
     {
-        return $this->divisionRepository->getPaginated();
+        return [
+            'data' => $this->divisionRepository->getPaginated()
+        ];
     }
 
     public function getDivisions(): Collection
