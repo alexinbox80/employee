@@ -36,7 +36,7 @@ final class DivisionRepository implements DivisionContract
         return Division::query()->findOrFail($id);
     }
 
-    public function createDivision(CreateDivisionDTO $divisionDTO): bool
+    public function createDivision(CreateDivisionDTO $divisionDTO): Division
     {
         $division = Division::create([
             'level0_full' => $divisionDTO->level0Full,
@@ -54,13 +54,13 @@ final class DivisionRepository implements DivisionContract
             'description' => $divisionDTO->description
         ]);
 
-        return isset($division);
+        return $division->refresh();
     }
 
-    public function updateDivision(UpdateDivisionDTO $divisionDTO, int $divisionId): int
+    public function updateDivision(UpdateDivisionDTO $divisionDTO, int $divisionId): Division
     {
         $division = Division::find($divisionId);
-        return $division->update([
+        $division->update([
             'level0_full' => $divisionDTO->level0Full,
             'level0_short' => $divisionDTO->level0Short,
             'level1_full' => $divisionDTO->level1Full,
@@ -75,6 +75,8 @@ final class DivisionRepository implements DivisionContract
             'level5_short' => $divisionDTO->level5Short,
             'description' => $divisionDTO->description
         ]);
+
+        return $division->refresh();
     }
 
     public function deleteDivision(string $level0Full, string $level1Full, string $level2Full): int
@@ -93,8 +95,8 @@ final class DivisionRepository implements DivisionContract
             $division
         );
 
-        if ($divisions->save()) return $divisions->id;
-
+        if ($divisions->save())
+            return $divisions->id;
 
         return 0;
     }

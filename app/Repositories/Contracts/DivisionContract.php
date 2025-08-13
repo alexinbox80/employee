@@ -16,8 +16,8 @@ interface DivisionContract
     public function getPaginated(): LengthAwarePaginator;
     public function getDivisions(): Collection;
     public function getDivisionById(int $id): Division;
-    public function createDivision(CreateDivisionDTO $divisionDTO): bool;
-    public function updateDivision(UpdateDivisionDTO $divisionDTO, int $divisionId): int;
+    public function createDivision(CreateDivisionDTO $divisionDTO): Division;
+    public function updateDivision(UpdateDivisionDTO $divisionDTO, int $divisionId): Division;
     public function deleteDivision(string $level0Full, string $level1Full, string $level2Full): int;
     public function store(array $division): int;
     public function destroy(int $divisionId): int;

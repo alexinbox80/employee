@@ -20,7 +20,7 @@ Accept: application/json
 ###
 
 ###
-GET http://localhost:8080/api/v1/divisions/19
+GET http://localhost:8080/api/v1/divisions/20
 Content-Type: application/json
 Accept: application/json
 ###
@@ -35,15 +35,8 @@ Accept: application/json
     "level0_short": "tst tst tst tst tst 123",
     "level1_full": "ORGANIZ ORGANIZ 123",
     "level1_short": "ORG ORG ORG ORG ORG ORG ORG 123",
-    "level2_full": "ORGANIZ ORGANIZ 123",
-    "level2_short": "ORG ORG ORG ORG ORG ORG ORG 123",
-    "level3_full": "ORGANIZ ORGANIZ 123",
-    "level3_short": "ORG ORG ORG ORG ORG ORG ORG 123",
-    "level4_full": "ORGANIZ ORGANIZ 123",
-    "level4_short": "ORG ORG ORG ORG ORG ORG ORG 123",
-    "level5_full": "ORGANIZ ORGANIZ 123",
-    "level5_short": "ORG ORG ORG ORG ORG ORG ORG 123",
-    "description": "ORG ORG ORG ORG ORG ORG ORG 123"
+    "level2_full": "ORGANIZ ORGANIZ 456",
+    "level2_short": "ORG ORG ORG ORG ORG ORG ORG 456"
 }
 ###
 
