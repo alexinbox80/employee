@@ -2,12 +2,13 @@
 
 namespace App\Repositories;
 
+use App\DTO\CreateStatusDTO;
 use App\Models\Status;
 use App\Repositories\Contracts\StatusContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class StatusRepository implements StatusContract
+final class StatusRepository implements StatusContract
 {
     public function getStatuses(): Collection
     {
@@ -29,13 +30,13 @@ class StatusRepository implements StatusContract
         return Status::query()->findOrFail($id);
     }
 
-    public function createStatus(string $letter, string $description, string $color, string $colorDescription): bool
+    public function createStatus(CreateStatusDTO $statusDTO): bool
     {
         $status = Status::create([
-            'letter' => $letter,
-            'description' => $description,
-            'color' => $color,
-            'color_description' => $colorDescription
+            'letter' => $statusDTO->letter,
+            'description' => $statusDTO->description,
+            'color' => $statusDTO->color,
+            'color_description' => $statusDTO->colorDescription
         ]);
 
         return isset($status);

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
+use App\DTO\CreateScheduleDTO;
 use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,7 +14,7 @@ interface ScheduleContract
     public function getSchedules(): Collection;
     public function getSchedulesByEmployeeId(int $employeeId): Collection;
     public function getScheduleById(int $id): Schedule;
-    public function createSchedule(int $employeeId, int $statusId, string $date): bool;
+    public function createSchedule(CreateScheduleDTO $scheduleDTO): bool;
     public function deleteSchedule(int $employeeId, int $statusId, string $date): int;
     public function store(array $schedule): bool;
     public function destroy(int $scheduleId): int;

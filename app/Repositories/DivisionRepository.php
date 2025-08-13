@@ -6,6 +6,7 @@ use App\Models\Division;
 use App\Repositories\Contracts\DivisionContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\DTO\CreateDivisionDTO;
 
 final class DivisionRepository implements DivisionContract
 {
@@ -34,38 +35,23 @@ final class DivisionRepository implements DivisionContract
         return Division::query()->findOrFail($id);
     }
 
-    public function createSchedule(
-        string $level0Full,
-        string $level0Short,
-        string $level1Full,
-        string $level1Short,
-        string $level2Full,
-        string $level2Short,
-        string $level3Full,
-        string $level3Short,
-        string $level4Full,
-        string $level4Short,
-        string $level5Full,
-        string $level5Short,
-        string $description
-    ): bool
+    public function createDivision(CreateDivisionDTO $divisionDTO): bool
     {
-
         $division = Division::create([
-            'level0_full' => $level0Full,
-            'level0_short' => $level0Short,
-            'level1_full' => $level1Full,
-            'level1_short' => $level1Short,
-            'level2_full' => $level2Full,
-            'level2_short' => $level2Short,
-            'level3_full' => $level3Full,
-            'level3_short' => $level3Short,
-            'level4_full'  => $level4Full,
-            'level4_short' => $level4Short,
-            'level5_full' => $level5Full,
-            'level5_short' => $level5Short,
-            'description' => $description
-            ]);
+            'level0_full' => $divisionDTO->level0Full,
+            'level0_short' => $divisionDTO->level0Short,
+            'level1_full' => $divisionDTO->level1Full,
+            'level1_short' => $divisionDTO->level1Short,
+            'level2_full' => $divisionDTO->level2Full,
+            'level2_short' => $divisionDTO->level2Short,
+            'level3_full' => $divisionDTO->level3Full,
+            'level3_short' => $divisionDTO->level3Short,
+            'level4_full' => $divisionDTO->level4Full,
+            'level4_short' => $divisionDTO->level4Short,
+            'level5_full' => $divisionDTO->level5Full,
+            'level5_short' => $divisionDTO->level5Short,
+            'description' => $divisionDTO->description
+        ]);
 
         return isset($division);
     }

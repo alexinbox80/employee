@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\CreateScheduleDTO;
 use DateTime;
 use App\Models\Schedule;
 use App\Services\Contracts\ScheduleContract;
@@ -59,7 +60,11 @@ final class ScheduleService implements ScheduleContract
         foreach ($schedules['schedules'] as $schedule) {
             if ($schedule['isDelete'] === false) {
                 $result = $this->scheduleRepository->createSchedule(
-                    $schedule['employeeId'], $schedule['statusId'], $schedule['date']
+                    new CreateScheduleDTO(
+                        employeeId: $schedule['employeeId'],
+                        statusId: $schedule['statusId'],
+                        date: $schedule['date']
+                    )
                 );
 
                 if (!$result) {

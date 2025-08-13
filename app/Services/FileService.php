@@ -5,7 +5,7 @@ namespace App\Services;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class FileService
+final class FileService
 {
     /**
      * @param string $filePath

@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
+use App\DTO\CreateEmployeeDTO;
 use App\Models\Employee;
 use App\Repositories\Contracts\EmployeeContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use DateTime;
-
 
 final class EmployeeRepository implements EmployeeContract
 {
@@ -82,41 +81,24 @@ final class EmployeeRepository implements EmployeeContract
         return Employee::query()->findOrFail($id);
     }
 
-    public function createEmployee(
-        int $divisionId,
-        int $departmentId,
-        bool $isShown,
-        string $lastName,
-        string $firstName,
-        string $middleName,
-        DateTime $birthDate,
-        string $sex,
-        string $position,
-        string $email,
-        string $homePhone,
-        string $workPhone,
-        string $mobilePhone,
-        string $address,
-        int $room
-
-    ): bool
+    public function createEmployee(CreateEmployeeDTO $employeeDTO): bool
     {
         $employee= Employee::create([
-            'division_id' => $divisionId,
-            'department_id' => $departmentId,
-            'is_shown' => $isShown,
-            'last_name' => $lastName,
-            'first_name' => $firstName,
-            'middle_name' => $middleName,
-            'birth_date' => $birthDate,
-            'sex' => $sex,
-            'position' => $position,
-            'email' => $email,
-            'home_phone' => $homePhone,
-            'work_phone' => $workPhone,
-            'mobile_phone' => $mobilePhone,
-            'address' => $address,
-            'room' => $room
+            'division_id' => $employeeDTO->divisionId,
+            'department_id' => $employeeDTO->departmentId,
+            'is_shown' => $employeeDTO->isShown,
+            'last_name' => $employeeDTO->lastName,
+            'first_name' => $employeeDTO->firstName,
+            'middle_name' => $employeeDTO->middleName,
+            'birth_date' => $employeeDTO->birthDate,
+            'sex' => $employeeDTO->sex,
+            'position' => $employeeDTO->position,
+            'email' => $employeeDTO->email,
+            'home_phone' => $employeeDTO->homePhone,
+            'work_phone' => $employeeDTO->workPhone,
+            'mobile_phone' => $employeeDTO->mobilePhone,
+            'address' => $employeeDTO->address,
+            'room' => $employeeDTO->room
         ]);
 
         return isset($employee);

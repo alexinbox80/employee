@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\CreateScheduleDTO;
 use App\Models\Schedule;
 use App\Repositories\Contracts\ScheduleContract;
 use Illuminate\Database\Eloquent\Collection;
@@ -41,12 +42,12 @@ final class ScheduleRepository implements ScheduleContract
         return Schedule::query()->findOrFail($id);
     }
 
-    public function createSchedule(int $employeeId, int $statusId, string $date): bool
+    public function createSchedule(CreateScheduleDTO $scheduleDTO): bool
     {
         $schedule = Schedule::create([
-            'employee_id' => $employeeId,
-            'status_id' => $statusId,
-            'date' => Schedule::dateConvert($date),
+            'employee_id' => $scheduleDTO->employeeId,
+            'status_id' => $scheduleDTO->statusId,
+            'date' => Schedule::dateConvert($scheduleDTO->date),
         ]);
 
         return isset($schedule);

@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Services\Contracts;
 
-use App\DTO\CreateDivisionDTO;
 use App\Models\Division;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-
+use Illuminate\Support\Collection;
 
 interface DivisionContract
 {
-    public function findById(int $id): Division;
-    public function getAll(): Collection;
+    public function getAll(): array;
     public function getPaginated(): LengthAwarePaginator;
     public function getDivisions(): Collection;
     public function getDivisionById(int $id): Division;
-    public function createDivision(CreateDivisionDTO $divisionDTO): bool;
+    public function createDivision(array $division): bool;
     public function deleteDivision(string $level0Full, string $level1Full, string $level2Full): int;
     public function store(array $division): bool;
     public function destroy(int $divisionId): int;
