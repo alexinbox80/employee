@@ -1,0 +1,54 @@
+###
+GET http://localhost:8080/api/v1/divisions
+Content-Type: application/json
+Accept: application/json
+###
+
+###
+POST http://localhost:8080/api/v1/divisions
+Content-Type: application/json
+Accept: application/json
+
+{
+    "level0_full" : "TEST TEST TEST",
+    "level0_short": "tst tst tst tst tst",
+    "level1_full": "ORGANIZ ORGANIZ",
+    "level1_short": "ORG ORG ORG ORG ORG ORG ORG",
+    "level2_full": "ORGANIZ ORGANIZ",
+    "level2_short": "ORG ORG ORG ORG ORG ORG ORG"
+}
+###
+
+###
+GET http://localhost:8080/api/v1/divisions/19
+Content-Type: application/json
+Accept: application/json
+###
+
+###
+PUT http://localhost:8080/api/v1/divisions/18
+Content-Type: application/json
+Accept: application/json
+
+{
+    "level0_full" : "TEST TEST TEST 1213",
+    "level0_short": "tst tst tst tst tst 123",
+    "level1_full": "ORGANIZ ORGANIZ 123",
+    "level1_short": "ORG ORG ORG ORG ORG ORG ORG 123",
+    "level2_full": "ORGANIZ ORGANIZ 123",
+    "level2_short": "ORG ORG ORG ORG ORG ORG ORG 123",
+    "level3_full": "ORGANIZ ORGANIZ 123",
+    "level3_short": "ORG ORG ORG ORG ORG ORG ORG 123",
+    "level4_full": "ORGANIZ ORGANIZ 123",
+    "level4_short": "ORG ORG ORG ORG ORG ORG ORG 123",
+    "level5_full": "ORGANIZ ORGANIZ 123",
+    "level5_short": "ORG ORG ORG ORG ORG ORG ORG 123",
+    "description": "ORG ORG ORG ORG ORG ORG ORG 123"
+}
+###
+
+###
+DELETE http://localhost:8080/api/v1/divisions/19
+Content-Type: application/json
+Accept: application/json
+###

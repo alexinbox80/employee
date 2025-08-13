@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\DTO\CreateDivisionDTO;
+use App\DTO\UpdateDivisionDTO;
 use App\Models\Division;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,7 +17,8 @@ interface DivisionContract
     public function getDivisions(): Collection;
     public function getDivisionById(int $id): Division;
     public function createDivision(CreateDivisionDTO $divisionDTO): bool;
+    public function updateDivision(UpdateDivisionDTO $divisionDTO, int $divisionId): int;
     public function deleteDivision(string $level0Full, string $level1Full, string $level2Full): int;
-    public function store(array $division): bool;
+    public function store(array $division): int;
     public function destroy(int $divisionId): int;
 }

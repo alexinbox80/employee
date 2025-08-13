@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\CreateDivisionDTO;
+use App\DTO\UpdateDivisionDTO;
 use App\Models\Division;
 use App\Repositories\Contracts\DivisionContract as DivisionRepositoryContract;
 use App\Services\Contracts\DivisionContract;
@@ -41,18 +42,18 @@ final class DivisionService implements DivisionContract
     {
         $result = $this->divisionRepository->createDivision(
             new CreateDivisionDTO(
-                level0Full: $division['level0Full'],
-                level0Short: $division['level0Short'],
-                level1Full: $division['level1Full'],
-                level1Short: $division['level1Short'],
-                level2Full: $division['level2Full'],
-                level2Short: $division['level2Short'],
-                level3Full: $division['level3Full'],
-                level3Short: $division['level3Short'],
-                level4Full: $division['level4Full'],
-                level4Short: $division['level4Short'],
-                level5Full: $division['level5Full'],
-                level5Short: $division['level5Short'],
+                level0Full: $division['level0_full'],
+                level0Short: $division['level0_short'],
+                level1Full: $division['level1_full'],
+                level1Short: $division['level1_short'],
+                level2Full: $division['level2_full'],
+                level2Short: $division['level2_short'],
+                level3Full: $division['level_full'],
+                level3Short: $division['level3_short'],
+                level4Full: $division['level4_full'],
+                level4Short: $division['level4_short'],
+                level5Full: $division['level5_full'],
+                level5Short: $division['level5_short'],
                 description: $division['description']
             )
         );
@@ -64,12 +65,33 @@ final class DivisionService implements DivisionContract
         return true;
     }
 
+    public function updateDivision(array $division, int $divisionId): int
+    {
+        $divisionDTO = new UpdateDivisionDTO(
+            level0Full: $division['level0_full'],
+            level0Short: $division['level0_short'],
+            level1Full: $division['level1_full'],
+            level1Short: $division['level1_short'],
+            level2Full: $division['level2_full'],
+            level2Short: $division['level2_short'],
+            level3Full: $division['level3_full'],
+            level3Short: $division['level3_short'],
+            level4Full: $division['level4_full'],
+            level4Short: $division['level4_short'],
+            level5Full: $division['level5_full'],
+            level5Short: $division['level5_short'],
+            description: $division['description']
+        );
+
+        return $this->divisionRepository->updateDivision($divisionDTO, $divisionId);
+    }
+
     public function deleteDivision(string $level0Full, string $level1Full, string $level2Full): int
     {
         return $this->divisionRepository->deleteDivision($level0Full, $level1Full, $level2Full);
     }
 
-    public function store(array $division): bool
+    public function store(array $division): int
     {
         return $this->divisionRepository->store($division);
     }

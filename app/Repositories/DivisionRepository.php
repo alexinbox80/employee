@@ -7,6 +7,7 @@ use App\Repositories\Contracts\DivisionContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\DTO\CreateDivisionDTO;
+use App\DTO\UpdateDivisionDTO;
 
 final class DivisionRepository implements DivisionContract
 {
@@ -56,6 +57,26 @@ final class DivisionRepository implements DivisionContract
         return isset($division);
     }
 
+    public function updateDivision(UpdateDivisionDTO $divisionDTO, int $divisionId): int
+    {
+        $division = Division::find($divisionId);
+        return $division->update([
+            'level0_full' => $divisionDTO->level0Full,
+            'level0_short' => $divisionDTO->level0Short,
+            'level1_full' => $divisionDTO->level1Full,
+            'level1_short' => $divisionDTO->level1Short,
+            'level2_full' => $divisionDTO->level2Full,
+            'level2_short' => $divisionDTO->level2Short,
+            'level3_full' => $divisionDTO->level3Full,
+            'level3_short' => $divisionDTO->level3Short,
+            'level4_full' => $divisionDTO->level4Full,
+            'level4_short' => $divisionDTO->level4Short,
+            'level5_full' => $divisionDTO->level5Full,
+            'level5_short' => $divisionDTO->level5Short,
+            'description' => $divisionDTO->description
+        ]);
+    }
+
     public function deleteDivision(string $level0Full, string $level1Full, string $level2Full): int
     {
         $division = Division::where([
@@ -66,13 +87,16 @@ final class DivisionRepository implements DivisionContract
         return $division->delete();
     }
 
-    public function store(array $division): bool
+    public function store(array $division): int
     {
         $divisions = new Division(
             $division
         );
 
-        return $divisions->save();
+        if ($divisions->save()) return $divisions->id;
+
+
+        return 0;
     }
 
     public function destroy(int $divisionId): int
