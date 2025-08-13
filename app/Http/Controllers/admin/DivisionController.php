@@ -8,19 +8,24 @@ use App\Http\Requests\Divisions\EditRequest;
 use App\Models\Division;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use App\Services\Contracts\DivisionContract as DivisionServiceContract;
 
-class DivisionController extends Controller
+final class DivisionController extends Controller
 {
+
+    public function __construct(
+        private readonly DivisionServiceContract $divisionService
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $divisions = Division::query()
-            ->paginate(config('pagination.admin.divisions'));
-
         return view('admin.divisions.index', [
-            'divisions' => $divisions
+            'divisions' => $this->divisionService->getPaginated()
         ]);
     }
 
@@ -40,12 +45,13 @@ class DivisionController extends Controller
      */
     public function store(CreateRequest $request): RedirectResponse
     {
-        $division = new Division(
-            $request->validated()
-        );
+        $validated = $request->validated();
+        $result = $this->divisionService->store($validated);
 
-        if ($division->save()) {
-            return redirect()->route('admin.divisions.index')
+        if ($result) {
+//            return redirect()->route('admin.divisions.index')
+//                ->with('success', __('messages.admin.divisions.create.success'));
+            return redirect()->back()
                 ->with('success', __('messages.admin.divisions.create.success'));
         }
 
@@ -85,7 +91,6 @@ class DivisionController extends Controller
         }
 
         return back()->with('error', __('messages.admin.divisions.update.fail'));
-
     }
 
     /**
@@ -97,7 +102,7 @@ class DivisionController extends Controller
      */
     public function destroy(Division $division): RedirectResponse
     {
-        $division = Division::destroy($division->id);
+        $division = $this->divisionService->destroy($division->id);
 
         if ($division) {
             return redirect()->route('admin.divisions.index')

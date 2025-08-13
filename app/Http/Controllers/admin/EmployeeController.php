@@ -8,19 +8,22 @@ use App\Http\Requests\Divisions\EditRequest;
 use App\Models\Employee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use App\Services\Contracts\EmployeeContract as EmployeeServiceContract;
 
-class EmployeeController extends Controller
+final class EmployeeController extends Controller
 {
+    public function __construct(
+        private readonly  EmployeeServiceContract $employeeService
+    )
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $employees = Employee::query()
-            ->paginate(config('pagination.admin.employees'));
-
         return view('admin.employees.index', [
-            'employees' => $employees
+            'employees' => $this->employeeService->getPaginated()
         ]);
     }
 
@@ -40,11 +43,10 @@ class EmployeeController extends Controller
      */
     public function store(CreateRequest $request): RedirectResponse
     {
-        $employee = new Employee(
-            $request->validated()
-        );
+        $validated = $request->validated();
+        $result = $this->employeeService->store($validated);
 
-        if ($employee->save()) {
+        if ($result) {
             return redirect()->route('admin.employees.index')
                 ->with('success', __('messages.admin.employees.create.success'));
         }
@@ -85,7 +87,6 @@ class EmployeeController extends Controller
         }
 
         return back()->with('error', __('messages.admin.employees.update.fail'));
-
     }
 
     /**
@@ -97,7 +98,7 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee): RedirectResponse
     {
-        $employee = Employee::destroy($employee->id);
+        $employee= $this->employeeService->destroy($employee->id);
 
         if ($employee) {
             return redirect()->route('admin.employees.index')

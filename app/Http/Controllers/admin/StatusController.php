@@ -8,19 +8,23 @@ use App\Http\Requests\Statuses\EditRequest;
 use App\Models\Status;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
+use App\Services\Contracts\StatusContract as StatusServiceContract;
 
-class StatusController extends Controller
+final class StatusController extends Controller
 {
+    public function __construct(
+        private readonly StatusServiceContract $statusService
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $statuses = Status::query()
-            ->paginate(config('pagination.admin.statuses'));
-
         return view('admin.statuses.index', [
-            'statuses' => $statuses
+            'statuses' => $this->statusService->getPaginated()
         ]);
     }
 
@@ -40,11 +44,10 @@ class StatusController extends Controller
      */
     public function store(CreateRequest $request): RedirectResponse
     {
-        $status = new Status(
-            $request->validated()
-        );
+        $validated = $request->validated();
+        $status = $this->statusService->store($validated);
 
-        if ($status->save()) {
+        if ($status) {
             return redirect()->route('admin.statuses.index')
                 ->with('success', __('messages.admin.statuses.create.success'));
         }
@@ -85,7 +88,6 @@ class StatusController extends Controller
         }
 
         return back()->with('error', __('messages.admin.statuses.update.fail'));
-
     }
 
     /**
@@ -97,7 +99,7 @@ class StatusController extends Controller
      */
     public function destroy(Status $status): RedirectResponse
     {
-        $status = Status::destroy($status->id);
+        $status = $this->statusService->destroy($status->id);
 
         if ($status) {
             return redirect()->route('admin.statuses.index')

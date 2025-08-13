@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Schedules\CreateRequest;
 use App\Http\Requests\Schedules\EditRequest;
 use App\Models\Schedule;
-use App\Services\ScheduleService as scheduleServiceContract;
+use App\Services\Contracts\ScheduleContract as ScheduleServiceContract;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 
@@ -90,7 +90,6 @@ final class ScheduleController extends Controller
         }
 
         return back()->with('error', __('messages.admin.schedules.update.fail'));
-
     }
 
     /**
