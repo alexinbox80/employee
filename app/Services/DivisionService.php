@@ -19,7 +19,9 @@ final class DivisionService implements DivisionContract
 
     public function getAll(): array
     {
-        return ['data' => $this->divisionRepository->getAll()];
+        return [
+            'data' => $this->divisionRepository->getAll()
+        ];
     }
 
     public function getPaginated(): array
@@ -41,7 +43,7 @@ final class DivisionService implements DivisionContract
 
     public function createDivision(array $division): Division
     {
-        $result = $this->divisionRepository->createDivision(
+        return $this->divisionRepository->createDivision(
             new CreateDivisionDTO(
                 level0Full: $division['level0_full'],
                 level0Short: $division['level0_short'],
@@ -58,8 +60,6 @@ final class DivisionService implements DivisionContract
                 description: $division['description'] ?? null
             )
         );
-
-        return $result;
     }
 
     public function updateDivision(array $division, int $divisionId): Division
