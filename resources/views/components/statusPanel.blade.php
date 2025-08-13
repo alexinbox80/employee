@@ -1,7 +1,7 @@
 <div class="row">
     <div class="d-flex justify-content-between">
         <div class="col-md-9 px-0 d-flex">
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column align-items-center">
                 <input class="my-1 mx-1 sp__input radioStatusPanel"
                        type="radio"
                        title="Удалить статус"
@@ -19,7 +19,7 @@
                 </label>
             </div>
             @foreach($statuses as $key => $status)
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column align-items-center">
                     <input class="my-1 mx-1 sp__input radioStatusPanel"
                            type="radio"
                            name="exampleRadios"
