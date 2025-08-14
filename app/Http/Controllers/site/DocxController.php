@@ -12,7 +12,7 @@ use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\SimpleType\JcTable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class DocxController extends Controller
+final class DocxController extends Controller
 {
 
     public function __construct(
@@ -43,7 +43,157 @@ class DocxController extends Controller
         $secondDate = new DateTime($date2);
 
         $diff = $firstDate->diff($secondDate);
-        return abs($diff->days) === 1 && $employeeId1 === $employeeId2 && $statusId1 === $statusId2;
+        return abs($diff->days) === 1 && $employeeId1 === $employeeId2;// && $statusId1 === $statusId2;
+    }
+
+    private function sortArrayElements(array $elements, string $fieldName = 'start'): array
+    {
+        $sortContents = [];
+        foreach ($elements as $key => $items)
+            foreach ($items as $vol => $content) {
+                usort($content,  function ($a, $b) use ($fieldName){
+                    $t1 = strtotime($a[$fieldName]);
+                    $t2 = strtotime($b[$fieldName]);
+                    return $t1 - $t2; // For ascending order
+                    // return $t2 - $t1; // For descending order
+                });
+
+                if ($key === 10) $sortContents[] = $content;
+                if ($key === 12 || $key === 5) $sortContents[$content[0]['division_id']] = $content;
+            }
+
+        return $sortContents;
+    }
+
+    private function dayToWeekArray(array $object): array
+    {
+        $items = [];
+        foreach ($object as $contents) {
+            $flag = false;
+            foreach ($contents as $key => $content) {
+                if ($flag === false) {
+                    $firstDate = $content['date'];
+                    $flag = true;
+                }
+
+                if ($key < count($contents) - 1 &&
+                    $this->areDatesConsecutive(
+                        $content['date'],
+                        $contents[$key + 1]['date'],
+                        $content['employee_id'],
+                        $contents[$key + 1]['employee_id'],
+                        $content['status_id'],
+                        $contents[$key + 1]['status_id']
+                    )) {
+                    $flag = true;
+                }
+
+                if ($key < count($contents) - 1 &&
+                    !$this->areDatesConsecutive(
+                        $content['date'],
+                        $contents[$key + 1]['date'],
+                        $content['employee_id'],
+                        $contents[$key + 1]['employee_id'],
+                        $content['status_id'],
+                        $contents[$key + 1]['status_id']
+                    )) {
+                    $flag = false;
+
+                    $items[$content['division_id']][] = [
+                        'employee_id' => $content['employee_id'],
+                        'division_id' => $content['division_id'],
+                        'department_id' => $content['department_id'],
+                        'status_id' => $content['status_id'],
+                        'division' => $content['division'],
+                        'start' => $firstDate,
+                        'end' => $content['date'],
+                        'text' => $content['text'],
+                    ];
+                }
+
+                if ($key === count($contents) - 1)
+                    $items[$content['division_id']][] = [
+                        'employee_id' => $content['employee_id'],
+                        'division_id' => $content['division_id'],
+                        'department_id' => $content['department_id'],
+                        'status_id' => $content['status_id'],
+                        'division' => $content['division'],
+                        'start' => $firstDate,
+                        'end' => $content['date'],
+                        'text' => $content['text'],
+                    ];
+            }
+        }
+
+        return $items;
+    }
+
+    private function object2array(array $object): array
+    {
+        $divisionId = null;
+        $content1 = [];
+        $content2 = [];
+        $content3 = [];
+        foreach ($object['employees'] as $employee) {
+            $schedules = $employee->schedules;
+            if (count($schedules) > 0) {
+                $scheduleId = [5, 10, 12];
+                foreach ($schedules as $keySchedule => $schedule) {
+                    if (in_array($schedule->status_id, $scheduleId)) {
+
+                        if ($employee->division->id <> $divisionId) {
+                            $division = is_null($employee->division->level2_full) ? $employee->department->level1_full : $employee->division->level2_full;
+                            $divisionId = $employee->division->id;
+                        }
+
+                        if ($schedule->status_id === 10) {
+                            $content1[$schedule->status_id][$employee->division->id][] = [
+                                'employee_id' => $employee->id,
+                                'division_id' => $employee->division->id,
+                                'department_id' => $employee->department->id,
+                                'status_id' => $schedule->status_id,
+                                'division' => $division,
+                                'date' => $schedule->date,
+                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                            ];
+                        }
+
+                        if ($schedule->status_id === 12) {
+                            $content2[$schedule->status_id][$employee->division->id][] = [
+                                'employee_id' => $employee->id,
+                                'division_id' => $employee->division->id,
+                                'department_id' => $employee->department->id,
+                                'status_id' => $schedule->status_id,
+                                'division' => $division,
+                                'date' => $schedule->date,
+                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                            ];
+                        }
+
+                        if ($schedule->status_id === 5) {
+                            $content3[$schedule->status_id][$employee->division->id][] = [
+                                'employee_id' => $employee->id,
+                                'division_id' => $employee->division->id,
+                                'department_id' => $employee->department->id,
+                                'status_id' => $schedule->status_id,
+                                'division' => $division,
+                                'date' => $schedule->date,
+                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+
+        $items = isset($content1[10]) ? $this->sortArrayElements([ 10 => [ 10 => array_merge(...$this->dayToWeekArray($content1[10]))]]) : null;
+
+        return [
+            10 => $items,
+            12 => isset($content2[12]) ? $this->sortArrayElements([12 => $this->dayToWeekArray($content2[12])]) : null,
+            5 => isset($content3[5]) ? $this->sortArrayElements([5 => $this->dayToWeekArray($content3[5])]) : null,
+        ];
     }
 
     public function generate(Request $request): BinaryFileResponse
@@ -110,110 +260,33 @@ class DocxController extends Controller
         $phpWord->addTableStyle($spanTableStyleName, $fancyTableStyle);
         $table = $section->addTable($spanTableStyleName);
 
-        $divisionId = null;
-        $contents = [];
-        $division = null;
-        foreach ($employees['employees'] as $key => $employee) {
+        $sortContents = $this->object2array($employees);
 
-            $schedules = $employee->schedules;
-            if (count($schedules) > 0) {
-
-                if ($employee->division->id <> $divisionId) {
-                    $division = is_null($employee->division->level2_full) ? $employee->department->level1_full : $employee->division->level2_full;
-                    $divisionId = $employee->division->id;
-                }
-
-                $flag = false;
-                $scheduleId = [5, 10, 12];
-                $firstDate = null;
-                foreach ($schedules as $keySchedule => $schedule) {
-                    if (in_array($schedule->status_id, $scheduleId)) {
-                        if ($flag === false) {
-                            $firstDate = $schedule->date;
-                            //$lastDate = $schedule->date;
-                            $flag = true;
-                        }
-
-                        if ($keySchedule < count($schedules) - 1 &&
-                            $this->areDatesConsecutive(
-                                $schedule->date,
-                                $schedules[$keySchedule + 1]->date,
-                                $schedule->employee_id,
-                                $schedules[$keySchedule + 1]->employee_id,
-                                $schedule->status_id,
-                                $schedules[$keySchedule + 1]->status_id
-                            )) {
-                            //$lastDate = $schedule->date;
-                            $flag = true;
-                        }
-
-                        if ($keySchedule < count($schedules) - 1 &&
-                            !$this->areDatesConsecutive(
-                                $schedule->date,
-                                $schedules[$keySchedule + 1]->date,
-                                $schedule->employee_id,
-                                $schedules[$keySchedule + 1]->employee_id,
-                                $schedule->status_id,
-                                $schedules[$keySchedule + 1]->status_id
-                            )) {
-                            $flag = false;
-                            $contents[$employee->division->id * 100 + $schedule->status_id][] = [
-                                'employee_id' => $employee->id,
-                                'division_id' => $employee->division->id,
-                                'department_id' => $employee->department->id,
-                                'status_id' => $schedule->status_id,
-                                'division' => $division,
-                                'start' => $firstDate,
-                                'end' => $schedule->date,
-                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                            ];
-                        }
-
-                        if ($keySchedule === count($schedules) - 1) {
-                            $contents[$employee->division->id * 100 + $schedule->status_id][] = [
-                                'employee_id' => $employee->id,
-                                'division_id' => $employee->division->id,
-                                'department_id' => $employee->department->id,
-                                'status_id' => $schedule->status_id,
-                                'division' => $division,
-                                'start' => $firstDate,
-                                'end' => $schedule->date,
-                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                            ];
-                        }
-                    }
-                }
-           }
-        }
-
-        //dump($contents);
-
-        $sortContents = [];
-        foreach ($contents as $content) {
-            usort($content,  function ($a, $b) {
-                $t1 = strtotime($a['start']);
-                $t2 = strtotime($b['start']);
-                return $t1 - $t2; // For ascending order
-                // return $t2 - $t1; // For descending order
-            });
-            $sortContents[] = $content;
-        }
-
-        foreach ($sortContents as $key => $content) {
-            $divisionId = null;
-            foreach ($content as $item) {
-                if ($item['division_id'] <> $divisionId) {
-                    $row = $table->addRow();
-                    $row->addCell($this->m2t(180), $cellColSpan)->addText('');
-
-                    $row = $table->addRow();
-                    $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHleft);
-                    $divisionId = $item['division_id'];
-                }
-
+        $key = 1;
+        foreach ($sortContents as $value => $sorts) {
+            if ($value === 10) {
                 $row = $table->addRow();
-                $row->addCell($this->m2t(60))->addText(dateDDMMYYYY($item['start']) . ' - ' . dateDDMMYYYY($item['end']), null, $cellHCentered);
-                $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHleft);
+                $row->addCell($this->m2t(180), $cellColSpan)->addText($key . '. ' . 'Информационный центр', ['italic' => true, 'bold' => true], $cellHleft);
+            }
+
+            foreach ($sorts as $content) {
+                $divisionId = null;
+                foreach ($content as $item) {
+                    if ($item['division_id'] <> $divisionId && $value !== 10) {
+                        $row = $table->addRow();
+                        $row->addCell($this->m2t(180), $cellColSpan)->addText('');
+
+                        $row = $table->addRow();
+                        $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHleft);
+                        $divisionId = $item['division_id'];
+
+                        $key++;
+                    }
+
+                    $row = $table->addRow();
+                    $row->addCell($this->m2t(60))->addText(dateDDMMYYYY($item['start']) . ' - ' . dateDDMMYYYY($item['end']), null, $cellHCentered);
+                    $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHleft);
+                }
             }
         }
 
