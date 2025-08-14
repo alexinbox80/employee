@@ -37,19 +37,19 @@ class DocxController extends Controller
         return false;
     }
 
-    private function areDatesConsecutive(string $date1, string $date2, int $employeeId1, int $employeeId2): bool
+    private function areDatesConsecutive(string $date1, string $date2, int $employeeId1, int $employeeId2, int $statusId1, int $statusId2): bool
     {
         $firstDate = new DateTime($date1);
         $secondDate = new DateTime($date2);
 
         $diff = $firstDate->diff($secondDate);
-        return abs($diff->days) === 1 && $employeeId1 === $employeeId2;
+        return abs($diff->days) === 1 && $employeeId1 === $employeeId2 && $statusId1 === $statusId2;
     }
 
     public function generate(Request $request): BinaryFileResponse
     {
-        $month = $request->query('month');
-        $year = $request->query('year');
+        $month = (int) $request->query('month');
+        $year = (int) $request->query('year');
 
         $employees = $this->employeeService->indexDocx($month, $year);
 
@@ -112,6 +112,7 @@ class DocxController extends Controller
 
         $divisionId = null;
         $contents = [];
+        $division = null;
         foreach ($employees['employees'] as $key => $employee) {
 
             $schedules = $employee->schedules;
@@ -124,48 +125,59 @@ class DocxController extends Controller
 
                 $flag = false;
                 $scheduleId = [5, 10, 12];
+                $firstDate = null;
                 foreach ($schedules as $keySchedule => $schedule) {
                     if (in_array($schedule->status_id, $scheduleId)) {
                         if ($flag === false) {
                             $firstDate = $schedule->date;
-                            $lastDate = $schedule->date;
+                            //$lastDate = $schedule->date;
                             $flag = true;
                         }
 
-                        if ($keySchedule > 1 && $this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date, $schedule->employee_id, $schedules[$keySchedule - 1]->employee_id)) {
-                            $lastDate = $schedule->date;
+                        if ($keySchedule < count($schedules) - 1 &&
+                            $this->areDatesConsecutive(
+                                $schedule->date,
+                                $schedules[$keySchedule + 1]->date,
+                                $schedule->employee_id,
+                                $schedules[$keySchedule + 1]->employee_id,
+                                $schedule->status_id,
+                                $schedules[$keySchedule + 1]->status_id
+                            )) {
+                            //$lastDate = $schedule->date;
                             $flag = true;
                         }
 
-                        if ($keySchedule > 1 && !$this->areDatesConsecutive($schedule->date, $schedules[$keySchedule - 1]->date, $schedule->employee_id, $schedules[$keySchedule - 1]->employee_id)) {
+                        if ($keySchedule < count($schedules) - 1 &&
+                            !$this->areDatesConsecutive(
+                                $schedule->date,
+                                $schedules[$keySchedule + 1]->date,
+                                $schedule->employee_id,
+                                $schedules[$keySchedule + 1]->employee_id,
+                                $schedule->status_id,
+                                $schedules[$keySchedule + 1]->status_id
+                            )) {
                             $flag = false;
-                            //$firstDate = $schedules[$keySchedule - 1]->date;
-
-                            $contents[$employee->division->id][] = [
+                            $contents[$employee->division->id * 100 + $schedule->status_id][] = [
                                 'employee_id' => $employee->id,
                                 'division_id' => $employee->division->id,
                                 'department_id' => $employee->department->id,
+                                'status_id' => $schedule->status_id,
                                 'division' => $division,
                                 'start' => $firstDate,
-                                'end' => $lastDate,
+                                'end' => $schedule->date,
                                 'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
                             ];
                         }
 
                         if ($keySchedule === count($schedules) - 1) {
-//                        if (($firstDate <> $year . '-' . $month .'-01') && ($flag === false)) {
-//                            $date = new DateTime($firstDate); // Create a DateTime object for today
-//                            $date->modify('-1 day'); // Subtract one day
-//                            $firstDate =  $date->format('Y-m-d'); // Output: 2025-08-02
-//                        }
-
-                            $contents[$employee->division->id][] = [
+                            $contents[$employee->division->id * 100 + $schedule->status_id][] = [
                                 'employee_id' => $employee->id,
                                 'division_id' => $employee->division->id,
                                 'department_id' => $employee->department->id,
+                                'status_id' => $schedule->status_id,
                                 'division' => $division,
                                 'start' => $firstDate,
-                                'end' => $lastDate,
+                                'end' => $schedule->date,
                                 'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
                             ];
                         }
@@ -173,6 +185,8 @@ class DocxController extends Controller
                 }
            }
         }
+
+        //dump($contents);
 
         $sortContents = [];
         foreach ($contents as $content) {

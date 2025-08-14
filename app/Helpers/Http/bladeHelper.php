@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 if (!function_exists('getMonthsArray')) {
     /**
-     * This function return aray of months of year
+     * This function return array of months of year
      * @return array
      */
     function getMonthsArray(): array
@@ -16,7 +16,7 @@ if (!function_exists('getMonthsArray')) {
 
 if (!function_exists('getMonthsArrayEnding')) {
     /**
-     * This function return aray of months of year
+     * This function return array of months of year
      * @return array
      */
     function getMonthsArrayEnding(): array
