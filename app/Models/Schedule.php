@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
-class Schedule extends Model
+final class Schedule extends Model
 {
     /** @use HasFactory<\Database\Factories\ScheduleFactory> */
     use HasFactory, Notifiable;
@@ -28,6 +28,30 @@ class Schedule extends Model
     protected $with = [
         'status'
     ];
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getEmployeeId(): int
+    {
+        return $this->employee_id;
+    }
+
+    public function getStatusId(): int
+    {
+        return $this->status_id;
+    }
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
 
     public static function dateConvert(string $date): string
     {

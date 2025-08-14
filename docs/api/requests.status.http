@@ -1,0 +1,43 @@
+###
+GET http://localhost:8080/api/v1/statuses?page=1
+Content-Type: application/json
+Accept: application/json
+###
+
+###
+POST http://localhost:8080/api/v1/statuses
+Content-Type: application/json
+Accept: application/json
+
+{
+    "letter": "Ш",
+    "description": "Прогул",
+    "color": "#AABBCC",
+    "color_description": "ХЗ цвет"
+}
+###
+
+###
+GET http://localhost:8080/api/v1/statuses/13
+Content-Type: application/json
+Accept: application/json
+###
+
+###
+PUT http://localhost:8080/api/v1/statuses/13
+Content-Type: application/json
+Accept: application/json
+
+{
+    "letter": "Ш",
+    "description": "Прогул",
+    "color": "#AABBCC",
+    "color_description": "ХЗ ХЗ цвет"
+}
+###
+
+###
+DELETE http://localhost:8080/api/v1/statuses/13
+Content-Type: application/json
+Accept: application/json
+###

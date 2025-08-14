@@ -4,7 +4,7 @@ export default {
     _url: configure.url,
 
     async getSchedules(errorCallBack, month, year) {
-        return await fetch(`${this._url}schedules?month=${month}&year=${year}`, {
+        return await fetch(`${this._url}blade_schedules?month=${month}&year=${year}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export default {
     },
 
     async createSchedules(errorCallBack, data) {
-        return await fetch(`${this._url}schedules`, {
+        return await fetch(`${this._url}blade_schedules`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export default {
     },
 
     async deleteFromModels(errorCallBack, id) {
-        return await fetch(`${this._url}delete`, {
+        return await fetch(`${this._url}blade_schedules`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

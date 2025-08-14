@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 
-class Employee extends Model
+final class Employee extends Model
 {
     /** @use HasFactory<\Database\Factories\EmployeeFactory> */
     use HasFactory, Notifiable;
@@ -42,6 +42,86 @@ class Employee extends Model
         'department',
         'schedules'
     ];
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getDivisionId(): int
+    {
+        return $this->division_id;
+    }
+
+    public function getDepartmentId(): int
+    {
+        return $this->department_id;
+    }
+
+    public function getIsShown(): bool
+    {
+        return $this->is_shown;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->last_name;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->first_name;
+    }
+
+    public function getMiddleName(): string
+    {
+        return $this->middle_name;
+    }
+
+    public function getBirthDate(): string
+    {
+        return $this->birth_date;
+    }
+
+    public function getSex(): string
+    {
+        return $this->sex;
+    }
+
+    public function getPosition(): string
+    {
+        return $this->position;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getHomePhone(): ?string
+    {
+        return $this->home_phone;
+    }
+
+    public function getWorkPhone(): ?string
+    {
+        return $this->work_phone;
+    }
+
+    public function getMobilePhone(): ?string
+    {
+        return $this->mobile_phone;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function getRoom(): ?int
+    {
+        return $this->room;
+    }
 
     //Relations
     public function division(): HasOne

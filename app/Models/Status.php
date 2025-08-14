@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
-class Status extends Model
+final class Status extends Model
 {
     /** @use HasFactory<\Database\Factories\StatusFactory> */
     use HasFactory, Notifiable;
@@ -22,6 +22,31 @@ class Status extends Model
         'color',
         'color_description'
     ];
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getLetter(): string
+    {
+        return $this->letter;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function getColor(): string
+    {
+        return $this->color;
+    }
+
+    public function getColorDescription(): ?string
+    {
+        return $this->color_description;
+    }
 
     public function schedule(): BelongsTo
     {

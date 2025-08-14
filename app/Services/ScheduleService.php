@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\DTO\CreateScheduleDTO;
+use App\DTO\UpdateScheduleDTO;
 use DateTime;
 use App\Models\Schedule;
 use App\Services\Contracts\ScheduleContract;
 use App\Repositories\Contracts\ScheduleContract as ScheduleRepositoryContract;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 final class ScheduleService implements ScheduleContract
@@ -34,9 +34,11 @@ final class ScheduleService implements ScheduleContract
         return ['data' => $this->scheduleRepository->getAll($month, $year)];
     }
 
-    public function getPaginated(): LengthAwarePaginator
+    public function getPaginated(): array
     {
-        return $this->scheduleRepository->getPaginated();
+        return [
+            'data' => $this->scheduleRepository->getPaginated()
+        ];
     }
 
     public function getSchedules(): Collection
@@ -85,12 +87,23 @@ final class ScheduleService implements ScheduleContract
         return true;
     }
 
+    public function updateSchedule(array $schedule, int $scheduleId): Schedule
+    {
+        $scheduleDTO = new UpdateScheduleDTO(
+            employeeId: $schedule['employee_id'],
+            statusId: $schedule['status_id'],
+            date: $schedule['date'],
+        );
+
+        return $this->scheduleRepository->updateSchedule($scheduleDTO, $scheduleId);
+    }
+
     public function deleteSchedule(int $employeeId, int $statusId, string $date): int
     {
         return $this->scheduleRepository->deleteSchedule($employeeId, $statusId, $date);
     }
 
-    public function store(array $schedule): bool
+    public function store(array $schedule): Schedule
     {
         return $this->scheduleRepository->store($schedule);
     }

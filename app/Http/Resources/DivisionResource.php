@@ -14,21 +14,23 @@ class DivisionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $division = $this->resource;
+
         return [
-            'id' => $this->id,
-            'level0_full' => $this->level0_full,
-            'level0_short' => $this->level0_short,
-            'level1_full' => $this->level1_full,
-            'level1_short' => $this->level1_short,
-            'level2_full' => $this->level2_full,
-            'level2_short' => $this->level2_short,
-            'level3_full' => $this->level3_full,
-            'level3_short' => $this->level3_short,
-            'level4_full' => $this->level4_full,
-            'level4_short' => $this->level4_short,
-            'level5_full' => $this->level5_full,
-            'level5_short' => $this->level5_Short,
-            'description' => $this->description
+            'id' => $division->getId(),
+            'level0_full' => $division->getLevel0Full(),
+            'level0_short' => $division->getLevel0Short(),
+            'level1_full' => $division->getLevel1Full(),
+            'level1_short' => $division->getLevel1Short(),
+            'level2_full' => $division->getLevel2Full(),
+            'level2_short' => $division->getLevel2Short(),
+            'level3_full' => $division->getLevel3Full(),
+            'level3_short' => $division->getLevel3Short(),
+            'level4_full' => $division->getLevel4Full(),
+            'level4_short' => $division->getLevel4Short(),
+            'level5_full' => $division->getLevel5Full(),
+            'level5_short' => $division->getLevel5Short(),
+            'description' => $division->getDescription()
         ];
     }
 }

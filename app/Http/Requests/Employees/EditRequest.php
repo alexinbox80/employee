@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Employees;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class EditRequest extends FormRequest
 {
@@ -23,13 +24,20 @@ class EditRequest extends FormRequest
     {
         return [
             'division_id' => ['required', 'integer', 'exists:divisions,id'],
-            'first_name'  => ['required', 'string', 'min:10', 'max:255'],
-            'last_name'  => ['required', 'string', 'min:10', 'max:255'],
-            'middle_name'  => ['required', 'string', 'min:10', 'max:255'],
+            'department_id' => ['required', 'integer', 'exists:divisions,id'],
+            'is_shown' => ['required', 'boolean', Rule::in(['0', '1', 0, 1 , 'true', 'false', true, false])],
+            'first_name'  => ['required', 'string', 'min:4', 'max:255'],
+            'last_name'  => ['required', 'string', 'min:4', 'max:255'],
+            'middle_name'  => ['required', 'string', 'min:4', 'max:255'],
+            'birth_date' => ['required', 'string', 'min:10', 'max:10'],
+            'sex' => ['required', 'string', Rule::in(['МУЖСКОЙ', 'ЖЕНСКИЙ'])],
             'position'  => ['required', 'string', 'min:10', 'max:255'],
             'email' => ['nullable', 'email', 'min:5', 'max:128'],
-            'phone'  => ['nullable', 'numeric', 'digits:10'],
+            'home_phone'  => ['nullable', 'numeric', 'digits:10'],
+            'work_phone'  => ['nullable', 'numeric', 'digits:6'],
+            'mobile_phone'  => ['nullable', 'numeric', 'digits:10'],
             'address'  => ['required', 'string', 'min:11', 'max:256'],
+            'room' => ['required', 'integer', 'min:1']
         ];
     }
 

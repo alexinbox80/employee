@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\DTO\CreateStatusDTO;
+use App\DTO\UpdateStatusDTO;
 use App\Models\Status;
 use App\Repositories\StatusRepository as StatusRepositoryContract;
 use App\Services\Contracts\StatusContract;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 final class StatusService implements StatusContract
 {
@@ -27,9 +27,11 @@ final class StatusService implements StatusContract
         return ['data' => $this->statusRepository->getAll()];
     }
 
-    public function getPaginated(): LengthAwarePaginator
+    public function getPaginated(): array
     {
-        return $this->statusRepository->getPaginated();
+        return [
+            'data' => $this->statusRepository->getPaginated()
+        ];
     }
 
     public function getDivisions(): Collection
@@ -42,22 +44,28 @@ final class StatusService implements StatusContract
         return $this->statusRepository->getStatusById($id);
     }
 
-    public function createStatus(array $status): bool
+    public function createStatus(array $status): Status
     {
-        $result = $this->statusRepository->createStatus(
+        return $this->statusRepository->createStatus(
             new CreateStatusDTO(
                 letter: $status['letter'],
-                description: $status['description'],
+                description: $status['description'] ?? null,
                 color: $status['color'],
-                colorDescription: $status['colorDescription']
+                colorDescription: $status['color_description'] ?? null
             )
         );
+    }
 
-        if (!$result) {
-            return false;
-        }
+    public function updateStatus(array $status, int $statusId): Status
+    {
+        $statusDTO = new UpdateStatusDTO(
+            letter: $status['letter'],
+            description: $status['description'] ?? null,
+            color: $status['color'],
+            colorDescription: $status['color_description'] ?? null
+        );
 
-        return true;
+        return $this->statusRepository->updateStatus($statusDTO, $statusId);
     }
 
     public function deleteStatus(string $letter, string $color): int

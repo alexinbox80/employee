@@ -22,8 +22,10 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'letter'  => ['required', 'string', 'size:1', 'unique:statuses,letter'],
-            'description' => ['nullable', 'string', 'min:3', 'max:255']
+            'letter'  => ['required', 'string', 'size:1', 'exists:statuses,letter'],
+            'description' => ['nullable', 'string', 'min:3', 'max:255'],
+            'color' => ['required', 'string', 'min:7', 'max:7'],
+            'color_description' => ['nullable', 'string', 'min:3', 'max:255']
         ];
     }
 

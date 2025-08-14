@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use App\DTO\CreateEmployeeDTO;
+use App\DTO\UpdateEmployeeDTO;
 use App\Models\Division;
 use App\Models\Employee;
 use App\Repositories\Contracts\DivisionContract as DivisionRepositoryContract;
 use App\Repositories\Contracts\EmployeeContract as EmployeeRepositoryContract;
 use App\Services\Contracts\EmployeeContract;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 final class EmployeeService implements EmployeeContract
@@ -72,9 +72,11 @@ final class EmployeeService implements EmployeeContract
         return ['data' => $this->divisionRepository->getAll()];
     }
 
-    public function getPaginated(): LengthAwarePaginator
+    public function getPaginated(): array
     {
-        return $this->employeeRepository->getPaginated();
+        return [
+            'data' => $this->employeeRepository->getPaginated()
+        ];
     }
 
     public function getEmployees(): Collection
@@ -87,33 +89,50 @@ final class EmployeeService implements EmployeeContract
         return $this->employeeRepository->getEmployeeById($id);
     }
 
-    public function createEmployee(array $employee): bool
+    public function createEmployee(array $employee): Employee
     {
-        $result = $this->employeeRepository->createEmployee(
+        return $this->employeeRepository->createEmployee(
             new CreateEmployeeDTO(
-                divisionId: $employee['divisionId'],
-                departmentId: $employee['departmentId'],
-                isShown: $employee['isShown'],
-                lastName: $employee['lastName'],
-                firstName: $employee['firstName'],
-                middleName: $employee['middleName'],
-                birthDate: $employee['birthDate'],
+                divisionId: $employee['division_id'],
+                departmentId: $employee['department_id'],
+                isShown: $employee['is_shown'],
+                lastName: $employee['last_name'],
+                firstName: $employee['first_name'],
+                middleName: $employee['middle_name'],
+                birthDate: date('Y-m-d', strtotime($employee['birth_date'])),
                 sex: $employee['sex'],
                 position: $employee['position'],
-                email: $employee['email'],
-                homePhone: $employee['homePhone'],
-                workPhone: $employee['workPhone'],
-                mobilePhone: $employee['mobilePhone'],
+                email: $employee['email'] ?? null,
+                homePhone: $employee['home_phone'] ?? null,
+                workPhone: $employee['work_phone'] ?? null,
+                mobilePhone: $employee['mobile_phone'] ?? null,
                 address: $employee['address'],
-                room: $employee['room']
+                room: $employee['room'] ?? null
             )
         );
+    }
 
-        if (!$result) {
-            return false;
-        }
+    public function updateEmployee(array $employee, int $employeeId): Employee
+    {
+        $employeeDTO = new UpdateEmployeeDTO(
+            divisionId: $employee['division_id'],
+            departmentId: $employee['department_id'],
+            isShown: $employee['is_shown'],
+            lastName: $employee['last_name'],
+            firstName: $employee['first_name'],
+            middleName: $employee['middle_name'],
+            birthDate: date('Y-m-d', strtotime($employee['birth_date'])),
+            sex: $employee['sex'],
+            position: $employee['position'],
+            email: $employee['email'] ?? null,
+            homePhone: $employee['home_phone'] ?? null,
+            workPhone: $employee['work_phone'] ?? null,
+            mobilePhone: $employee['mobile_phone'] ?? null,
+            address: $employee['address'],
+            room: $employee['room'] ?? null
+        );
 
-        return true;
+        return $this->employeeRepository->updateEmployee($employeeDTO, $employeeId);
     }
 
     public function deleteEmployee(int $divisionId, int $departmentId): int

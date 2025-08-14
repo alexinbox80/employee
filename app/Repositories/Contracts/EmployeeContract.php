@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\DTO\CreateEmployeeDTO;
+use App\DTO\UpdateEmployeeDTO;
 use App\Models\Employee;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -19,7 +20,8 @@ interface EmployeeContract
     public function getEmployeesByDepartmentId(int $departmentId): Collection;
     public function getEmployeesByDivisionId(int $divisionId): Collection;
     public function getEmployeeById(int $id): Employee;
-    public function createEmployee(CreateEmployeeDTO $employeeDTO): bool;
+    public function createEmployee(CreateEmployeeDTO $employeeDTO): Employee;
+    public function updateEmployee(UpdateEmployeeDTO $employeeDTO, int $employeeId): Employee;
     public function deleteEmployee(int $divisionId, int $departmentId): int;
     public function store(array $employee): bool;
     public function destroy(int $employeeId): int;

@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-final class CreateEmployeeDTO
+final class UpdateEmployeeDTO
 {
     public function __construct(
         public readonly ?int $divisionId = null,

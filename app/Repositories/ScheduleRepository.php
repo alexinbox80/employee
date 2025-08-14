@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\CreateScheduleDTO;
+use App\DTO\UpdateScheduleDTO;
 use App\Models\Schedule;
 use App\Repositories\Contracts\ScheduleContract;
 use Illuminate\Database\Eloquent\Collection;
@@ -53,6 +54,18 @@ final class ScheduleRepository implements ScheduleContract
         return isset($schedule);
     }
 
+    public function updateSchedule(UpdateScheduleDTO $scheduleDTO, int $scheduleId): Schedule
+    {
+        $schedule = Schedule::find($scheduleId);
+        $schedule->update([
+            'employee_id' => $scheduleDTO->employeeId,
+            'status_id' => $scheduleDTO->statusId,
+            'date' => Schedule::dateConvert($scheduleDTO->date),
+        ]);
+
+        return $schedule->refresh();
+    }
+
     public function deleteSchedule(int $employeeId, int $statusId, string $date): int
     {
         $schedule = Schedule::where([
@@ -63,13 +76,15 @@ final class ScheduleRepository implements ScheduleContract
         return $schedule->delete();
     }
 
-    public function store(array $schedule): bool
+    public function store(array $schedule): Schedule
     {
         $schedules = new Schedule(
             $schedule
         );
 
-        return $schedules->save();
+        $schedules->save();
+
+        return $schedules->refresh();
     }
 
     public function destroy(int $scheduleId): int

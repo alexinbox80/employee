@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\CreateStatusDTO;
+use App\DTO\UpdateStatusDTO;
 use App\Models\Status;
 use App\Repositories\Contracts\StatusContract;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,7 +31,7 @@ final class StatusRepository implements StatusContract
         return Status::query()->findOrFail($id);
     }
 
-    public function createStatus(CreateStatusDTO $statusDTO): bool
+    public function createStatus(CreateStatusDTO $statusDTO): Status
     {
         $status = Status::create([
             'letter' => $statusDTO->letter,
@@ -39,7 +40,20 @@ final class StatusRepository implements StatusContract
             'color_description' => $statusDTO->colorDescription
         ]);
 
-        return isset($status);
+        return $status->refresh();
+    }
+
+    public function updateStatus(UpdateStatusDTO $statusDTO, int $statusId): Status
+    {
+        $status = Status::find($statusId);
+        $status->update([
+            'letter' => $statusDTO->letter,
+            'description' => $statusDTO->description,
+            'color' => $statusDTO->color,
+            'color_description' => $statusDTO->colorDescription
+        ]);
+
+        return $status->refresh();
     }
 
     public function deleteStatus(string $letter, string $color): int

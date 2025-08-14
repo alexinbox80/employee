@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\CreateEmployeeDTO;
+use App\DTO\UpdateEmployeeDTO;
 use App\Models\Employee;
 use App\Repositories\Contracts\EmployeeContract;
 use Illuminate\Database\Eloquent\Collection;
@@ -81,9 +82,9 @@ final class EmployeeRepository implements EmployeeContract
         return Employee::query()->findOrFail($id);
     }
 
-    public function createEmployee(CreateEmployeeDTO $employeeDTO): bool
+    public function createEmployee(CreateEmployeeDTO $employeeDTO): Employee
     {
-        $employee= Employee::create([
+        $employee = Employee::create([
             'division_id' => $employeeDTO->divisionId,
             'department_id' => $employeeDTO->departmentId,
             'is_shown' => $employeeDTO->isShown,
@@ -101,7 +102,31 @@ final class EmployeeRepository implements EmployeeContract
             'room' => $employeeDTO->room
         ]);
 
-        return isset($employee);
+        return $employee->refresh();
+    }
+
+    public function updateEmployee(UpdateEmployeeDTO $employeeDTO, int $employeeId): Employee
+    {
+        $employee = Employee::find($employeeId);
+        $employee->update([
+            'division_id' => $employeeDTO->divisionId,
+            'department_id' => $employeeDTO->departmentId,
+            'is_shown' => $employeeDTO->isShown,
+            'last_name' => $employeeDTO->lastName,
+            'first_name' => $employeeDTO->firstName,
+            'middle_name' => $employeeDTO->middleName,
+            'birth_date' => $employeeDTO->birthDate,
+            'sex' => $employeeDTO->sex,
+            'position' => $employeeDTO->position,
+            'email' => $employeeDTO->email,
+            'home_phone' => $employeeDTO->homePhone,
+            'work_phone' => $employeeDTO->workPhone,
+            'mobile_phone' => $employeeDTO->mobilePhone,
+            'address' => $employeeDTO->address,
+            'room' => $employeeDTO->room
+        ]);
+
+        return $employee->refresh();
     }
 
     public function deleteEmployee(int $divisionId, int $departmentId): int
