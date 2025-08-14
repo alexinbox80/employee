@@ -4,6 +4,7 @@ import RadioButtonList from './model/RadioButtonList.js';
 import eventEmitter from './helpers/eventEmitter.js';
 import TableView from './view/TableView.js';
 import SaveButton from './model/SaveButton.js';
+import ClearButton from './model/ClearButton.js';
 import dateVolumeObject from './vo/DateVolumeObject.js';
 
 export default {
@@ -13,7 +14,7 @@ export default {
 
     init() {
         const urlParams = new URLSearchParams(window.location.search);
-        const month = parseInt(urlParams.get('month')); // Retrieves the value of the 'name' parameter
+        const month = parseInt(urlParams.get('month')); // Retrieves the value of the 'month' parameter
         const year = parseInt(urlParams.get('year'));
 
         if (configure.debug) {
@@ -44,6 +45,7 @@ export default {
                     }
 
                     new SaveButton(this._scheduleListModel, table);
+                    new ClearButton(this._scheduleListModel);
                 }
         );
     }

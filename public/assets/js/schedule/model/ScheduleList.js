@@ -16,7 +16,6 @@ export default class ScheduleList {
             this._scheduleList = data.map(item => new scheduleClass(item));
             this._eventEmitter.emit('loaded');
         });
-
     }
 
     async createScheduleListApi(dateVolumeObject) {
@@ -72,16 +71,19 @@ export default class ScheduleList {
 
     removeLast(cell) {
         const scheduleCell = document.getElementById(cell.id);
+        if (configure.debug) console.log('scheduleCell ', this.getAll());
 
-        if (configure.debug) console.log('removeLast ', scheduleCell.lastChild);
+        const status = this._scheduleList.pop();
+        if (status.isActive === false && status.isDelete === false) {
+            this._scheduleList.push(status);
+        } else {
+            if (configure.debug) console.log('removeLast ', scheduleCell.lastChild);
 
-        if (scheduleCell.lastChild) {
-            scheduleCell.removeChild(scheduleCell.lastChild);
-
-            if (configure.debug) console.log('scheduleCell ', this.getAll());
-            this._scheduleList.pop();
-            if (configure.debug) console.log('scheduleCell ', this.getAll());
+            if (scheduleCell.lastChild) {
+                scheduleCell.removeChild(scheduleCell.lastChild);
+            }
         }
+        if (configure.debug) console.log('scheduleCell ', this.getAll());
     }
 
     get(data) {

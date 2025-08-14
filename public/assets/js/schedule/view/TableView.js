@@ -22,18 +22,19 @@ export default class TableView extends ScheduleList {
     }
 
     _init() {
-        const tableCells = document.querySelectorAll('#onduty__create .cell__event');
-        tableCells.forEach(cell => {
-            cell.addEventListener('click', this._clickListener.bind(this, cell));
-            cell.addEventListener('dblclick', this._doubleClickListener.bind(this, cell));
-        });
+        // const tableCells = document.querySelectorAll('#onduty__create .cell__event');
+        // tableCells.forEach(cell => {
+        //     //cell.addEventListener('click', this._clickListener.bind(this, cell));
+        //     //cell.addEventListener('dblclick', this._doubleClickListener.bind(this, cell));
+        // });
 
         let clicked = false;
         const selector = document.querySelectorAll('#onduty__create .cell__event');
         selector.forEach(cell => {
             cell.onclick = function (event) {
                 if (clicked) {
-                    console.log('double click');
+                    if (configure.debug) console.log('double click');
+                    this._doubleClickListener(cell);
 
                     clicked = false;
                     return;
@@ -42,12 +43,13 @@ export default class TableView extends ScheduleList {
                 clicked = true;
                 setTimeout(function () {
                     if (clicked) {
-                        console.log('single click');
+                        if (configure.debug) console.log('single click');
+                        this._clickListener(cell);
                     }
 
                     clicked = false;
-                }, 300);
-            }
+                }.bind(this), 300);
+            }.bind(this);
         });
     }
 
@@ -80,12 +82,13 @@ export default class TableView extends ScheduleList {
     }
 
     _doubleClickListener(cell) {
-        if (configure.debug) console.log('dclick ', cell);
+        if (configure.debug) console.log('double click');
         this._scheduleListModel.removeLast(cell);
     }
 
     _clickListener(cell) {
-        if (configure.debug) console.log('click ', cell);
+        if (configure.debug) console.log('click');
+
         const activeButton = this._radioButtonModel.getActive();
         const cellId = parseInt(cell.id.slice(5, cell.id.length));
 
