@@ -24,8 +24,10 @@ final class DivisionController extends Controller
      */
     public function index(): View
     {
+        $divisions = $this->divisionService->getPaginated();
+
         return view('admin.divisions.index', [
-            'divisions' => $this->divisionService->getPaginated()
+            'divisions' => $divisions['data']
         ]);
     }
 

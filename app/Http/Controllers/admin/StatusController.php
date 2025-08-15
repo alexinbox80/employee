@@ -23,8 +23,10 @@ final class StatusController extends Controller
      */
     public function index(): View
     {
+        $statuses = $this->statusService->getPaginated();
+
         return view('admin.statuses.index', [
-            'statuses' => $this->statusService->getPaginated()
+            'statuses' => $statuses['data']
         ]);
     }
 

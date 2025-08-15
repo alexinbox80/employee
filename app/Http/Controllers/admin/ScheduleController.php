@@ -23,8 +23,10 @@ final class ScheduleController extends Controller
      */
     public function index(): View
     {
+        $schedules = $this->scheduleService->getPaginated();
+
         return view('admin.schedules.index', [
-            'schedules' => $this->scheduleService->getPaginated()
+            'schedules' => $schedules['data']
         ]);
     }
 

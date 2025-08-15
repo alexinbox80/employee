@@ -22,8 +22,10 @@ final class EmployeeController extends Controller
      */
     public function index(): View
     {
+        $employees = $this->employeeService->getPaginated();
+
         return view('admin.employees.index', [
-            'employees' => $this->employeeService->getPaginated()
+            'employees' => $employees['data']
         ]);
     }
 
