@@ -2,7 +2,8 @@ services:
     employee_php-fpm:
         image: php:8.4-fpm-alpine
         build:
-            dockerfile: docker/php-fpm/Dockerfile
+            dockerfile: Dockerfile
+            context: ./docker/php-fpm
         container_name: 'employee_php'
         ports:
             - '9000:9000'

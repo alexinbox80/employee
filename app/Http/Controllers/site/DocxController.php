@@ -242,8 +242,21 @@ final class DocxController extends Controller
         //$fancyTableStyle = ['borderSize' => 6, 'borderColor' => '999999'];
         $fancyTableStyle = ['borderSize' => 6, 'borderColor' => 'white'];
         $cellColSpan = ['gridSpan' => 2];
-        $cellHCentered = ['alignment' => JcTable::CENTER];
-        $cellHleft = ['alignment' => JcTable::START];
+
+        $cellHCentered = [
+            'alignment' => JcTable::CENTER,
+            'height' => $this->m2t(10),
+            'spaceAfter' => $this->m2t(0),
+            'spaceBefore' => $this->m2t(0),
+            'lineHeightMultiple' => 0
+        ];
+        $cellHLeft = [
+            'alignment' => JcTable::START,
+            'height' => $this->m2t(10),
+            'spaceAfter' => $this->m2t(0),
+            'spaceBefore' => $this->m2t(0),
+            'lineHeightMultiple' => 0
+        ];
 
         $spanTableStyleName = 'new Colspan Rowspan';
         $phpWord->addTableStyle($spanTableStyleName, $fancyTableStyle);
@@ -255,7 +268,7 @@ final class DocxController extends Controller
         foreach ($sortContents as $value => $sorts) {
             if ($value === 10) {
                 $row = $table->addRow();
-                $row->addCell($this->m2t(180), $cellColSpan)->addText($key . '. ' . 'Информационный центр', ['italic' => true, 'bold' => true], $cellHleft);
+                $row->addCell($this->m2t(180), $cellColSpan)->addText($key . '. ' . 'Информационный центр', ['italic' => true, 'bold' => true], $cellHLeft);
             }
             if (isset($sorts))
                 foreach ($sorts as $content) {
@@ -263,10 +276,10 @@ final class DocxController extends Controller
                 foreach ($content as $item) {
                     if ($item['division_id'] <> $divisionId && $value !== 10) {
                         $row = $table->addRow();
-                        $row->addCell($this->m2t(180), $cellColSpan)->addText('');
+                        $row->addCell($this->m2t(180), $cellColSpan)->addText('', null, $cellHLeft);
 
                         $row = $table->addRow();
-                        $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHleft);
+                        $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHLeft);
                         $divisionId = $item['division_id'];
 
                         $key++;
@@ -274,7 +287,7 @@ final class DocxController extends Controller
 
                     $row = $table->addRow();
                     $row->addCell($this->m2t(60))->addText(dateDDMMYYYY($item['start']) . ' - ' . dateDDMMYYYY($item['end']), null, $cellHCentered);
-                    $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHleft);
+                    $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHLeft);
                 }
             }
         }
