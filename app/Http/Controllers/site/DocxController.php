@@ -7,6 +7,7 @@ use App\Services\Contracts\EmployeeContract;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use PhpOffice\PhpWord\Exception\Exception;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\SimpleType\JcTable;
@@ -49,18 +50,15 @@ final class DocxController extends Controller
     private function sortArrayElements(array $elements, string $fieldName = 'start'): array
     {
         $sortContents = [];
-        foreach ($elements as $key => $items)
-            foreach ($items as $vol => $content) {
-                usort($content,  function ($a, $b) use ($fieldName){
-                    $t1 = strtotime($a[$fieldName]);
-                    $t2 = strtotime($b[$fieldName]);
-                    return $t1 - $t2; // For ascending order
-                    // return $t2 - $t1; // For descending order
-                });
-
-                if ($key === 10) $sortContents[] = $content;
-                if ($key === 12 || $key === 5) $sortContents[$content[0]['division_id']] = $content;
-            }
+        foreach ($elements as $vol => $content) {
+            usort($content,  function ($a, $b) use ($fieldName){
+                $t1 = strtotime($a[$fieldName]);
+                $t2 = strtotime($b[$fieldName]);
+                return $t1 - $t2; // For ascending order
+                // return $t2 - $t1; // For descending order
+            });
+            $sortContents[$vol] = $content;
+        }
 
         return $sortContents;
     }
@@ -68,6 +66,7 @@ final class DocxController extends Controller
     private function dayToWeekArray(array $object): array
     {
         $items = [];
+        $firstDate = null;
         foreach ($object as $contents) {
             $flag = false;
             foreach ($contents as $key => $content) {
@@ -128,17 +127,31 @@ final class DocxController extends Controller
         return $items;
     }
 
+    private function getEmployeeArray(object $employee, object $schedule, string $division): array
+    {
+        return [
+            'employee_id' => $employee->id,
+            'division_id' => $employee->division->id,
+            'department_id' => $employee->department->id,
+            'status_id' => $schedule->status_id,
+            'division' => $division,
+            'date' => $schedule->date,
+            'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+        ];
+    }
+
     private function object2array(array $object): array
     {
         $divisionId = null;
         $content1 = [];
         $content2 = [];
         $content3 = [];
+        $division = null;
         foreach ($object['employees'] as $employee) {
             $schedules = $employee->schedules;
             if (count($schedules) > 0) {
                 $scheduleId = [5, 10, 12];
-                foreach ($schedules as $keySchedule => $schedule) {
+                foreach ($schedules as $schedule) {
                     if (in_array($schedule->status_id, $scheduleId)) {
 
                         if ($employee->division->id <> $divisionId) {
@@ -147,55 +160,31 @@ final class DocxController extends Controller
                         }
 
                         if ($schedule->status_id === 10) {
-                            $content1[$schedule->status_id][$employee->division->id][] = [
-                                'employee_id' => $employee->id,
-                                'division_id' => $employee->division->id,
-                                'department_id' => $employee->department->id,
-                                'status_id' => $schedule->status_id,
-                                'division' => $division,
-                                'date' => $schedule->date,
-                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                            ];
+                            $content1[$schedule->status_id][$employee->division->id][] = $this->getEmployeeArray($employee, $schedule, $division);
                         }
 
                         if ($schedule->status_id === 12) {
-                            $content2[$schedule->status_id][$employee->division->id][] = [
-                                'employee_id' => $employee->id,
-                                'division_id' => $employee->division->id,
-                                'department_id' => $employee->department->id,
-                                'status_id' => $schedule->status_id,
-                                'division' => $division,
-                                'date' => $schedule->date,
-                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                            ];
+                            $content2[$schedule->status_id][$employee->division->id][] = $this->getEmployeeArray($employee, $schedule, $division);
                         }
 
                         if ($schedule->status_id === 5) {
-                            $content3[$schedule->status_id][$employee->division->id][] = [
-                                'employee_id' => $employee->id,
-                                'division_id' => $employee->division->id,
-                                'department_id' => $employee->department->id,
-                                'status_id' => $schedule->status_id,
-                                'division' => $division,
-                                'date' => $schedule->date,
-                                'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
-                            ];
+                            $content3[$schedule->status_id][$employee->division->id][] = $this->getEmployeeArray($employee, $schedule, $division);
                         }
                     }
                 }
             }
         }
 
-
-        $items = isset($content1[10]) ? $this->sortArrayElements([ 10 => [ 10 => array_merge(...$this->dayToWeekArray($content1[10]))]]) : null;
-
         return [
-            10 => $items,
-            12 => isset($content2[12]) ? $this->sortArrayElements([12 => $this->dayToWeekArray($content2[12])]) : null,
-            5 => isset($content3[5]) ? $this->sortArrayElements([5 => $this->dayToWeekArray($content3[5])]) : null,
+            10 => isset($content1[10]) ? $this->sortArrayElements([10 => array_merge(...$this->dayToWeekArray($content1[10]))]) : null,
+            12 => isset($content2[12]) ? $this->sortArrayElements($this->dayToWeekArray($content2[12])) : null,
+            5 => isset($content3[5]) ? $this->sortArrayElements($this->dayToWeekArray($content3[5])) : null,
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function generate(Request $request): BinaryFileResponse
     {
         $month = (int) $request->query('month');
@@ -224,7 +213,7 @@ final class DocxController extends Controller
         ];
 
         $section->addText('У Т В Е Р Ж Д А Ю', $cornerStamp, $conerStampPosition);
-        if ($this->getHeadDepartment($employees['employees'], 1) === true) {
+        if ($this->getHeadDepartment($employees['employees']) === true) {
             $section->addText('Начальник ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
             $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
             $section->addText('____________ Г.А. Полевкова', $cornerStamp, $conerStampPosition);
@@ -243,12 +232,12 @@ final class DocxController extends Controller
         }
 
         $section->addText('" ' . lastDayOfMonth($stampMonth, $stampYear) . ' " ' . getMonth($stampMonth, true) .  ' ' . $stampYear . ' года', $cornerStamp, $conerStampPosition);
-        $section->addTextBreak(1);
+        $section->addTextBreak();
 
         $header = ['size' => 14, 'bold' => true, 'align' => 'center'];
-        $section->addTextBreak(1);
+        $section->addTextBreak();
         $section->addText('Дежурство сотрудников ИЦ на ' . getMonth($month) . ' ' . $year . ' года', $header, ['align' => 'center']);
-        $section->addTextBreak(1);
+        $section->addTextBreak();
 
         //$fancyTableStyle = ['borderSize' => 6, 'borderColor' => '999999'];
         $fancyTableStyle = ['borderSize' => 6, 'borderColor' => 'white'];
@@ -268,8 +257,8 @@ final class DocxController extends Controller
                 $row = $table->addRow();
                 $row->addCell($this->m2t(180), $cellColSpan)->addText($key . '. ' . 'Информационный центр', ['italic' => true, 'bold' => true], $cellHleft);
             }
-
-            foreach ($sorts as $content) {
+            if (isset($sorts))
+                foreach ($sorts as $content) {
                 $divisionId = null;
                 foreach ($content as $item) {
                     if ($item['division_id'] <> $divisionId && $value !== 10) {
