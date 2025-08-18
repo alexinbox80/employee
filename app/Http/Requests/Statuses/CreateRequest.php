@@ -24,7 +24,7 @@ class CreateRequest extends FormRequest
         return [
             'letter'  => ['required', 'string', 'size:1', 'unique:statuses,letter'],
             'description' => ['nullable', 'string', 'min:3', 'max:255'],
-            'color' => ['required', 'string', 'min:7', 'max:7'],
+            'color' => ['required', 'string', 'min:7', 'max:7'], //'regex:/^#([a-fA-F0-9]{6})$/i'
             'color_description' => ['nullable', 'string', 'min:3', 'max:255']
         ];
     }

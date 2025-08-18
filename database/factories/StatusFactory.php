@@ -17,7 +17,12 @@ class StatusFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'letter' => $this->faker->randomLetter,
+            'description' => $this->faker->paragraph(1),
+            'color' => '#' . substr(str_shuffle('0123456789ABCDEF'), 0, 6),
+            'color_description' => $this->faker->paragraph(1),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
