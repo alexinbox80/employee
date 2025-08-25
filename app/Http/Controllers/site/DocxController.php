@@ -187,6 +187,15 @@ final class DocxController extends Controller
      */
     public function generate(Request $request): BinaryFileResponse
     {
+        $reports = [
+            2 => 'Отдел статистической информации и контроля',
+            5 => 'Отдел разыскной и криминалистической информации (оружие, автопоиск, розыск лиц)',
+            6 => 'Отдел оперативно-справочных учетов и оказания государственных услуг: <w:br /> -проверка требований на судимость:',
+            '6_1' => '- проверка по дактилоскопическим учетам (установление личности, неопознанные трупы) в нерабочее время, выходные и праздничные дни по согласованию с руководством ИЦ',
+            9 => 'Отдел специальных фондов и оперативного учета',
+            12 => 'Вычислительный центр'
+        ];
+
         $month = (int) $request->query('month');
         $year = (int) $request->query('year');
 
@@ -213,15 +222,16 @@ final class DocxController extends Controller
         ];
 
         $section->addText('У Т В Е Р Ж Д А Ю', $cornerStamp, $conerStampPosition);
-        if ($this->getHeadDepartment($employees['employees']) === true) {
+        //if ($this->getHeadDepartment($employees['employees']) === true) {
             $section->addText('Начальник ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
             $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
             $section->addText('____________ Г.А. Полевкова', $cornerStamp, $conerStampPosition);
-        } else {
+            $section->addText('', $cornerStamp, $conerStampPosition);
+        //} else {
             $section->addText('Врио начальника ИЦ МВД по РК', $cornerStamp, $conerStampPosition);
             $section->addText('полковник внутренней службы', $cornerStamp, $conerStampPosition);
             $section->addText('____________ Е.И. Минкин', $cornerStamp, $conerStampPosition);
-        }
+        //}
 
         if ($month === 1) {
             $stampMonth = 12;
@@ -268,26 +278,37 @@ final class DocxController extends Controller
         foreach ($sortContents as $value => $sorts) {
             if ($value === 10) {
                 $row = $table->addRow();
-                $row->addCell($this->m2t(180), $cellColSpan)->addText($key . '. ' . 'Информационный центр', ['italic' => true, 'bold' => true], $cellHLeft);
+                $row->addCell($this->m2t(180), $cellColSpan)->addText($key . '. ' . 'Руководство', ['italic' => true, 'bold' => true], $cellHLeft);
             }
-            if (isset($sorts))
+            if (isset($sorts)) {
                 foreach ($sorts as $content) {
-                $divisionId = null;
-                foreach ($content as $item) {
-                    if ($item['division_id'] <> $divisionId && $value !== 10) {
-                        $row = $table->addRow();
-                        $row->addCell($this->m2t(180), $cellColSpan)->addText('', null, $cellHLeft);
+                    $divisionId = null;
+                    $count = 0;
+                    foreach ($content as $item) {
+                        if ($item['division_id'] <> $divisionId && $value !== 10) {
+                            $row = $table->addRow();
+                            $row->addCell($this->m2t(180), $cellColSpan)->addText('', null, $cellHLeft);
+
+                            $row = $table->addRow();
+                            $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $reports[$item['division_id']], ['italic' => true, 'bold' => true], $cellHLeft);
+                            $divisionId = $item['division_id'];
+
+                            $key++;
+                        }
 
                         $row = $table->addRow();
-                        $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $item['division'], ['italic' => true, 'bold' => true], $cellHLeft);
-                        $divisionId = $item['division_id'];
+                        $row->addCell($this->m2t(60))->addText(dateDDMMYYYY($item['start']) . ' - ' . dateDDMMYYYY($item['end']), null, $cellHCentered);
+                        $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHLeft);
 
-                        $key++;
+                        if ($item['division_id'] === 6) {
+                            $count++;
+                            if (count($content) === $count) {
+                                $row = $table->addRow();
+                                $row = $table->addRow();
+                                $row->addCell($this->m2t(180), $cellColSpan)->addText($reports['6_1'], ['italic' => true, 'bold' => true], $cellHLeft);
+                            }
+                        }
                     }
-
-                    $row = $table->addRow();
-                    $row->addCell($this->m2t(60))->addText(dateDDMMYYYY($item['start']) . ' - ' . dateDDMMYYYY($item['end']), null, $cellHCentered);
-                    $row->addCell($this->m2t(120))->addText($item['text'], null, $cellHLeft);
                 }
             }
         }
