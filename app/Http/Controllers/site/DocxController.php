@@ -188,12 +188,12 @@ final class DocxController extends Controller
     public function generate(Request $request): BinaryFileResponse
     {
         $reports = [
-            2 => 'Отдел статистической информации и контроля',
-            5 => 'Отдел разыскной и криминалистической информации (оружие, автопоиск, розыск лиц)',
-            6 => 'Отдел оперативно-справочных учетов и оказания государственных услуг: <w:br /> -проверка требований на судимость:',
-            '6_1' => '- проверка по дактилоскопическим учетам (установление личности, неопознанные трупы) в нерабочее время, выходные и праздничные дни по согласованию с руководством ИЦ',
-            9 => 'Отдел специальных фондов и оперативного учета',
-            12 => 'Вычислительный центр'
+            2 => [ 'h' => 'Отдел статистической информации и контроля'],
+            5 => [ 'h' => 'Отдел разыскной и криминалистической информации (оружие, автопоиск, розыск лиц)'],
+            6 => [ 'h' => 'Отдел оперативно-справочных учетов и оказания государственных услуг: <w:br /> -проверка требований на судимость:',
+                   'f' => '- проверка по дактилоскопическим учетам (установление личности, неопознанные трупы) в нерабочее время, выходные и праздничные дни по согласованию с руководством ИЦ'],
+            9 => [ 'h' => 'Отдел специальных фондов и оперативного учета'],
+            12 => [ 'h' => 'Вычислительный центр']
         ];
 
         $month = (int) $request->query('month');
@@ -290,7 +290,7 @@ final class DocxController extends Controller
                             $row->addCell($this->m2t(180), $cellColSpan)->addText('', null, $cellHLeft);
 
                             $row = $table->addRow();
-                            $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $reports[$item['division_id']], ['italic' => true, 'bold' => true], $cellHLeft);
+                            $row->addCell($this->m2t(180), $cellColSpan)->addText($key + 1 . '. ' . $reports[$item['division_id']]['h'], ['italic' => true, 'bold' => true], $cellHLeft);
                             $divisionId = $item['division_id'];
 
                             $key++;
@@ -305,7 +305,7 @@ final class DocxController extends Controller
                             if (count($content) === $count) {
                                 $row = $table->addRow();
                                 $row = $table->addRow();
-                                $row->addCell($this->m2t(180), $cellColSpan)->addText($reports['6_1'], ['italic' => true, 'bold' => true], $cellHLeft);
+                                $row->addCell($this->m2t(180), $cellColSpan)->addText($reports[6]['f'], ['italic' => true, 'bold' => true], $cellHLeft);
                             }
                         }
                     }
