@@ -76,3 +76,22 @@ td.weekend {
 .employee__img {
     width: 400px;
 }
+
+.table__stat th, .table__stat td {
+    border: 1px solid black;
+    text-align: center;
+    align-content: center;
+}
+
+.table__stat-th {
+    padding: 0!important;
+    width: 31px;
+}
+
+.table__stat-p {
+    border: 1px solid black;
+    width: auto;
+    height: auto;
+    text-align: center;
+    line-height: 25px;
+}

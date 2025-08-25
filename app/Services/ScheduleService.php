@@ -46,7 +46,26 @@ final class ScheduleService implements ScheduleContract
 
         $schedules = $this->scheduleRepository->getSchedulesStat($month, $year);
 
-        return ['schedules' => $schedules, 'month' => $month, 'year' => $year];
+        $employees = [];
+        foreach ($schedules as $schedule) {
+            $employees[$schedule->employee_id]['employee'] = [
+                    'employee_id' => $schedule->employee_id,
+                    'last_name' => $schedule->employee->last_name,
+                    'first_name' => $schedule->employee->first_name,
+                    'middle_name' => $schedule->employee->middle_name,
+                    'position' => $schedule->employee->position,
+                ];
+
+            $employees[$schedule->employee_id]['status'][$schedule->status_id] = [
+                'status_id' => $schedule->status_id,
+                'color' => $schedule->status->color,
+                'description' => $schedule->status->description,
+                'letter' => $schedule->status->letter,
+                'count' => $schedule->count,
+            ];
+        }
+
+        return ['schedules' => $employees, 'month' => $month, 'year' => $year];
     }
 
     public function getPaginated(): array

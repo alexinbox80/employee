@@ -78,6 +78,7 @@ final class PageController extends Controller
         $result = $this->scheduleService->stat($month, $year);
 
         return view('stat', [
+            'statuses' => $this->statusService->getStatuses(),
             'schedules' => $result['schedules'],
             'month' => $result['month'],
             'year' => $result['year'],
