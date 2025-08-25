@@ -23,6 +23,23 @@ final class ScheduleRepository implements ScheduleContract
             ->get();
     }
 
+    public function getSchedulesStat($month, $year): Collection
+    {
+        //SELECT count(status_id), employee_id, status_id
+        //	FROM schedules WHERE date BETWEEN '2024-01-01' AND '2024-01-31' GROUP BY employee_id, status_id;
+
+        $dateL = $year . '-' . $month . '-01';
+        $lastDayOfMonth = (int)date('t', strtotime($dateL . ' 01:01:01'));
+        $dateR = $year . '-' . $month . '-' . $lastDayOfMonth;
+
+        return Schedule::query()
+            ->with(['employee', 'status'])
+            ->selectRaw('employee_id, status_id, COUNT(status_id) as count')
+            ->whereBetween('date', [$dateL, $dateR])
+            ->groupBy(['employee_id', 'status_id'])
+            ->get();
+    }
+
     public function getPaginated(): LengthAwarePaginator
     {
         return Schedule::paginate(config('pagination.admin.schedules'));

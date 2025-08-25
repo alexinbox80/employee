@@ -4,6 +4,8 @@ namespace App\Http\Controllers\site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Division;
+use App\Models\Schedule;
+use App\Services\Contracts\ScheduleContract;
 use App\Services\Contracts\StatusContract;
 use App\Services\Contracts\EmployeeContract;
 use Illuminate\Contracts\View\View;
@@ -14,6 +16,7 @@ final class PageController extends Controller
     public function __construct(
         private readonly EmployeeContract $employeeService,
         private readonly StatusContract $statusService,
+        private readonly ScheduleContract $scheduleService,
     )
     {
     }
@@ -62,6 +65,20 @@ final class PageController extends Controller
         return view('create', [
             'employees' => $result['employees'],
             'statuses' => $this->statusService->getStatuses(),
+            'month' => $result['month'],
+            'year' => $result['year'],
+        ]);
+    }
+
+    public function stat(Request $request): View
+    {
+        $month = $request->query('month');
+        $year = $request->query('year');
+
+        $result = $this->scheduleService->stat($month, $year);
+
+        return view('stat', [
+            'schedules' => $result['schedules'],
             'month' => $result['month'],
             'year' => $result['year'],
         ]);

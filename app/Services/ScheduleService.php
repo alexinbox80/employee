@@ -34,6 +34,21 @@ final class ScheduleService implements ScheduleContract
         return ['data' => $this->scheduleRepository->getAll($month, $year)];
     }
 
+    public function stat(int $month = null, int $year = null): array
+    {
+        if ($month === null) {
+            $month = date('m');
+        }
+
+        if ($year === null) {
+            $year = date('Y');
+        }
+
+        $schedules = $this->scheduleRepository->getSchedulesStat($month, $year);
+
+        return ['schedules' => $schedules, 'month' => $month, 'year' => $year];
+    }
+
     public function getPaginated(): array
     {
         return [

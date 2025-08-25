@@ -68,15 +68,3 @@ final class Schedule extends Model
         return $this->hasOne(Status::class, 'id', 'status_id');
     }
 }
-
-/*
-
-Employee::with(['division', 'schedules'])->whereHas('schedules', function($query) {
-    return $query->with('status')->where('date', '2025-07-25');
-})->get();
-
-Employee::whereHas('schedules', function($query) {
-    return $query->where('date', '2025-07-25');
-})->get();
-
-*/

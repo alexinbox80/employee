@@ -3,6 +3,7 @@
     <div class="container">
         <div class="page_header mt-5">
             <div class="d-flex justify-content-end">
+                <a class="btn btn-outline-primary me-2" href="{{ generateURL(route('page.get.stat'), getCurrentMonth(), $year) }}">Статистика</a>
                 <a class="btn btn-outline-primary me-2" href="{{ generateURL(route('page.get.create'), getCurrentMonth() + 1, $year) }}">Создать дежурных</a>
                 <a class="btn btn-primary" href="{{ generateURL(route('page.get.docx'), $month, $year) }}">Выгрузить в Word</a>
             </div>
