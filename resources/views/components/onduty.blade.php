@@ -1,5 +1,5 @@
 <div class="col-md-12 px-0">
-    <table class="table table-striped table-sm">
+    <table class="table-fixed table table-striped table-sm">
         <thead>
         <tr class="table__grid">
             <th class="column" scope="col">#</th>

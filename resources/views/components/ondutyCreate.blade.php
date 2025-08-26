@@ -2,7 +2,7 @@
 <div class="col-md-12 px-0">
     <a class="fio__link" href="{{ route('page.get.index') }}">НАЗАД</a>
     <div class="alert-message"></div>
-    <table id="onduty__create" class="table table-striped table-sm">
+    <table id="onduty__create" class="table-fixed table table-striped table-sm">
         <thead>
             <tr class="table__grid">
                 <th class="column" scope="col">#</th>

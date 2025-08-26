@@ -8,7 +8,7 @@
         <h2 class="text-center"> за {{ $month }} мес. {{ $year }} год</h2>
 
         <a class="fio__link" href="{{ route('page.get.index') }}">НАЗАД</a>
-        <table id="" class="table table-striped table-sm">
+        <table id="" class="table-fixed table table-striped table-sm">
             <thead>
                 <tr class="table__stat">
                     <th class="column" scope="col">#</th>

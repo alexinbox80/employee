@@ -95,3 +95,18 @@ td.weekend {
     text-align: center;
     line-height: 25px;
 }
+
+.table-fixed thead {
+    position: sticky;
+    top: 0;
+    /*background-color: #fff;*/
+}
+
+.table-fixed thead:before {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #fff;
+}
