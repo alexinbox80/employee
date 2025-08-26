@@ -129,6 +129,10 @@ final class DocxController extends Controller
 
     private function getEmployeeArray(object $employee, object $schedule, string $division): array
     {
+        $text = $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name;
+        //$text .= (isset($employee->home_phone) && $employee->home_phone !== '') ? ', д.т.: ' . $employee->home_phone : '';
+        $text .= ', м.т.: ' . $employee->mobile_phone;
+
         return [
             'employee_id' => $employee->id,
             'division_id' => $employee->division->id,
@@ -136,7 +140,7 @@ final class DocxController extends Controller
             'status_id' => $schedule->status_id,
             'division' => $division,
             'date' => $schedule->date,
-            'text' => $employee->last_name . ' ' . $employee->first_name . ' ' . $employee->middle_name . ', м.т.: ' . $employee->mobile_phone
+            'text' => $text
         ];
     }
 
@@ -241,7 +245,9 @@ final class DocxController extends Controller
             $stampYear = $year;
         }
 
-        $section->addText('" ' . lastDayOfMonth($stampMonth, $stampYear) . ' " ' . getMonth($stampMonth, true) .  ' ' . $stampYear . ' года', $cornerStamp, $conerStampPosition);
+        //$section->addText('" ' . lastDayOfMonth($stampMonth, $stampYear) . ' " ' . getMonth($stampMonth, true) .  ' ' . $stampYear . ' года', $cornerStamp, $conerStampPosition);
+        $section->addText('"___" ' . getMonth($stampMonth, true) .  ' ' . $stampYear . ' года', $cornerStamp, $conerStampPosition);
+
         $section->addTextBreak();
 
         $header = ['size' => 14, 'bold' => true, 'align' => 'center'];
@@ -315,7 +321,7 @@ final class DocxController extends Controller
 
         // Save the document
         $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-        $fileName = 'IC_DUTY_' . date('Y_m_d', strtotime($year . '-' . $month . '-' . '1')) . '.docx';
+        $fileName = 'график иц ' . date('m-Y', strtotime($year . '-' . $month . '-' . '1')) . '.docx';
         $objWriter->save(storage_path('app/' . $fileName));
 
         // Download the document
