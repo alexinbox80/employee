@@ -23,17 +23,17 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'division_id' => ['required', 'integer', 'exists:divisions,id'],
-            'department_id' => ['required', 'integer', 'exists:divisions,id'],
-            'is_shown' => ['required', 'boolean', Rule::in(['0', '1', 0, 1 , 'true', 'false', true, false])],
+            //'division_id' => ['required', 'integer', 'exists:divisions,id'],
+            //'department_id' => ['required', 'integer', 'exists:divisions,id'],
+            //'is_shown' => ['required', 'boolean', Rule::in(['0', '1', 0, 1 , 'true', 'false', true, false])],
             'first_name'  => ['required', 'string', 'min:4', 'max:255'],
             'last_name'  => ['required', 'string', 'min:4', 'max:255'],
             'middle_name'  => ['required', 'string', 'min:4', 'max:255'],
             'birth_date' => ['required', 'string', 'min:10', 'max:10'],
             'sex' => ['required', 'string', Rule::in(['МУЖСКОЙ', 'ЖЕНСКИЙ'])],
-            'position'  => ['required', 'string', 'min:10', 'max:255'],
+            'position'  => ['required', 'string', 'min:9', 'max:255'],
             'email' => ['nullable', 'email', 'min:5', 'max:128'],
-            'home_phone'  => ['nullable', 'numeric', 'digits:10'],
+            'home_phone'  => ['nullable', 'numeric', 'digits:6'],
             'work_phone'  => ['nullable', 'numeric', 'digits:6'],
             'mobile_phone'  => ['nullable', 'numeric', 'digits:10'],
             'address'  => ['required', 'string', 'min:11', 'max:256'],

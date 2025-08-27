@@ -130,6 +130,11 @@ if (!function_exists('numOfWeek')) {
          */
         function generateURL(string $url, int $month, int $year): string
         {
+            if ($month >= 13) {
+                $month = 1;
+                $year++;
+            }
+
             return $url . '?month=' . $month . '&year=' . $year;
         }
     }

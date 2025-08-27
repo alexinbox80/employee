@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Employees\CreateRequest;
-use App\Http\Requests\Divisions\EditRequest;
+use App\Http\Requests\Employees\EditRequest;
 use App\Models\Employee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
